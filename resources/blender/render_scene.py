@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Runs INSIDE Blender (``blender -b --factory-startup --python
-render_scene.py -- job.json``): IngeTrazo's side of "Render with Blender"
+render_scene.py -- job.json``): SipilBIM's side of "Render with Blender"
 (issue #181, plugins/render_blender.py).
 
-The job file says everything: the GLB IngeTrazo exported, its camera, the
+The job file says everything: the GLB SipilBIM exported, its camera, the
 sun, the engine and quality, and where to write the image (and, if asked,
 the .blend). Blender's glTF importer turns glTF's Y-up back into Z-up, so
-the model lands in IngeTrazo's own coordinates and the camera goes in as
+the model lands in SipilBIM's own coordinates and the camera goes in as
 given.
 
 Written against Blender 3.6–5.x: every name that changed between versions
@@ -83,7 +83,7 @@ def _ripples(mat, bsdf, scale=6.0, strength=0.12):
 
 
 def apply_finishes():
-    """Turn IngeTrazo's finish (glTF extras, core.finish) into a real
+    """Turn SipilBIM's finish (glTF extras, core.finish) into a real
     material: the importer keeps extras as custom properties."""
     counts = {}
     for mat in bpy.data.materials:
@@ -133,9 +133,9 @@ def apply_finishes():
 
 def set_camera(scene, cam_cfg, width, height):
     cam = scene.camera
-    if cam is None or cam.name != "IngeTrazo camera":
-        data = bpy.data.cameras.new("IngeTrazo")
-        cam = bpy.data.objects.new("IngeTrazo camera", data)
+    if cam is None or cam.name != "SipilBIM camera":
+        data = bpy.data.cameras.new("SipilBIM")
+        cam = bpy.data.objects.new("SipilBIM camera", data)
         scene.collection.objects.link(cam)
         scene.camera = cam
     data = cam.data
@@ -200,10 +200,10 @@ def face_figures(figures, cam_cfg):
 def add_sun(scene, direction, strength):
     """``direction`` points FROM the scene TOWARD the sun (core.sun)."""
     d = Vector(direction).normalized()
-    light = bpy.data.lights.new("IngeTrazo sun", type="SUN")
+    light = bpy.data.lights.new("SipilBIM sun", type="SUN")
     light.energy = strength
     light.angle = math.radians(0.53)           # the real sun's disc
-    sun = bpy.data.objects.new("IngeTrazo sun", light)
+    sun = bpy.data.objects.new("SipilBIM sun", light)
     scene.collection.objects.link(sun)
     # A sun light shines along its local -Z: point +Z at the sun.
     sun.rotation_euler = d.to_track_quat("Z", "Y").to_euler()
@@ -211,7 +211,7 @@ def add_sun(scene, direction, strength):
 
 
 def set_world(scene, sun_dir):
-    world = bpy.data.worlds.new("IngeTrazo sky")
+    world = bpy.data.worlds.new("SipilBIM sky")
     scene.world = world
     if hasattr(world, "use_nodes"):            # gone in Blender 6: always on
         world.use_nodes = True
@@ -250,7 +250,7 @@ def set_world(scene, sun_dir):
 def set_plain_world(scene, color, strength, name):
     """A sky of one colour: the dark blue of a night, the grey of an
     overcast day (the whole sky lights the scene evenly)."""
-    world = bpy.data.worlds.new(f"IngeTrazo {name}")
+    world = bpy.data.worlds.new(f"SipilBIM {name}")
     scene.world = world
     if hasattr(world, "use_nodes"):
         world.use_nodes = True
@@ -263,22 +263,22 @@ def set_plain_world(scene, color, strength, name):
 
 def add_moon(scene):
     """A faint cold key light from high up, so a night still has shape."""
-    light = bpy.data.lights.new("IngeTrazo moon", type="SUN")
+    light = bpy.data.lights.new("SipilBIM moon", type="SUN")
     light.energy = 0.08
     light.color = (0.7, 0.8, 1.0)
     light.angle = math.radians(1.0)
-    moon = bpy.data.objects.new("IngeTrazo moon", light)
+    moon = bpy.data.objects.new("SipilBIM moon", light)
     scene.collection.objects.link(moon)
     moon.rotation_euler = Vector((0.3, -0.4, 0.86)).normalized().to_track_quat(
         "Z", "Y").to_euler()
 
 
 def add_lights(scene, lights):
-    """The lights placed in IngeTrazo's Render panel: point lights (a bulb,
+    """The lights placed in SipilBIM's Render panel: point lights (a bulb,
     a lantern) and spots (a lamp post head, a reflector) in real watts."""
     for i, lt in enumerate(lights):
         kind = "SPOT" if lt["kind"] == "spot" else "POINT"
-        data = bpy.data.lights.new(f"IngeTrazo light {i + 1}", type=kind)
+        data = bpy.data.lights.new(f"SipilBIM light {i + 1}", type=kind)
         data.energy = float(lt["power"])
         data.color = tuple(lt["color"])
         if hasattr(data, "shadow_soft_size"):
@@ -300,8 +300,8 @@ def add_lights(scene, lights):
 def add_ground(scene, z, size, color):
     bpy.ops.mesh.primitive_plane_add(size=size, location=(0.0, 0.0, z))
     ground = bpy.context.active_object
-    ground.name = "IngeTrazo ground"
-    mat = bpy.data.materials.new("IngeTrazo ground")
+    ground.name = "SipilBIM ground"
+    mat = bpy.data.materials.new("SipilBIM ground")
     if hasattr(mat, "use_nodes"):
         mat.use_nodes = True
     bsdf = mat.node_tree.nodes.get("Principled BSDF")
@@ -426,7 +426,7 @@ def main():
 
 
 def serve(scene, figures):
-    """Render each camera IngeTrazo sends until told to stop."""
+    """Render each camera SipilBIM sends until told to stop."""
     say("ready")
     r = scene.render
     for line in sys.stdin:

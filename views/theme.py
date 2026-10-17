@@ -1,7 +1,7 @@
 """Light / dark UI chrome that follows the desktop, or a fixed choice.
 
 Window ▸ Preferences ▸ Theme stores the General setting ``theme``: ``dark`` (the
-default — IngeTrazo's look, Marco 2026-09-22: the user opts into the rest),
+default — SipilBIM's look, Marco 2026-09-22: the user opts into the rest),
 ``light``, or ``system``, which follows the OS colour scheme and flips live
 when the user switches it — GNOME/KDE portals, Windows 10/11 and macOS all
 report it to Qt through ``QStyleHints.colorScheme``. Only the
@@ -27,7 +27,7 @@ SYSTEM, LIGHT, DARK = "system", "light", "dark"
 THEMES = (SYSTEM, LIGHT, DARK)
 _KEY = "theme"          # a General setting: core.general_settings (#266)
 
-# The one accent both themes share — selection and the IngeTrazo blue.
+# The one accent both themes share — selection and the SipilBIM blue.
 _HIGHLIGHT = QColor(42, 93, 143)
 
 
@@ -44,7 +44,7 @@ def save_theme(mode: str) -> None:
 
 def is_dark(mode: str, system_scheme: Qt.ColorScheme) -> bool:
     """Which palette a mode resolves to. The system saying nothing (an old
-    desktop, a bare X session) keeps the dark chrome IngeTrazo always had."""
+    desktop, a bare X session) keeps the dark chrome SipilBIM always had."""
     if mode == LIGHT:
         return False
     if mode == DARK:
@@ -85,7 +85,7 @@ def dark_palette() -> QPalette:
 
 
 def light_palette() -> QPalette:
-    # Fusion's own light shades, with IngeTrazo's accent.
+    # Fusion's own light shades, with SipilBIM's accent.
     window = QColor(239, 239, 239)
     text = QColor(20, 22, 26)
     disabled = QColor(160, 160, 160)

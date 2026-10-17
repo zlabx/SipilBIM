@@ -128,7 +128,7 @@ def _run_text3d_dialog(monkeypatch, params, typed):
 def test_text3d_dialog_in_millimetres(doc, monkeypatch):
     doc("mm", 0)
     shown, out = _run_text3d_dialog(
-        monkeypatch, {"text": "IngeTrazo", "height": 0.25, "thickness": 0.05},
+        monkeypatch, {"text": "SipilBIM", "height": 0.25, "thickness": 0.05},
         ("20", "3"))
     assert shown == {"height": "250 mm", "depth": "50 mm"}
     assert out["height"] == pytest.approx(0.020)       # stored in metres
@@ -138,7 +138,7 @@ def test_text3d_dialog_in_millimetres(doc, monkeypatch):
 def test_text3d_dialog_in_metres_is_as_before(doc, monkeypatch):
     doc("m", 2)
     shown, out = _run_text3d_dialog(
-        monkeypatch, {"text": "IngeTrazo", "height": 0.25, "thickness": 0.05},
+        monkeypatch, {"text": "SipilBIM", "height": 0.25, "thickness": 0.05},
         (None, "20cm"))
     assert shown == {"height": "0.250 m", "depth": "0.050 m"}
     assert out["height"] == pytest.approx(0.25)

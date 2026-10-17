@@ -3,7 +3,7 @@
 """Ask Windows for the discrete GPU on hybrid laptops.
 
 A laptop with an Intel iGPU and an NVIDIA/AMD dGPU starts every unknown
-program on the Intel chip; IngeTrazo then orbits at a crawl while the RTX
+program on the Intel chip; SipilBIM then orbits at a crawl while the RTX
 sits idle. Windows keeps the per-program choice the user makes in
 Settings ▸ System ▸ Display ▸ Graphics as a string value under
 ``HKCU\\Software\\Microsoft\\DirectX\\UserGpuPreferences`` (name: the
@@ -21,7 +21,7 @@ HIGH_PERFORMANCE = "GpuPreference=2;"
 
 
 def app_executable() -> Path | None:
-    """The packaged ``ingetrazo.exe``; None when running from a checkout
+    """The packaged ``sipilbim.exe``; None when running from a checkout
     (tagging the venv's python.exe would leak into every script)."""
     if getattr(sys, "frozen", False) and sys.executable:
         return Path(sys.executable)

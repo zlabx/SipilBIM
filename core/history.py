@@ -45,7 +45,7 @@ def _plog(tag: str, ms: float, extra: str = "", floor: float = 100.0) -> None:
     if _perf_file is None:
         path = _os.environ.get("INGETRAZO_PERF_LOG")
         _perf_file = open(_Path(path) if path
-                          else _Path.home() / "ingetrazo-perf.log",
+                          else _Path.home() / "sipilbim-perf.log",
                           "a", buffering=1)
     _perf_file.write(f"{_time_mod.strftime('%H:%M:%S')} [{_os.getpid()}] "
                      f"{tag} {ms:.0f}ms"
@@ -148,12 +148,12 @@ class History:
     #: Where failed-command tracebacks are appended: the user's log folder
     #: (core.paths.user_log_dir — writable even when the app is installed
     #: under Program Files), so the user can just send the file.
-    error_log = "ingetrazo-errors.log"
+    error_log = "sipilbim-errors.log"
 
     @staticmethod
     def default_error_log() -> str:
         from core.paths import user_log_dir
-        return str(user_log_dir() / "ingetrazo-errors.log")
+        return str(user_log_dir() / "sipilbim-errors.log")
 
     #: How many steps back the history keeps; the oldest fall off the
     #: front. Every command carries a mesh snapshot, so on a big model the

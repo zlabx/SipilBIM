@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Every tool key still draws an icon, the standard views are told apart,
 and the Solid Tools cursor draws every state -- after the toolbar icons
-were redesigned as IngeTrazo's own (camera, walk, look around, standard
+were redesigned as SipilBIM's own (camera, walk, look around, standard
 views, solid tools, text, eraser, zoom extents, dimensions, pie, freehand,
 rotated rectangle)."""
 from __future__ import annotations

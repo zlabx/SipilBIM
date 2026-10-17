@@ -33,8 +33,8 @@ os.environ["XDG_DATA_HOME"] = _bench_dir
 _QSettings.setDefaultFormat(_QSettings.IniFormat)
 for _scope in (_QSettings.UserScope, _QSettings.SystemScope):
     _QSettings.setPath(_QSettings.IniFormat, _scope, _bench_dir)
-app.setApplicationName("IngeTrazo")
-app.setOrganizationName("IngeTrazo")
+app.setApplicationName("SipilBIM")
+app.setOrganizationName("SipilBIM")
 from views.main_window import MainWindow  # noqa: E402
 import gc  # noqa: E402
 from PySide6.QtCore import QCoreApplication, QEvent  # noqa: E402

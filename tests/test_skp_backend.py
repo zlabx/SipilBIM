@@ -280,7 +280,7 @@ def test_parse_skp_accepts_an_empty_payload(tmp_path, monkeypatch):
 
 def test_openskp_adapter_resolves_face_colours_via_materials_by_id():
     # Face.material_id → SkpModel.materials_by_id (our upstream PR openskp#3)
-    # → IngeTrazo attrs["color"] in 0..1. A model without the join (PyPI
+    # → SipilBIM attrs["color"] in 0..1. A model without the join (PyPI
     # 0.2.0) simply imports uncoloured.
     root = _fake_definition(
         id=0, name="ROOT_MODEL",
@@ -750,7 +750,7 @@ def test_openskp_adapter_colorized_material_tints_shared_texture(tmp_path):
 
 def test_openskp_adapter_carries_file_layers_with_visibility():
     # The file's layers travel on the payload with their hidden state; the
-    # model's DEFAULT layer never travels (it IS IngeTrazo's default layer).
+    # model's DEFAULT layer never travels (it IS SipilBIM's default layer).
     root = _tri_def(0, "ROOT_MODEL")
     model = NS(definitions={0: root}, layers=[
         NS(name="Layer0", visible=True, default=True),

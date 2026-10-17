@@ -7,7 +7,7 @@ viewport on the GPU driver, or on Qt's bundled software rasterizer
 (``opengl32sw.dll``, which Qt falls back to when the driver cannot give a
 3.3 core context — old drivers, Remote Desktop, a VM)? The strings the GL
 context reports answer it, so the viewport records them here, the About
-box shows them, and ``ingetrazo-gl.txt`` in the log folder keeps them for a
+box shows them, and ``sipilbim-gl.txt`` in the log folder keeps them for a
 user who cannot read a dialog over WhatsApp."""
 from __future__ import annotations
 
@@ -64,11 +64,11 @@ def describe(info: dict) -> str:
 
 
 def write_gl_report(info: dict, path: Path | None = None) -> Path | None:
-    """Overwrite ``ingetrazo-gl.txt`` in the log folder with the context
+    """Overwrite ``sipilbim-gl.txt`` in the log folder with the context
     strings; returns the path, or None when nothing is writable."""
     if path is None:
         from core.paths import user_log_dir
-        path = user_log_dir() / "ingetrazo-gl.txt"
+        path = user_log_dir() / "sipilbim-gl.txt"
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         text = (f"vendor   : {info.get('vendor', '')}\n"

@@ -685,7 +685,7 @@ _NON_CHAT = ("whisper", "tts", "embed", "guard", "moderation", "imagen",
              "veo", "aqa", "audio", "transcribe", "image", "dall-e",
              # Groq's agentic "compound" systems run their own tools and
              # answer with prose about what they "did" — no recipe ever
-             # reaches IngeTrazo (Marco, 2026-09-15).
+             # reaches SipilBIM (Marco, 2026-09-15).
              "compound")
 
 

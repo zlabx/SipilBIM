@@ -4,7 +4,7 @@
 
 The realistic road/GIS flow: you trace the alignment in Google Earth or QGIS
 (with your own SHP layers as reference there), export it, and bring it into
-IngeTrazo **correctly located** to profile / measure it. This module parses the
+SipilBIM **correctly located** to profile / measure it. This module parses the
 geometry to plain ``(lat, lon)`` features; the caller projects them through the
 scene datum into local :class:`~georef.geopath.GeoPath` traces.
 

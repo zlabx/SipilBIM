@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Asistente IA — model with AI from INSIDE IngeTrazo, in the side tray's
+"""Asistente IA — model with AI from INSIDE SipilBIM, in the side tray's
 «AI» tab (Ctrl+Shift+A brings it forward, even when hidden).
 
 The user types what they want; the model answers in Spanish and acts by
@@ -66,7 +66,7 @@ TOKENS_BY_PROVIDER = {"gemini": 16384}
 #: modelling reference itself is shared with the MCP door (core.ai_recipes),
 #: so a new helper is taught once and both doors learn it.
 SYSTEM_PROMPT = "\n".join((
-    "Eres el asistente de modelado de IngeTrazo. " + ai_recipes.UNITS
+    "Eres el asistente de modelado de SipilBIM. " + ai_recipes.UNITS
     + " Conversas en español, breve y claro.",
     """
 Para ACTUAR sobre el modelo incluye EXACTAMENTE UN bloque ```python por \

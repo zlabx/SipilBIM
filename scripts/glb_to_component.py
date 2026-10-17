@@ -31,7 +31,7 @@ from PySide6.QtWidgets import QApplication  # noqa: E402
 
 if QApplication.instance() is None:
     app = QApplication([])
-    app.setOrganizationName("IngeTrazoTools")
+    app.setOrganizationName("SipilBIMTools")
     app.setApplicationName("glb-to-component")
 
 import numpy as np  # noqa: E402
@@ -145,7 +145,7 @@ def _alpha_bleed(img):
 
 
 def _auto_exposure(img, target=125.0, max_gain=2.0):
-    """PBR albedo is authored to be LIT; IngeTrazo displays it the classic
+    """PBR albedo is authored to be LIT; SipilBIM displays it the classic
     way (texel × orientation shade), so dark-baked foliage reads near black.
     Lift dark textures toward a mid luminance with a soft shoulder."""
     from PySide6.QtGui import QImage

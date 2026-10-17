@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """The recipe book the model reads — ONE text behind the two AI doors.
 
-IngeTrazo has two of them: the in-app Asistente IA (``plugins/ai_assistant``,
+SipilBIM has two of them: the in-app Asistente IA (``plugins/ai_assistant``,
 which pastes this into its system prompt) and the MCP bridge
 (``scripts/ingetrazo_mcp``, which pastes it into ``run_python``'s description
 and the handshake's ``instructions``). They drifted: the assistant's prompt
@@ -95,7 +95,7 @@ billboard): no la borres ni la muevas salvo que te lo pidan, y no la tomes \
 por el modelo."""
 
 #: Model conventions. First line of everything the model reads.
-UNITS = ("IngeTrazo es un modelador 3D libre de empujar/tirar: Z arriba, "
+UNITS = ("SipilBIM es un modelador 3D libre de empujar/tirar: Z arriba, "
          "unidades en METROS, ángulos en RADIANES.")
 
 

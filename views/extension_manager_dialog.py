@@ -112,7 +112,7 @@ class _CatalogTask(QRunnable):
 class ExtensionManagerDialog(QDialog):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setWindowTitle(tr("Manage extensions") + " — IngeTrazo")
+        self.setWindowTitle(tr("Manage extensions") + " — SipilBIM")
         self.resize(1400, 860)
         self.setMinimumSize(1000, 650)
         self.setStyleSheet(
@@ -147,7 +147,7 @@ class ExtensionManagerDialog(QDialog):
         layout.addLayout(header)
 
         intro = QLabel(tr(
-            "Tools the community adds to IngeTrazo. All are free software "
+            "Tools the community adds to SipilBIM. All are free software "
             "with published code; install only the ones you need."))
         intro.setWordWrap(True)
         layout.addWidget(intro)
@@ -326,7 +326,7 @@ class ExtensionManagerDialog(QDialog):
         if snapshot is not None:
             self._apply_catalog(snapshot)
         elif self._catalog_snapshot is None:
-            # Offline with no cached catalog: what ships with IngeTrazo
+            # Offline with no cached catalog: what ships with SipilBIM
             # still installs from here.
             self._extensions = self._with_bundled([])
             for key in self._pages:
@@ -341,7 +341,7 @@ class ExtensionManagerDialog(QDialog):
 
     @staticmethod
     def _with_bundled(catalog: list) -> list:
-        """The catalog plus the extensions shipped with IngeTrazo that
+        """The catalog plus the extensions shipped with SipilBIM that
         it does not list (Windowizer); a catalog entry wins over a bundled
         one with the same id (Levels, Polygon properties)."""
         known = {e.id for e in catalog}
@@ -605,7 +605,7 @@ class ExtensionManagerDialog(QDialog):
             tags_row.addWidget(chip)
         image_column.addLayout(tags_row)
         license_label = QLabel(
-            tr("Included with IngeTrazo") if extension.bundled
+            tr("Included with SipilBIM") if extension.bundled
             else tr("License: {license}", license=extension.license))
         license_label.setWordWrap(True)
         license_label.setStyleSheet(
@@ -618,9 +618,9 @@ class ExtensionManagerDialog(QDialog):
         version_row = QHBoxLayout()
         version_row.addStretch(1)
         versions = QLabel(
-            tr("Ships with IngeTrazo {version}", version=extension.version)
+            tr("Ships with SipilBIM {version}", version=extension.version)
             if extension.bundled else
-            tr("v{version} · Tested with IngeTrazo {tested}",
+            tr("v{version} · Tested with SipilBIM {tested}",
                version=extension.version, tested=extension.minimum_version))
         versions.setStyleSheet(
             "color: palette(text); font-size: 10px; font-weight: bold")
@@ -652,7 +652,7 @@ class ExtensionManagerDialog(QDialog):
         details.addWidget(summary)
         if not reviewed and not extension.bundled:
             community = QLabel(tr(
-                "Community extension — not reviewed by an IngeTrazo "
+                "Community extension — not reviewed by an SipilBIM "
                 "maintainer."))
             community.setWordWrap(True)
             community.setStyleSheet("color: palette(link); font-size: 11px")
@@ -664,14 +664,14 @@ class ExtensionManagerDialog(QDialog):
             restart.setWordWrap(True)
             details.addWidget(restart)
         if not compatible:
-            warning = QLabel(tr("Requires IngeTrazo {version} or later.",
+            warning = QLabel(tr("Requires SipilBIM {version} or later.",
                                 version=extension.minimum_version))
             warning.setWordWrap(True)
             details.addWidget(warning)
         elif tested_version_is_old(extension):
             warning = QLabel(tr(
                 "Compatibility is uncertain: this extension was tested with "
-                "IngeTrazo {version}.",
+                "SipilBIM {version}.",
                 version=extension.minimum_version))
             warning.setWordWrap(True)
             warning.setStyleSheet("color: palette(link);")
@@ -711,7 +711,7 @@ class ExtensionManagerDialog(QDialog):
             # the catalog version replaces it, or it is set aside.
             if compatible:
                 replace = QPushButton(
-                    tr("Replace with the version included with IngeTrazo")
+                    tr("Replace with the version included with SipilBIM")
                     if extension.bundled
                     else tr("Replace with the catalog version"))
                 replace.clicked.connect(
@@ -906,7 +906,7 @@ class ExtensionManagerDialog(QDialog):
             return
         QMessageBox.information(
             self, tr("Extension installed"),
-            tr("«{name}» is installed. Restart IngeTrazo to load it.",
+            tr("«{name}» is installed. Restart SipilBIM to load it.",
                name=display_name(extension, current_language())))
         for key in self._pages:
             self._render_page(key)
@@ -926,7 +926,7 @@ class ExtensionManagerDialog(QDialog):
             return
         QMessageBox.information(
             self, tr("Extension uninstalled"),
-            tr("«{name}» is uninstalled. Restart IngeTrazo to apply the "
+            tr("«{name}» is uninstalled. Restart SipilBIM to apply the "
                "change.", name=display_name(extension, current_language())))
         for key in self._pages:
             self._render_page(key)
@@ -1000,7 +1000,7 @@ class ExtensionManagerDialog(QDialog):
             self, tr("Uninstall extension"),
             tr("«{name}» was installed by hand. Uninstalling sets it aside "
                "instead of deleting it: it is renamed with a dot in front, "
-               "in the same folder, and IngeTrazo no longer loads it.",
+               "in the same folder, and SipilBIM no longer loads it.",
                name=name),
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if answer != QMessageBox.Yes:
@@ -1012,7 +1012,7 @@ class ExtensionManagerDialog(QDialog):
             return
         QMessageBox.information(
             self, tr("Extension uninstalled"),
-            tr("«{name}» is set aside as {folder}. Restart IngeTrazo to "
+            tr("«{name}» is set aside as {folder}. Restart SipilBIM to "
                "apply the change.", name=name, folder=aside.name))
         for key in self._pages:
             self._render_page(key)
@@ -1022,7 +1022,7 @@ class ExtensionManagerDialog(QDialog):
         answer = QMessageBox.question(
             self, tr("Extension manager"),
             (tr("Replace the copy of «{name}» installed by hand with the "
-                "version included with IngeTrazo? The copy is set aside "
+                "version included with SipilBIM? The copy is set aside "
                 "(renamed with a dot in front), not deleted, and the "
                 "included version can then be disabled and uninstalled from "
                 "here.", name=name) if extension.bundled else
@@ -1042,7 +1042,7 @@ class ExtensionManagerDialog(QDialog):
             return
         QMessageBox.information(
             self, tr("Extension installed"),
-            tr("«{name}» is installed. Restart IngeTrazo to load it.",
+            tr("«{name}» is installed. Restart SipilBIM to load it.",
                name=name))
         for key in self._pages:
             self._render_page(key)
@@ -1057,7 +1057,7 @@ class ExtensionManagerDialog(QDialog):
         action = tr("enabled") if enabled else tr("disabled")
         QMessageBox.information(
             self, tr("Extension changed"),
-            tr("«{name}» is {state}. Restart IngeTrazo for the change to "
+            tr("«{name}» is {state}. Restart SipilBIM for the change to "
                "take effect.", name=display_name(extension, current_language()),
                state=action))
         for key in self._pages:

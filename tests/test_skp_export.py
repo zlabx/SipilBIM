@@ -159,7 +159,7 @@ def test_skp_export_instances_share_one_definition(tmp_path):
 
 
 def test_skp_export_roundtrip_instances(tmp_path):
-    """Export → re-import through IngeTrazo's OWN .skp importer: the three
+    """Export → re-import through SipilBIM's OWN .skp importer: the three
     instances come back as groups at their original world positions —
     the strongest check that the placement matrix convention matches
     ``skp_openskp._matrix`` (and therefore real .skp files)."""
@@ -338,7 +338,7 @@ def test_skp_export_empty_scene(tmp_path):
 
 
 def test_skp_export_annotations_roundtrip(tmp_path):
-    """Dimensions and leader texts drawn in IngeTrazo survive the .skp
+    """Dimensions and leader texts drawn in SipilBIM survive the .skp
     export: re-reading the file yields their world geometry (metres →
     inches), with the text label floating at anchor + offset."""
     from core.dimension import Dimension
@@ -650,7 +650,7 @@ def _face_min_x_m(model, face) -> float:
 
 def test_a_face_painted_on_the_front_stays_front_only_in_the_skp(tmp_path):
     """Faces have sides (2026-09-11): a paint on the front is the front's,
-    and the back is the .skp default — the same thing IngeTrazo now
+    and the back is the .skp default — the same thing SipilBIM now
     shows. A TWO-SIDED face (``back = True``) and a translucent front, which
     reads from both sides here, get the same material and pins on both."""
     png = _make_png(tmp_path / "tile.png")
@@ -779,7 +779,7 @@ def test_translated_copies_inside_one_mesh_share_a_definition(tmp_path):
     """Three translated copies of a 20-face strip fused in one group, plus a
     different 21-face strip: the copy is written ONCE as a definition placed
     three times (at each copy's corner) and the odd strip stays as faces.
-    An older IngeTrazo saved models with their components exploded — the
+    An older SipilBIM saved models with their components exploded — the
     pool's 24 hedges became one 230 400-face group — and the file was 70 MB
     for what the .skp format keeps in a fraction."""
     from core.group import Group
@@ -926,7 +926,7 @@ def _quad_mesh():
 
 def test_only_layers_in_use_are_written(tmp_path):
     """A Purge on the pool threw away 8 of our 10 layers — all
-    empty — and IngeTrazo's default "Layer 0" is the .skp format's own "Layer0":
+    empty — and SipilBIM's default "Layer 0" is the .skp format's own "Layer0":
     an exported file carries the layers something sits on, nothing else."""
     scene = Scene()
     hist = History(scene)

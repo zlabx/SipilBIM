@@ -23,7 +23,7 @@ def test_the_unsaved_changes_box_is_drawn_by_qt(monkeypatch):
     monkeypatch.setattr(QMessageBox, "exec", fake_exec)
     win = MainWindow()
     win.viewport.scene.version += 1               # something unsaved
-    assert win._confirm_discard("Quit IngeTrazo?") is True
+    assert win._confirm_discard("Quit SipilBIM?") is True
     native_off, buttons, default = seen[0]
     assert native_off
     assert buttons == (QMessageBox.Save | QMessageBox.Discard
@@ -48,7 +48,7 @@ def test_the_buttons_speak_the_app_language(monkeypatch):
     try:
         win = MainWindow()
         win.viewport.scene.version += 1
-        assert win._confirm_discard("¿Salir de IngeTrazo?") is False
+        assert win._confirm_discard("¿Salir de SipilBIM?") is False
     finally:
         i18n.set_language(before)
     assert seen == ["Guardar", "No guardar", "Cancelar"]

@@ -1,4 +1,4 @@
-"""Copy/Paste between IngeTrazo windows (issue #76): the model clipboard
+"""Copy/Paste between SipilBIM windows (issue #76): the model clipboard
 travels through the system clipboard as a small ``.igz``-based payload."""
 from __future__ import annotations
 

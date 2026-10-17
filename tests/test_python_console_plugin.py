@@ -32,7 +32,7 @@ def win():
     w = MainWindow()
     yield w
     # Console runs DO dirty the document (that is the feature); mark it
-    # saved before closing or closeEvent's modal "Quit IngeTrazo?" box
+    # saved before closing or closeEvent's modal "Quit SipilBIM?" box
     # blocks forever under the offscreen platform.
     w._saved_version = w.viewport.scene.version
     w.close()

@@ -53,7 +53,7 @@ class PreferencesDialog(QDialog):
     def __init__(self, window) -> None:
         super().__init__(window)
         self._window = window
-        self.setWindowTitle(tr("Preferences") + " — IngeTrazo")
+        self.setWindowTitle(tr("Preferences") + " — SipilBIM")
         self.setMinimumWidth(440)
         st = QSettings()
 
@@ -388,7 +388,7 @@ class PreferencesDialog(QDialog):
                 set_language(code)
                 QMessageBox.information(
                     self, tr("Language changed"),
-                    tr("Restart IngeTrazo to apply the new language."))
+                    tr("Restart SipilBIM to apply the new language."))
 
         # Theme: applies at once (a no-op re-apply is cheap).
         from views.theme import apply_theme, save_theme, saved_theme

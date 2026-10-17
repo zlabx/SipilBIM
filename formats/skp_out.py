@@ -38,7 +38,7 @@ from core.texture import face_uv_axes, projection_basis, uv_reference_points
 # turns about its own Z so that its LOCAL −Y axis points at the eye.
 _FACEME_FRONT = (0.0, -1.0)
 
-# IngeTrazo stores geometry in metres; the .skp format works in inches.
+# SipilBIM stores geometry in metres; the .skp format works in inches.
 _M_TO_IN = 39.37007874
 
 
@@ -78,7 +78,7 @@ def _boundary_edges(face):
 def _is_hidden_face(face):
     """True when EVERY bounding edge of the face is hidden: the writer's
     ``hidden_edges`` applies to all the edges a face creates, so only a
-    face whose outline is fully invisible in IngeTrazo asks for it — a
+    face whose outline is fully invisible in SipilBIM asks for it — a
     figure's cut-out quad, a leaf card whose outline is its texture mask.
     Without it the .skp reader drew a black rectangle around Sumari."""
     edges = _boundary_edges(face)
@@ -229,7 +229,7 @@ def _collect_layers(scene, builder, used=None):
     """Register the scene's layers on the builder AFTER materials — only
     the ones something exported sits on, when ``used`` (a set of names)
     is given: a purge of unused items on Marco's pool threw away 8 of our 10
-    layers, every one of them empty, and IngeTrazo's default "Layer 0" is
+    layers, every one of them empty, and SipilBIM's default "Layer 0" is
     the .skp "Layer0" already (a face on it carries no layer).
 
     Returns ``layer_handles``: ``layer_name → layer_slot``."""
@@ -839,7 +839,7 @@ def _share_repeats(sources):
     ``per_owner[owner] = (copies, remaining_faces)`` with ``copies`` a list
     of ``(proto_index, xform)`` — the placement, local metres → owner metres.
 
-    A model saved by an older IngeTrazo has its components exploded: Marco's
+    A model saved by an older SipilBIM has its components exploded: Marco's
     pool carries 24 hedges — 7200 leaves — fused into ONE group of 230 400
     faces, three identical benches as three groups. The .skp format keeps such
     things as one definition placed N times, and so does this writer for
@@ -1007,7 +1007,7 @@ def _compensate_pins(pairs, pts_in, normal, quirks, applied):
         pairs = [(pt, (u * aw, v * ah)) for pt, (u, v) in pairs]
     if "first-edge basis" in quirks and len(pts_in) >= 2:
         # The normal the reader will read is the plane the WRITER computes
-        # from these very points, in float64 — not IngeTrazo's float32
+        # from these very points, in float64 — not SipilBIM's float32
         # one. A horizontal face is exactly vertical there while the
         # float32 normal carried (2.9e-6, 0, 1): the Z × n basis snaps to
         # the world axes only at the vertical, so the two bases were 90°
@@ -1072,7 +1072,7 @@ def _face_uv_pairs(face, points=None, quirks=frozenset(), applied=(1.0, 1.0),
     degenerate face, which then takes the .skp default projection.
 
     Without this the exporter wrote textured faces with no mapping at all,
-    and a model saved from IngeTrazo opened in a web .skp viewer with every
+    and a model saved from SipilBIM opened in a web .skp viewer with every
     texture gone, each surface flat in its average colour (Marco's pool: the
     water lavender, the deck terracotta, the palm a black silhouette). The
     recipe is shared with the renderer through ``core.texture.face_uv_axes``,

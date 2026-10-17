@@ -38,7 +38,7 @@ class _Win:
 def _isolated_settings():
     prev_org = QCoreApplication.organizationName()
     prev_app = QCoreApplication.applicationName()
-    QCoreApplication.setOrganizationName("IngeTrazoTest")
+    QCoreApplication.setOrganizationName("SipilBIMTest")
     QCoreApplication.setApplicationName("georef-utm-test")
     QSettings().clear()
     yield

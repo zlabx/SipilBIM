@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""The units to work in, asked once when IngeTrazo starts.
+"""The units to work in, asked once when SipilBIM starts.
 
 Three ready configurations — metres (m, m², m³, degrees), millimetres and
 imperial feet-and-inches — or Custom…, which takes the user to the units

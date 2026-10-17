@@ -33,7 +33,7 @@ NOMINATIM = "https://nominatim.openstreetmap.org/search"
 IPAPI = "https://ipapi.co/json/"
 from core.version import __version__
 
-_USER_AGENT = (f"IngeTrazo/{__version__} (https://github.com/ingelibre/ingetrazo)").encode()
+_USER_AGENT = (f"SipilBIM/{__version__} (https://sipilstock.com/sipilbim/; based on IngeTrazo)").encode()
 
 
 @dataclass(frozen=True)

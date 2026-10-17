@@ -1,7 +1,7 @@
-"""Copy and paste between IngeTrazo windows (issue #76).
+"""Copy and paste between SipilBIM windows (issue #76).
 
 The model clipboard lives on the viewport (``viewport.clipboard``), so it
-never left the process: with two IngeTrazo windows open side by side,
+never left the process: with two SipilBIM windows open side by side,
 Ctrl+C in one and Ctrl+V in the other pasted nothing. Copy now also offers
 the clipboard on the SYSTEM clipboard under :data:`MIME`, and Paste adopts
 it when it came from another window.
@@ -165,7 +165,7 @@ def flush() -> None:
 
 
 def foreign() -> dict | None:
-    """The clipboard another IngeTrazo window copied, decoded — or ``None``
+    """The clipboard another SipilBIM window copied, decoded — or ``None``
     when the system clipboard holds this window's own copy, or no model
     clipboard at all."""
     from PySide6.QtWidgets import QApplication

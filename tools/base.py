@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Base class for IngeTrazo tools and the per-event ``ToolContext`` they receive.
+"""Base class for SipilBIM tools and the per-event ``ToolContext`` they receive.
 
 A tool is anything the user activates from the toolbar to interact with the
 viewport: draw, modify, select. Both built-in tools and third-party plugins

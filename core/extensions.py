@@ -8,7 +8,7 @@ places:
 
 - ``<app_root>/plugins/`` — plugins bundled with the application. Read-only
   in a frozen install (AppImage mount, Program Files), listed in
-  ``ingetrazo.spec`` so they actually travel with the installers.
+  ``sipilbim.spec`` so they actually travel with the installers.
 - the per-user directory (``%APPDATA%/ingetrazo/plugins`` on Windows,
   ``$XDG_DATA_HOME/ingetrazo/plugins`` — default ``~/.local/share/...`` —
   elsewhere): where third-party plugins are installed without touching the

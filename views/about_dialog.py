@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Help ▸ About IngeTrazo, with the contributors rolling like film credits.
+"""Help ▸ About SipilBIM, with the contributors rolling like film credits.
 
 The list of people whose work is IN the program keeps growing — a
 draftsman's reports, a reviewer's drafting norms, a translation, the Mac
@@ -214,7 +214,7 @@ class _Credits(QWidget):
 class AboutDialog(QDialog):
     def __init__(self, parent, version: str, gl_line: str = "") -> None:
         super().__init__(parent)
-        self.setWindowTitle(tr("About IngeTrazo"))
+        self.setWindowTitle(tr("About SipilBIM"))
         self.setMinimumWidth(480)
         outer = QHBoxLayout(self)
         outer.setContentsMargins(18, 18, 18, 14)
@@ -241,16 +241,19 @@ class AboutDialog(QDialog):
         # The top is one compact block, so the credits below get the room
         # (Marco, 23-09).
         gl = f"<br><small>OpenGL: {gl_line}</small>" if gl_line else ""
-        para("<b style='font-size:15px'>IngeTrazo</b> "
+        para("<b style='font-size:15px'>SipilBIM</b> "
              f"{tr('Version')} {version}{gl}<br>"
              f"{tr('Free 3D modeler for architecture, engineering and 3D design.')}<br>"
-             f"{tr('Created by')} <b>Marco Sumari Tellez</b> — "
+             f"IngeTrazo — {tr('Created by')} <b>Marco Sumari Tellez</b> — "
              f"{tr('Civil Engineer — Arequipa, Peru')}")
+        para("<small>SipilBIM is a build of IngeTrazo, free software by Marco Sumari Tellez and "
+             "contributors, with its own name and icon. Source of this build: "
+             "<a href='https://github.com/zlabx/SipilBIM'>github.com/zlabx/SipilBIM</a></small>")
         head = para(f"<b>{tr('With contributions from')}</b>")
         head.setContentsMargins(0, 8, 0, 0)
         self.credits = _Credits(CONTRIBUTORS, self)
         col.addWidget(self.credits)
-        para(f"<small>{tr('And thanks to everyone who tries IngeTrazo and reports what they find.')}</small>")
+        para(f"<small>{tr('And thanks to everyone who tries SipilBIM and reports what they find.')}</small>")
         para(f"<small>{tr('Licensed under GPL-3.0-or-later.')} · "
              "<a href='https://github.com/ingelibre/ingetrazo'>"
              "github.com/ingelibre/ingetrazo</a></small>")

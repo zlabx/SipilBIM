@@ -111,7 +111,7 @@ def test_mcp_server_protocol_and_bridge_down_message(monkeypatch):
 
     init = mcp.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize",
                        "params": {}})
-    assert init["result"]["serverInfo"]["name"] == "ingetrazo"
+    assert init["result"]["serverInfo"]["name"] == "sipilbim"
 
     tools = mcp.handle({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
     names = {t["name"] for t in tools["result"]["tools"]}
@@ -133,8 +133,8 @@ def test_the_packaged_app_tells_windows_users_the_exe_to_run():
     from plugins.ai_bridge import connect_instructions, mcp_command, desktop_config_path
 
     cmd = mcp_command("win32", frozen=True,
-                      executable=r"C:\Program Files\IngeTrazo\ingetrazo.exe")
-    assert cmd == [r"C:\Program Files\IngeTrazo\ingetrazo-mcp.exe"]
+                      executable=r"C:\Program Files\SipilBIM\sipilbim.exe")
+    assert cmd == [r"C:\Program Files\SipilBIM\sipilbim-mcp.exe"]
     assert mcp_command("linux", frozen=True, executable="/opt/it/ingetrazo") == \
         ["/opt/it/ingetrazo", "--mcp"]
     # A POSIX root even on a Windows host, where Path("/src/app") is
@@ -146,10 +146,10 @@ def test_the_packaged_app_tells_windows_users_the_exe_to_run():
     assert desktop_config_path("win32").endswith("claude_desktop_config.json")
 
     text = connect_instructions(4763, "win32", frozen=True,
-                                executable=r"C:\Program Files\IngeTrazo\ingetrazo.exe")
-    assert 'claude mcp add ingetrazo -- "C:\\Program Files\\IngeTrazo\\ingetrazo-mcp.exe"' in text
+                                executable=r"C:\Program Files\SipilBIM\sipilbim.exe")
+    assert 'claude mcp add sipilbim -- "C:\\Program Files\\SipilBIM\\sipilbim-mcp.exe"' in text
     snippet = text[text.index("{"):text.rindex("}") + 1]
-    assert json.loads(snippet)["mcpServers"]["ingetrazo"]["command"].endswith("ingetrazo-mcp.exe")
+    assert json.loads(snippet)["mcpServers"]["sipilbim"]["command"].endswith("sipilbim-mcp.exe")
 
 
 def test_the_linux_packages_print_a_command_that_outlives_the_session():
@@ -160,8 +160,8 @@ def test_the_linux_packages_print_a_command_that_outlives_the_session():
     from plugins.ai_bridge import mcp_command, connect_instructions
     mount = "/tmp/.mount_IngeTrJk3f/usr/bin/ingetrazo"
     assert mcp_command("linux", frozen=True, executable=mount,
-                       env={"APPIMAGE": "/home/ana/Apps/IngeTrazo-0.4.9-x86_64.AppImage"}) == \
-        ["/home/ana/Apps/IngeTrazo-0.4.9-x86_64.AppImage", "--mcp"]
+                       env={"APPIMAGE": "/home/ana/Apps/SipilBIM-0.4.9-x86_64.AppImage"}) == \
+        ["/home/ana/Apps/SipilBIM-0.4.9-x86_64.AppImage", "--mcp"]
     assert mcp_command("linux", frozen=False, root=Path("/app/ingetrazo"),
                        env={"FLATPAK_ID": "com.ingetrazo.IngeTrazo"}) == \
         ["flatpak", "run", "com.ingetrazo.IngeTrazo", "--mcp"]
@@ -172,7 +172,7 @@ def test_the_linux_packages_print_a_command_that_outlives_the_session():
         ["/opt/it/ingetrazo", "--mcp"]
     text = connect_instructions(4763, "linux", frozen=False, root=Path("/app/ingetrazo"),
                                 env={"FLATPAK_ID": "com.ingetrazo.IngeTrazo"})
-    assert "claude mcp add ingetrazo -- flatpak run com.ingetrazo.IngeTrazo --mcp" in text
+    assert "claude mcp add sipilbim -- flatpak run com.ingetrazo.IngeTrazo --mcp" in text
 
 
 def test_the_flatpak_ships_the_mcp_script():
@@ -187,9 +187,9 @@ def test_the_flatpak_ships_the_mcp_script():
 def test_the_mcp_script_ships_with_the_app_and_the_flag_finds_it():
     from core.paths import app_root
     assert (app_root() / "scripts" / "ingetrazo_mcp.py").is_file()
-    spec = (app_root() / "ingetrazo.spec").read_text(encoding="utf-8")
+    spec = (app_root() / "sipilbim.spec").read_text(encoding="utf-8")
     assert "('scripts/ingetrazo_mcp.py',   'scripts')" in spec
-    assert "name='ingetrazo-mcp'" in spec and "console=True" in spec
+    assert "name='sipilbim-mcp'" in spec and "console=True" in spec
 
 
 def test_the_mcp_door_hands_the_model_the_same_recipe_book_as_the_assistant():

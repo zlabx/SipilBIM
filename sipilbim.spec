@@ -1,12 +1,12 @@
 # -*- mode: python ; coding: utf-8 -*-
-"""PyInstaller spec for IngeTrazo.
+"""PyInstaller spec for SipilBIM.
 
 Produces (one-dir mode):
-- Windows: dist\\ingetrazo\\  (ingetrazo.exe + DLLs + _internal resources)
-- Linux:   dist/ingetrazo/   (binary + libs)
+- Windows: dist\\sipilbim\\  (sipilbim.exe + DLLs + _internal resources)
+- Linux:   dist/sipilbim/   (binary + libs)
 
 Build:
-    pyinstaller ingetrazo.spec --noconfirm
+    pyinstaller sipilbim.spec --noconfirm
 
 The same spec works on every platform (mirrors ingepresupuestos.spec in the
 sibling repo). Runtime resource lookups are repo-root-relative
@@ -62,7 +62,7 @@ datas = [
     # extensions copies one into the user's plugins folder on request.
     # Whole folder: an example extension can be a package (CAM, PR #132).
     ('examples/extensions',        'examples/extensions'),
-    # The MCP server (stdlib-only): `ingetrazo --mcp` runs it by path, and
+    # The MCP server (stdlib-only): `sipilbim --mcp` runs it by path, and
     # the console build below makes it a program of its own on Windows.
     ('scripts/ingetrazo_mcp.py',   'scripts'),
 ]
@@ -197,7 +197,7 @@ hiddenimports += _app_imports(
 from PyInstaller.utils.hooks import collect_data_files
 hiddenimports += collect_submodules('openskp')
 # ...except _scaffold/blank_v17.skp, the blank document openskp's writer
-# builds its files on top of. IngeTrazo does not distribute it and has no
+# builds its files on top of. SipilBIM does not distribute it and has no
 # .skp export; main.py --check fails a frozen bundle that still carries it.
 datas += [(src, dst) for src, dst in collect_data_files('openskp')
           if '_scaffold' not in src.replace('\\', '/')]
@@ -311,7 +311,7 @@ pyz = PYZ(a.pure, a.zipped_data)
 
 icon = None
 if sys.platform == 'win32':
-    win_ico = ROOT / 'resources' / 'icons' / 'ingetrazo.ico'
+    win_ico = ROOT / 'resources' / 'icons' / 'sipilbim.ico'
     if win_ico.exists():
         icon = str(win_ico)
 
@@ -320,7 +320,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='ingetrazo',
+    name='sipilbim',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -354,7 +354,7 @@ mcp_exe = EXE(
     mcp_a.scripts,
     [],
     exclude_binaries=True,
-    name='ingetrazo-mcp',
+    name='sipilbim-mcp',
     debug=False,
     strip=False,
     upx=False,
@@ -374,7 +374,7 @@ coll = COLLECT(
     strip=False,
     upx=False,
     upx_exclude=[],
-    name='ingetrazo',
+    name='sipilbim',
 )
 
 # ── macOS: wrap the onedir COLLECT as a double-clickable .app ────────────────
@@ -383,15 +383,15 @@ coll = COLLECT(
 # MCP client that already knows its path, so it does not need its own bundle.
 if sys.platform == 'darwin':
     from core.version import __version__ as _version
-    mac_icon = ROOT / 'resources' / 'icons' / 'ingetrazo.icns'
+    mac_icon = ROOT / 'resources' / 'icons' / 'sipilbim.icns'
     app = BUNDLE(
         coll,
-        name='IngeTrazo.app',
+        name='SipilBIM.app',
         icon=str(mac_icon) if mac_icon.exists() else None,
         bundle_identifier='com.ingetrazo.IngeTrazo',
         info_plist={
-            'CFBundleName': 'IngeTrazo',
-            'CFBundleDisplayName': 'IngeTrazo',
+            'CFBundleName': 'SipilBIM',
+            'CFBundleDisplayName': 'SipilBIM',
             'CFBundleShortVersionString': _version,
             'CFBundleVersion': _version,
             'NSHighResolutionCapable': True,
@@ -404,7 +404,7 @@ if sys.platform == 'darwin':
             # platforms register (packaging/ingetrazo.desktop, the .iss).
             'CFBundleDocumentTypes': [
                 {
-                    'CFBundleTypeName': 'IngeTrazo document',
+                    'CFBundleTypeName': 'SipilBIM document',
                     'CFBundleTypeExtensions': ['igz'],
                     'CFBundleTypeRole': 'Editor',
                     'LSHandlerRank': 'Owner',

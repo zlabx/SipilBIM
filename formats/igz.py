@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Native IngeTrazo document format (``.igz``).
+"""Native SipilBIM document format (``.igz``).
 
 Plain JSON, schema-versioned. Trivial to inspect, edit by hand, and diff
 in source control. Will grow as new entity types (faces, groups,
@@ -771,7 +771,7 @@ def _write_container(path: Path, doc: str, blobs: dict,
 def _parse_json(text, pump=None):
     """``json.loads`` — in a worker thread while ``pump`` keeps the window
     answering, when given. A 3.3 GB document took 24 s in one call, and the
-    desktop flagged IngeTrazo as «not responding» after five (Marco, 01-10,
+    desktop flagged SipilBIM as «not responding» after five (Marco, 01-10,
     the model of #158); the parser lets the main thread in every ~0.4 s."""
     if pump is None:
         return json.loads(text, parse_constant=_note_constant)
@@ -807,7 +807,7 @@ def _read_document(path: Path, pump=None):
     except KeyError:
         archive.close()
         raise ValueError(
-            f"{path.name} is not an IngeTrazo document (no {_DOC_ENTRY}).")
+            f"{path.name} is not an SipilBIM document (no {_DOC_ENTRY}).")
     return data, archive
 
 
@@ -1170,7 +1170,7 @@ def _release_in_steps(data, pump) -> None:
     """Drop the parsed document a slice at a time, ``pump()`` between
     slices. Released in one go when the loader returned, the JSON tree of
     a 3.3 GB document — tens of millions of objects — kept the window from
-    answering for 8 s, long enough for the desktop to call IngeTrazo «not
+    answering for 8 s, long enough for the desktop to call SipilBIM «not
     responding» (#158)."""
     import time
     last = time.monotonic()

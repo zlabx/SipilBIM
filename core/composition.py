@@ -1424,7 +1424,7 @@ class Composicion:
     @classmethod
     def from_dict(cls, d: dict) -> "Composicion":
         """Rebuild a sheet from its .igz record. Keys this version does not
-        know (a sheet saved by a newer IngeTrazo) are dropped, not fatal:
+        know (a sheet saved by a newer SipilBIM) are dropped, not fatal:
         the model must open whatever the sheets carry."""
         c = cls(name=d.get("name", "Lámina 1"),
                 paper=d.get("paper", "A4"),

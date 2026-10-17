@@ -1158,7 +1158,7 @@ class ComponentsPanel(QWidget):
         # library drawn from a file of one's own.
         from_file = QPushButton(tr("Components from File…"))
         from_file.setToolTip(tr(
-            "Add the components of another IngeTrazo document to this "
+            "Add the components of another SipilBIM document to this "
             "list, kept in the file and ready to place or swap in"))
         from_file.clicked.connect(window._on_components_from_file)
         lay.addWidget(from_file)

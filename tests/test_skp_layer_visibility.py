@@ -10,7 +10,7 @@ off.
 
 Found on 2026-09-17 with Rafael's ``edificio.skp``: the file hides
 ``Camera_FOV_Lines`` and ``Camera_FOV_Volume``, so the original program shows a
-small camera glyph and nothing else. IngeTrazo drew the whole camera frustum
+small camera glyph and nothing else. SipilBIM drew the whole camera frustum
 across the model — Marco spotted it comparing screenshots side by side.
 
 Not a regression from the openskp 1.3.0 repin: the old pinned version
@@ -75,7 +75,7 @@ def test_a_plain_layer_is_still_visible():
 
 
 def test_the_default_layer_still_does_not_travel():
-    """``Layer0`` IS IngeTrazo's default layer; importing it would make a
+    """``Layer0`` IS SipilBIM's default layer; importing it would make a
     duplicate. Pinned so the visibility fix does not let it through."""
     got = _layers_of(_Model([_Layer("Layer0"), _Layer("Untagged"),
                              _Layer("Muros")]))

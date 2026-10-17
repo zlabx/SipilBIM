@@ -23,7 +23,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
 
 app = QApplication(sys.argv)
-app.setOrganizationName("IngeTrazoThumbs")
+app.setOrganizationName("SipilBIMThumbs")
 app.setApplicationName("gen-thumbs")
 
 import views.viewport as vpmod

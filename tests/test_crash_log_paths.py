@@ -42,12 +42,12 @@ def test_crash_log_opens_with_a_read_only_cwd_and_no_stderr(tmp_path, state_home
         if os.access(ro, os.W_OK):
             pytest.skip("running as a user that writes anywhere")
         with pytest.raises(PermissionError):
-            open("ingetrazo-crash.log", "a")          # the old behaviour
+            open("sipilbim-crash.log", "a")          # the old behaviour
         fh = paths.open_crash_log()
         assert fh is not None
         fh.write("ok\n")
         fh.close()
-        assert (paths.user_log_dir() / "ingetrazo-crash.log").read_text().endswith("ok\n")
+        assert (paths.user_log_dir() / "sipilbim-crash.log").read_text().endswith("ok\n")
         # the startup rule: a handle → faulthandler on it; none → only if stderr
         import faulthandler
         fh = paths.open_crash_log()
@@ -81,5 +81,5 @@ def test_failed_commands_log_into_the_user_folder(state_home):
 def test_no_default_writes_land_in_the_working_directory(tmp_path, state_home, monkeypatch):
     monkeypatch.chdir(tmp_path)
     from core.history import History
-    assert not Path("ingetrazo-errors.log").exists()
+    assert not Path("sipilbim-errors.log").exists()
     assert Path(History.default_error_log()).is_absolute()

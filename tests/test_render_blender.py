@@ -112,13 +112,13 @@ def test_under_flatpak_renders_go_where_the_host_sees_them(tmp_path,
                                                           monkeypatch):
     monkeypatch.setattr(rb, "in_flatpak", lambda: True)
     monkeypatch.setattr(rb.Path, "home", lambda: tmp_path)
-    assert rb.work_base() == tmp_path / ".cache" / "IngeTrazo" / "render"
+    assert rb.work_base() == tmp_path / ".cache" / "SipilBIM" / "render"
 
 
 @pytest.mark.parametrize("line, expected", [
     ("INGETRAZO stats Remaining: 00:03.05 | Mem: 77M | Sample 16/64", 0.25),
     ("INGETRAZO stats Rendering 32 / 64 samples", 0.5),
-    ("INGETRAZO stats Mem: 0M | Synchronizing object | IngeTrazo", None),
+    ("INGETRAZO stats Mem: 0M | Synchronizing object | SipilBIM", None),
 ])
 def test_progress_is_read_from_both_engines(line, expected):
     assert rb.progress_of(line) == expected

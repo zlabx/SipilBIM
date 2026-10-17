@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Toolbar icons, drawn programmatically with QPainter (Track: UI).
 
-IngeTrazo has its **own** icons — the goal is not to copy any one program but to
+SipilBIM has its **own** icons — the goal is not to copy any one program but to
 be understood at a glance, so the learning curve is near zero. Each icon is the
 plainest picture of what the tool does: the drawing tools *are* their shapes (a
 line is a line, a rectangle a rectangle), Paint is a brush laying a band of
@@ -61,7 +61,7 @@ def _canvas():
 
 
 def _accent() -> QColor:
-    return QColor(243, 115, 41)   # IngeTrazo orange, for endpoint dots / handles
+    return QColor(243, 115, 41)   # SipilBIM orange, for endpoint dots / handles
 
 
 # ---- Per-tool drawings ---------------------------------------------------------
@@ -541,7 +541,7 @@ def _eyedropper(p, ink):
 
 
 def _paint(p, ink):
-    # IngeTrazo's Paint tool (apply a colour/material to a face), replicating
+    # SipilBIM's Paint tool (apply a colour/material to a face), replicating
     # Inkscape's symbolic "color-fill": a tilted square bucket (a diamond) half
     # full of paint, a handle stub at the top-right, a spout at the lower-left,
     # and a fat drop falling from it. Coordinates ported from the 16 px SVG
@@ -957,7 +957,7 @@ def _zoom_selection(p, ink):
 
 
 # ---- Standard-view icons: a little house drawn from each viewpoint ----------
-# Each orthographic view shows IngeTrazo's own little house from that
+# Each orthographic view shows SipilBIM's own little house from that
 # direction — ONE gable house, consistently, no windows: the door on the
 # front gable, the chimney on the right slope toward the back (right of
 # the apex from the front, left of it from behind, at the far end from

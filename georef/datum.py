@@ -12,7 +12,7 @@ and projects every other point into a local, continuous, metre-based frame:
     Y = northing (north, metres from anchor)
     Z = altitude (metres from anchor altitude)
 
-matching IngeTrazo's Z-up / X-east / Y-north convention.
+matching SipilBIM's Z-up / X-east / Y-north convention.
 
 Projection is UTM (WGS84 Transverse Mercator). The datum **freezes the UTM
 zone** at construction and projects every point through that single zone, so

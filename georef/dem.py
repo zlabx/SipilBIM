@@ -9,7 +9,7 @@ render — just ``elevation_at(lat, lon)``, which is exactly what the G4 profile
 tool needs. The full drape-over-terrain render is the rest of G2, later.
 
 Source: **AWS Terrain Tiles** (``terrarium`` encoding) — an open, no-API-key
-global DEM (SRTM / NED / etc.), so IngeTrazo pulls elevation with zero
+global DEM (SRTM / NED / etc.), so SipilBIM pulls elevation with zero
 credentials and zero new services. Encoding is provider-declared, so a Mapbox
 Terrain-RGB URL (with a token) also works if the user pastes one.
 

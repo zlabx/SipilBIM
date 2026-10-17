@@ -297,7 +297,7 @@ def save_stl(scene, path) -> None:
     """Write the scene as a binary STL to ``path``."""
     tris = list(iter_triangles(scene))
     with open(Path(path), "wb") as f:
-        f.write(b"IngeTrazo STL export".ljust(80, b"\x00"))  # 80-byte header
+        f.write(b"SipilBIM STL export".ljust(80, b"\x00"))  # 80-byte header
         f.write(struct.pack("<I", len(tris)))
         for a, b, c in tris:
             n = _normal(a, b, c)

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Hybrid laptops: IngeTrazo claims the discrete GPU through the same
+"""Hybrid laptops: SipilBIM claims the discrete GPU through the same
 registry value the Windows Graphics settings page writes."""
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ class _FakeWinreg:
         self.closed += 1
 
 
-EXE = Path(r"C:\Program Files\IngeTrazo\ingetrazo.exe")
+EXE = Path(r"C:\Program Files\SipilBIM\sipilbim.exe")
 
 
 def test_first_run_claims_the_high_performance_gpu():

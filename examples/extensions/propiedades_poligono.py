@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Rony Leonel Janampa Monago
-# Adapted to IngeTrazo's extension API (selection, holes, composite
-# sections, document units, translations) by the IngeTrazo maintainers.
+# Adapted to SipilBIM's extension API (selection, holes, composite
+# sections, document units, translations) by the SipilBIM maintainers.
 """Polygon properties — area, centroid and second moments of the selected faces.
 
 Select one face (or several faces in the same plane: a section drawn in

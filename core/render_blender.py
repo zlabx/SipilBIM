@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Render with Blender (issue #181): everything but the dialog.
 
-IngeTrazo does not render photorealistic images itself; the user's own
+SipilBIM does not render photorealistic images itself; the user's own
 Blender does, in the background (``blender -b``), with Cycles or EEVEE.
 This module finds that Blender, writes the job (the model as GLB, the
 current camera, the sun of the Shadows panel, engine and quality), builds
@@ -124,7 +124,7 @@ def find_blender(saved: str | None = None) -> Optional[BlenderFound]:
     for cand in _platform_candidates():
         if Path(cand).is_file():
             return BlenderFound([cand], cand)
-    # Blender installed from Flathub, on a system where IngeTrazo itself is
+    # Blender installed from Flathub, on a system where SipilBIM itself is
     # not a Flatpak (the AppImage, the tarball): `flatpak run` it.
     flatpak = shutil.which("flatpak")
     if flatpak and sys.platform.startswith("linux"):
@@ -149,7 +149,7 @@ FLATPAK_PERMISSION = ("flatpak override --user "
 
 
 def package_kind() -> str:
-    """Which IngeTrazo this is: snap, flatpak, windows, macos, or linux
+    """Which SipilBIM this is: snap, flatpak, windows, macos, or linux
     (AppImage, tarball or source — all can run a system Blender)."""
     if in_snap():
         return "snap"
@@ -179,13 +179,13 @@ def install_steps(kind: str | None = None,
         steps = [("Install Blender from Flathub (skip it if you already have "
                   "Blender):", f"flatpak install flathub {BLENDER_FLATPAK_ID}")]
         if not host_allowed:
-            steps.append(("Let IngeTrazo start it (the Flatpak cannot see "
+            steps.append(("Let SipilBIM start it (the Flatpak cannot see "
                           "other programs on its own), once:",
                           FLATPAK_PERMISSION))
         return steps
     if kind == "snap":
         return [("The Snap package cannot start other programs. To render "
-                 "with Blender, use IngeTrazo's AppImage or Flatpak.", None)]
+                 "with Blender, use SipilBIM's AppImage or Flatpak.", None)]
     return [("Install Blender, for example with Snap (current version):",
              "sudo snap install blender --classic"),
             ("or with Flatpak:", f"flatpak install flathub {BLENDER_FLATPAK_ID}")]
@@ -198,14 +198,14 @@ def flatpak_host_allowed() -> bool:
 
 # ---- The environment Blender runs in ----------------------------------------
 
-#: Variables a frozen IngeTrazo sets for ITSELF that would break Blender.
+#: Variables a frozen SipilBIM sets for ITSELF that would break Blender.
 _OURS = ("PYTHONHOME", "PYTHONPATH", "QT_PLUGIN_PATH",
          "QT_QPA_PLATFORM_PLUGIN_PATH", "QML2_IMPORT_PATH", "QT_QPA_PLATFORM")
 
 
 def clean_env(environ: dict | None = None) -> dict:
     """The environment for the Blender child: PyInstaller's
-    ``LD_LIBRARY_PATH`` points at IngeTrazo's bundled libraries, and a
+    ``LD_LIBRARY_PATH`` points at SipilBIM's bundled libraries, and a
     Blender that inherits it loads our Qt/Python libs and dies. PyInstaller
     keeps the original in ``LD_LIBRARY_PATH_ORIG``; restore it."""
     env = dict(os.environ if environ is None else environ)
@@ -440,11 +440,11 @@ def work_base() -> Path:
     the real ``~/.cache`` (the sandbox's own cache lives under
     ``~/.var/app``, which Blender's own Flatpak cannot read)."""
     if in_flatpak():
-        return Path.home() / ".cache" / "IngeTrazo" / "render"
+        return Path.home() / ".cache" / "SipilBIM" / "render"
     from PySide6.QtCore import QStandardPaths
     base = QStandardPaths.writableLocation(
         QStandardPaths.StandardLocation.GenericCacheLocation)
-    return Path(base) / "IngeTrazo" / "render"
+    return Path(base) / "SipilBIM" / "render"
 
 
 def command(found: BlenderFound, job: Path) -> list:
@@ -452,7 +452,7 @@ def command(found: BlenderFound, job: Path) -> list:
     file or add-ons, running our script on the job.
 
     The script always travels next to the job, a folder Blender is sure to
-    see. Its own path may exist only for IngeTrazo: inside our Flatpak
+    see. Its own path may exist only for SipilBIM: inside our Flatpak
     (``/app/ingetrazo/…``, «Python file … could not be opened»), or under
     the AppImage's ``/tmp/.mount_…`` when Blender is the Flathub one, whose
     sandbox sees the home folder but not our /tmp."""

@@ -5,7 +5,7 @@ window instead of spawning a rival the desktop then kills as a duplicate."""
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
 
-_NAME = "ingetrazo-single-instance-test"
+_NAME = "sipilbim-single-instance-test"
 
 
 def _app():

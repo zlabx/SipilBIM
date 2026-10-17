@@ -36,17 +36,17 @@ def user_log_dir() -> Path:
     Files, read-only for users, and a relative ``open("…log", "a")`` at
     startup raised PermissionError — whose fallback touched ``sys.stderr``,
     None in a windowed build, so v0.3.8/v0.3.9 died before showing a window
-    ("sys.stderr is None"). Windows: ``%LOCALAPPDATA%\\IngeTrazo``; macOS:
-    ``~/Library/Logs/IngeTrazo``; elsewhere ``$XDG_STATE_HOME/ingetrazo`` or
+    ("sys.stderr is None"). Windows: ``%LOCALAPPDATA%\\SipilBIM``; macOS:
+    ``~/Library/Logs/SipilBIM``; elsewhere ``$XDG_STATE_HOME/ingetrazo`` or
     ``~/.local/state/ingetrazo``; the temp dir as the last resort."""
     import os
     import tempfile
     home = Path.home()
     if sys.platform.startswith("win"):
         base = os.environ.get("LOCALAPPDATA") or str(home / "AppData" / "Local")
-        candidates = [Path(base) / "IngeTrazo"]
+        candidates = [Path(base) / "SipilBIM"]
     elif sys.platform == "darwin":
-        candidates = [home / "Library" / "Logs" / "IngeTrazo"]
+        candidates = [home / "Library" / "Logs" / "SipilBIM"]
     else:
         state = os.environ.get("XDG_STATE_HOME") or str(home / ".local" / "state")
         candidates = [Path(state) / "ingetrazo"]
@@ -63,7 +63,7 @@ def user_log_dir() -> Path:
     return Path(tempfile.gettempdir())
 
 
-def open_crash_log(name: str = "ingetrazo-crash.log"):
+def open_crash_log(name: str = "sipilbim-crash.log"):
     """An append handle for the faulthandler black box, or None when no
     location is writable at all — callers must then leave faulthandler on
     its default only if ``sys.stderr`` exists."""

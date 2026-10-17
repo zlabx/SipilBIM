@@ -49,7 +49,7 @@ from core.units import fmt_len as _fmt_len
 from core.units import typed_value_text as _typed_value_text
 
 # Perf telemetry (INGETRAZO_PERF=1): every operation slower than 50 ms and a
-# once-per-second frame summary land in ~/ingetrazo-perf.log — the tool for
+# once-per-second frame summary land in ~/sipilbim-perf.log — the tool for
 # "it feels slow" reports from real sessions, where synthetic benchmarks lie.
 _PERF = bool(os.environ.get("INGETRAZO_PERF"))
 # Kill-switch for the instanced component pass (P2): set to 1 to draw
@@ -85,7 +85,7 @@ def _plog(tag: str, ms: float, extra: str = "", floor: float = 50.0) -> None:
     if _perf_file is None:
         path = os.environ.get("INGETRAZO_PERF_LOG")
         _perf_file = open(Path(path) if path
-                          else Path.home() / "ingetrazo-perf.log",
+                          else Path.home() / "sipilbim-perf.log",
                           "a", buffering=1)
     _perf_file.write(f"{_time_mod.strftime('%H:%M:%S')} [{os.getpid()}] "
                      f"{tag} {ms:.0f}ms"
@@ -483,7 +483,7 @@ def _load_invert_orbit_y() -> bool:
 
     Off by default: `OrbitCamera.orbit` grabs the model in both axes, the
     classic way. This is for the hands that learned the other feel —
-    including the ones that learned it from IngeTrazo before 0.3.16, when
+    including the ones that learned it from SipilBIM before 0.3.16, when
     the vertical axis was inverted by mistake.
     """
     from PySide6.QtCore import QSettings
@@ -657,7 +657,7 @@ def _ray_triangle(
     """Möller–Trumbore ray / triangle intersection. Returns distance ``t``
     along the ray, or ``None`` for a miss / behind-camera hit. The triangle
     is intersected from both sides — front/back orientation does not matter
-    because IngeTrazo doesn't (yet) cull back faces."""
+    because SipilBIM doesn't (yet) cull back faces."""
     eps = 1e-6
     e1 = v1 - v0
     e2 = v2 - v0
@@ -2636,7 +2636,7 @@ class Viewport(QOpenGLWidget):
         """Build the drawing data of every group and prototype now, with
         ``progress(fraction, text)`` called a few times a second — what the
         first paint would otherwise do in one go: 55 s on a model of 21 406
-        placements, long enough for the desktop to call IngeTrazo «not
+        placements, long enough for the desktop to call SipilBIM «not
         responding» (Marco, 01-10, #158). Pure NumPy, no GL needed."""
         import time
         from core.group import effective_material
@@ -11636,7 +11636,7 @@ class Viewport(QOpenGLWidget):
             drop(old_clip)
         self.clipboard = {"faces": face_data, "edges": edge_data,
                           "groups": group_data, "ref": ref}
-        # Also on the system clipboard, so another IngeTrazo window can
+        # Also on the system clipboard, so another SipilBIM window can
         # paste it (issue #76); encoded only if that window asks.
         from formats import clip as clip_transfer
         clip_transfer.publish(self.clipboard)

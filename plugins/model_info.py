@@ -10,7 +10,7 @@ with the rest of the application because they come from the same sources:
 - geometry reads ``scene.loose_mesh`` (NOT ``scene.mesh``, which is swapped
   while a group is open for editing — reading it would double-count);
 - materials mirror the Paint tray's idiom: ``attrs["color"]`` (floats 0–1)
-  and ``attrs["texture"]`` on each face — IngeTrazo has no material
+  and ``attrs["texture"]`` on each face — SipilBIM has no material
   registry to query;
 - BIM objects come from :func:`core.bim.collect_objects`, the same call
   behind the BIM tray and the IFC export, so a six-face wall with one tag
@@ -165,7 +165,7 @@ def _stats_to_text(stats: dict) -> str:
     """Plain-text summary (the Copy to Clipboard payload)."""
     s, style = stats, stats["style"]
     lines = [
-        "=== IngeTrazo — " + tr("Model Info") + " ===",
+        "=== SipilBIM — " + tr("Model Info") + " ===",
         "",
         "--- " + tr("Geometry") + " ---",
         f"{tr('Vertices')}:  {s['total_verts']:,}",

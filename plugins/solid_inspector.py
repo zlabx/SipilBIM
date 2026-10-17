@@ -3,7 +3,7 @@
 """Solid Inspector plugin — find out WHY a solid is not watertight, and
 repair what can be repaired without guessing.
 
-IngeTrazo's engine guarantees hermetic solids and its BIM layer only
+SipilBIM's engine guarantees hermetic solids and its BIM layer only
 reports a volume when the object is closed. When Model Info (or the BIM
 tray) says "(not watertight)", this plugin answers the next question:
 *where is the hole?*
@@ -640,7 +640,7 @@ def _nav_button(arrow, tip: str) -> QToolButton:
 
 
 def _icon_button(key: str, text: str) -> QPushButton:
-    """A button with one of IngeTrazo's own icons, repainted when the
+    """A button with one of SipilBIM's own icons, repainted when the
     theme changes (the ``icon_key`` property)."""
     from views.icons import tool_icon
     btn = QPushButton(tool_icon(key), text)
@@ -850,7 +850,7 @@ class SolidInspectorPanel(QWidget):
         fix.addWidget(self._repair_all_btn, 1)
         layout.addLayout(fix)
 
-        # IngeTrazo's blue marks the buttons that change the model.
+        # SipilBIM's blue marks the buttons that change the model.
         # (A template: theme_style fills {muted} again on every theme change.)
         theme_style(self,
             "QPushButton {{ padding: 5px 10px; }}"
@@ -1114,7 +1114,7 @@ class SolidInspectorPanel(QWidget):
                         f'({counts[kind]})')
             self._problem_label.setText("&nbsp;&nbsp; ".join(parts))
             self._fix_btn.setEnabled(False)
-            self._edge(QColor(243, 115, 41))      # IngeTrazo orange
+            self._edge(QColor(243, 115, 41))      # SipilBIM orange
             return
         if cur is None:
             text = note or tr(

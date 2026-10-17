@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Insert another IngeTrazo document into the open one, as ONE component.
+"""Insert another SipilBIM document into the open one, as ONE component.
 
 Like importing a .skp file: the whole file arrives as a single
 component you place with a click — a pergola, an arch, a lamp post drawn

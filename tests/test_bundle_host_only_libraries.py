@@ -10,7 +10,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-SPEC = Path(__file__).resolve().parents[1] / "ingetrazo.spec"
+SPEC = Path(__file__).resolve().parents[1] / "sipilbim.spec"
 
 
 def _host_only() -> set[str]:

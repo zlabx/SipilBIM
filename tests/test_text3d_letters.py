@@ -31,9 +31,9 @@ def _extent(meshes):
 def test_letters_lay_out_exactly_like_the_one_piece_text():
     """Splitting into letters changes the STRUCTURE, never the geometry:
     same faces, same block extent, same baseline."""
-    whole = build_text_mesh("IngeTrazo", "Sans", True, False, 0.25, 0.05)
-    letters = build_text_letters("IngeTrazo", "Sans", True, False, 0.25, 0.05)
-    assert [c for c, _m in letters] == list("IngeTrazo")
+    whole = build_text_mesh("SipilBIM", "Sans", True, False, 0.25, 0.05)
+    letters = build_text_letters("SipilBIM", "Sans", True, False, 0.25, 0.05)
+    assert [c for c, _m in letters] == list("SipilBIM")
     assert sum(len(m.faces) for _c, m in letters) == len(whole.faces)
     a = _extent([whole])
     b = _extent([m for _c, m in letters])

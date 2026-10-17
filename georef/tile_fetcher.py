@@ -29,7 +29,7 @@ from georef.tiles import TileCache, TileSource, default_cache_dir  # noqa: F401 
 # usage policy in particular requires a real User-Agent.
 from core.version import __version__
 
-_USER_AGENT = (f"IngeTrazo/{__version__} (https://github.com/ingelibre/ingetrazo)").encode()
+_USER_AGENT = (f"SipilBIM/{__version__} (https://sipilstock.com/sipilbim/; based on IngeTrazo)").encode()
 
 
 class TileFetcher(QObject):

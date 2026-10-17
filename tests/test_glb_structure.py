@@ -3,7 +3,7 @@
 """A GLB for other programs keeps the model's structure (#304) and its
 scale figures (#353).
 
-Until now the file was ONE mesh named «IngeTrazo»: groups and components
+Until now the file was ONE mesh named «SipilBIM»: groups and components
 gone, and the face-me figures left out — unless they sat inside a group,
 where they came out baked with their picture anchored to the world:
 sliding, repeated, mirrored halves. Every check reads the file back

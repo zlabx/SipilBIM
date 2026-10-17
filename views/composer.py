@@ -12632,7 +12632,7 @@ class ComposerWindow(QMainWindow):
         if mod is None:
             QMessageBox.information(
                 self, tr("Print preview"),
-                tr("This build of IngeTrazo has no printing support "
+                tr("This build of SipilBIM has no printing support "
                    "(Qt's print module is missing), so the sheet cannot "
                    "be previewed or printed from here.\n\nExport PDF "
                    "gives you the same sheet, at its exact paper size, "

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Adapter: an OpenSKP parse → an IngeTrazo geometry payload.
+"""Adapter: an OpenSKP parse → an SipilBIM geometry payload.
 
 Kept in its own module so ``import openskp`` happens lazily (only when this
 backend actually runs) — ``formats/skp.py`` must stay importable without the
@@ -21,13 +21,13 @@ OpenSKP 0.8-era data model (v0.2.0), discovered by introspection:
   floats), ``ref_idx`` (→ the placed definition's id), ``children``.
 
 The .skp format stores lengths in **inches** and is **Z-up** — same up axis as
-IngeTrazo, so we only scale (inches → metres); no axis swap. The instance tree
+SipilBIM, so we only scale (inches → metres); no axis swap. The instance tree
 is flattened to world-space polygons (reference geometry, like the big-DAE
 import path). Per-face materials resolve through ``SkpModel.materials_by_id``
 (our upstream PR iamahsanmehmood/openskp#3): plain colours become
 ``attrs["color"]``, and textured materials (``Material.texture``, PR openskp#4)
 become ``attrs["texture"]`` — image bytes extracted to the app's texture cache
-(see :func:`_texture_dir`), tile size in metres, rendered with IngeTrazo's planar projection
+(see :func:`_texture_dir`), tile size in metres, rendered with SipilBIM's planar projection
 (the .skp format's default texture behaviour; per-face UVs from the TLV are a
 later refinement). Both joins are guarded, so PyPI 0.2.0 still imports (uncoloured).
 """
@@ -207,7 +207,7 @@ def _tile_size(width, height):
 
 
 def _material_attrs(model, skp_path):
-    """Map ``material_id`` → IngeTrazo ``Face.attrs`` dict.
+    """Map ``material_id`` → SipilBIM ``Face.attrs`` dict.
 
     A textured material (``Material.texture``, our upstream PR openskp#4)
     becomes ``{"texture": {"path", "sw", "sh"}}`` — image bytes written once
@@ -299,7 +299,7 @@ def _material_attrs(model, skp_path):
 
 
 def _face_attrs(face, attr_map, inherited=None):
-    """IngeTrazo ``Face.attrs`` for an OpenSKP face, or ``None``.
+    """SipilBIM ``Face.attrs`` for an OpenSKP face, or ``None``.
 
     A face with no material of its own inherits ``inherited`` — the material
     painted on the nearest enclosing instance (the .skp "paint the
@@ -439,12 +439,12 @@ def _face_entry(face, wl, raw_l, s0, s1, holes_sl, attr_map,
     the same corners in local inches for the UV math). Bakes a positioned /
     photo-fitted texture's exact per-face UVs (``Face.uv_transform``,
     upstream PR openskp#6) into a world→UV affine — the ``"uvw"``
-    IngeTrazo's renderer and exporters already consume. Exact for triangles;
+    SipilBIM's renderer and exporters already consume. Exact for triangles;
     a per-face affine fit of the projective map otherwise.
 
     ``layer`` is the .skp layer (tag) of the nearest enclosing tagged
     instance — a face with no tag of its own carries it, so hiding the tag's
-    layer in IngeTrazo hides what the file marks as hidden."""
+    layer in SipilBIM hides what the file marks as hidden."""
     raw = raw_l[s0:s1]
     outer = wl[s0:s1]
     # Material precedence (the .skp rule): the face's OWN material wins —
@@ -635,7 +635,7 @@ def _collect(defn, xform, by_id, attr_map, out, depth, stack,
 
     When ``layer_uses`` is given, a nested instance that carries its OWN
     layer (tag) is NOT flattened here — it is recorded to become a separate
-    group with that layer, so hiding the layer in IngeTrazo hides exactly
+    group with that layer, so hiding the layer in SipilBIM hides exactly
     what the file marks as hidden (reference-group chunks render whole groups;
     per-face layers inside them are not filtered).
 
@@ -854,13 +854,13 @@ def _merge_equal_protos(protos):
 def file_layer_records(model):
     """The file's layers (tags) as ``[{"name", "visible"}]`` — Scene-level,
     so the importer can register them even when nothing sits on one yet.
-    The model's default layer never travels (it IS IngeTrazo's default).
+    The model's default layer never travels (it IS SipilBIM's default).
 
     openskp spells the switch ``hidden``; this asked for ``visible``, which
     no generation of the library has ever had, so the ``getattr`` default
     won every time and EVERY layer arrived visible however the author had
     left it. Rafael's ``edificio.skp`` hides ``Camera_FOV_Lines`` and
-    ``Camera_FOV_Volume``: the author saw a small camera glyph, IngeTrazo
+    ``Camera_FOV_Volume``: the author saw a small camera glyph, SipilBIM
     drew the whole frustum across the model (Marco, 2026-09-17, comparing
     screenshots). ``visible`` is still honoured if a future library grows
     it, but ``hidden`` is what decides today.
@@ -1290,7 +1290,7 @@ def _adapt(model, name: str, skp_path=None):
         payload["texts"] = texts
     # The file's style back-face colour (our upstream PR openskp#10): adopt it
     # so unpainted faces seen from behind read like they did for the author
-    # (instead of IngeTrazo's own blue-grey default).
+    # (instead of SipilBIM's own blue-grey default).
     for st in getattr(model, "styles", []) or []:
         back = getattr(st, "back_color", None)
         if back:

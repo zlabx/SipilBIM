@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""IngeTrazo MCP server — connect Claude (Code / Desktop) to the live app.
+"""SipilBIM MCP server — connect Claude (Code / Desktop) to the live app.
 
 Stdlib-only stdio MCP server: it bridges the Model Context Protocol to the
-AI Bridge plugin's localhost TCP port (start it first: IngeTrazo ▸
+AI Bridge plugin's localhost TCP port (start it first: SipilBIM ▸
 Extensiones ▸ "AI Bridge (MCP)").
 
 Register it with Claude Code:
 
-    claude mcp add ingetrazo -- python3 /path/to/app/scripts/ingetrazo_mcp.py
+    claude mcp add sipilbim -- python3 /path/to/app/scripts/ingetrazo_mcp.py
 
 Tools: run_python (transactional, one undo step per call), query_model,
 screenshot (the agent SEES the viewport), undo, redo. Every mutation goes
-through IngeTrazo's command engine — the hermeticity guard validates the
+through SipilBIM's command engine — the hermeticity guard validates the
 agent's recipes, and Ctrl+Z always works.
 """
 from __future__ import annotations
@@ -45,7 +45,7 @@ try:
     from core.ai_recipes import reference as _reference
     REFERENCE = _reference("llamada")
 except ImportError:                             # pragma: no cover - packaging
-    REFERENCE = ("IngeTrazo: Z arriba, unidades en METROS. En el scope: "
+    REFERENCE = ("SipilBIM: Z arriba, unidades en METROS. En el scope: "
                  "scene, mesh, selection, groups, layers, viewport, "
                  "QVector3D, Mesh, Group, Edge, Face, bim. Recetario: "
                  "revolve / extrude / prism / wall / house.")
@@ -57,7 +57,7 @@ finally:
 #: the stance, with the recipes themselves on ``run_python`` where every
 #: client is sure to put them in front of the model.
 INSTRUCTIONS = (
-    "Estas herramientas operan el documento ABIERTO de IngeTrazo, en vivo: "
+    "Estas herramientas operan el documento ABIERTO de SipilBIM, en vivo: "
     "lo que escribas aparece en la pantalla del usuario y entra en su "
     "historial de deshacer.\n" + REFERENCE + "\nEmpieza por query_model "
     "para ver qué hay, construye con run_python y MIRA el resultado con "
@@ -67,7 +67,7 @@ TOOLS = [
     {
         "name": "run_python",
         "description": (
-            "Execute Python against the LIVE IngeTrazo document (Z-up, "
+            "Execute Python against the LIVE SipilBIM document (Z-up, "
             "metres). Returns stdout/stderr. The reference below is "
             "everything you need — read it instead of exploring the API.\n\n"
             + REFERENCE),
@@ -95,12 +95,12 @@ TOOLS = [
     },
     {
         "name": "undo",
-        "description": "Undo the last step in IngeTrazo.",
+        "description": "Undo the last step in SipilBIM.",
         "inputSchema": {"type": "object", "properties": {}},
     },
     {
         "name": "redo",
-        "description": "Redo the last undone step in IngeTrazo.",
+        "description": "Redo the last undone step in SipilBIM.",
         "inputSchema": {"type": "object", "properties": {}},
     },
 ]
@@ -149,8 +149,8 @@ def _call(name: str, args: dict) -> dict:
         reply = _bridge(name, args)
     except OSError as exc:
         return _tool_result(
-            "Cannot reach IngeTrazo's AI bridge on %s:%d (%s). "
-            "In IngeTrazo: the AI tab of the side tray > Start bridge (or Extensions > AI Bridge (MCP))."
+            "Cannot reach SipilBIM's AI bridge on %s:%d (%s). "
+            "In SipilBIM: the AI tab of the side tray > Start bridge (or Extensions > AI Bridge (MCP))."
             % (HOST, PORT, exc), is_error=True)
     if not reply.get("ok"):
         return _tool_result(str(reply.get("error")), is_error=True)
@@ -187,7 +187,7 @@ def handle(msg: dict) -> dict | None:
         return {"jsonrpc": "2.0", "id": msg_id, "result": {
             "protocolVersion": PROTOCOL,
             "capabilities": {"tools": {}},
-            "serverInfo": {"name": "ingetrazo", "version": "1.0.0"},
+            "serverInfo": {"name": "sipilbim", "version": "1.0.0"},
             "instructions": INSTRUCTIONS,
         }}
     if method == "tools/list":

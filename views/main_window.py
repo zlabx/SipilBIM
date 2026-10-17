@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""IngeTrazo main window: toolbar, viewport, side panels, status bar.
+"""SipilBIM main window: toolbar, viewport, side panels, status bar.
 
 Owns the open document path and dispatches File menu actions (New, Open,
 Save, Save As) onto :mod:`formats.igz`.
@@ -83,7 +83,7 @@ from views.icons import tool_icon
 from views.viewport import Viewport
 
 
-IGZ_FILE_FILTER = "IngeTrazo document (*.igz);;All files (*)"
+IGZ_FILE_FILTER = "SipilBIM document (*.igz);;All files (*)"
 
 # What each command does, for the status bar, the button tooltips and F3
 # (Blender's descriptions): a sentence, in English — ``tr`` translates it
@@ -223,7 +223,7 @@ class _DockDropZone(QWidget):
 
 
 class MainWindow(QMainWindow):
-    """Top-level IngeTrazo window."""
+    """Top-level SipilBIM window."""
 
     def __init__(self, defer_extensions: bool = False) -> None:
         super().__init__()
@@ -410,7 +410,7 @@ class MainWindow(QMainWindow):
             dev.button.connect(self._on_ndof_button)
         except Exception as exc:  # noqa: BLE001 — never block the window
             import sys as _sys
-            print(f"IngeTrazo: 3D mouse unavailable ({exc!r})",
+            print(f"SipilBIM: 3D mouse unavailable ({exc!r})",
                   file=_sys.stderr)
 
     def _on_ndof_motion(self, sample, dt: float) -> None:
@@ -1036,7 +1036,7 @@ class MainWindow(QMainWindow):
         copy_action = QAction(tr("Copy"), self)
         copy_action.setStatusTip(tr(
             "Keep a copy of the selection to paste here or in another "
-            "IngeTrazo window."))
+            "SipilBIM window."))
         copy_action.setShortcut(QKeySequence.Copy)
         copy_action.triggered.connect(lambda: self.viewport.copy_selection())
         edit_menu.addAction(copy_action)
@@ -1507,7 +1507,7 @@ class MainWindow(QMainWindow):
         get_models_action = QAction(tr("Get more models and textures…"), self)
         get_models_action.setStatusTip(tr(
             "Free websites with models and textures that open in "
-            "IngeTrazo."))
+            "SipilBIM."))
         get_models_action.triggered.connect(self._on_get_models)
         help_menu.addAction(get_models_action)
         # Only as an AppImage: put a launcher in the menu, or take it away.
@@ -1526,9 +1526,9 @@ class MainWindow(QMainWindow):
             rm_act.triggered.connect(self.remove_appimage_from_menu)
             help_menu.addAction(rm_act)
             help_menu.addSeparator()
-        about_action = QAction(tr("About IngeTrazo"), self)
+        about_action = QAction(tr("About SipilBIM"), self)
         about_action.setStatusTip(tr(
-            "The version, the authors and the licence of IngeTrazo."))
+            "The version, the authors and the licence of SipilBIM."))
         about_action.triggered.connect(self._on_about)
         help_menu.addAction(about_action)
         # A letter typed in an open menu searches that menu (Blender 4).
@@ -2280,7 +2280,7 @@ class MainWindow(QMainWindow):
         QMessageBox.information(
             self,
             tr("Language changed"),
-            tr("Restart IngeTrazo to apply the new language."),
+            tr("Restart SipilBIM to apply the new language."),
         )
 
     def _build_extensions_menu(self, menubar) -> None:
@@ -2314,7 +2314,7 @@ class MainWindow(QMainWindow):
         act.triggered.connect(self._on_open_plugins_folder)
         act = ext_menu.addAction(tr("Develop an extension…"))
         act.setStatusTip(tr(
-            "Open the guide to writing extensions for IngeTrazo."))
+            "Open the guide to writing extensions for SipilBIM."))
         act.triggered.connect(self._on_develop_plugin)
 
         # The app itself (main.py) defers the plugins' setup until the window
@@ -2354,7 +2354,7 @@ class MainWindow(QMainWindow):
         # ambiguity that silently disables the built-in key for both.
         taken = {a.shortcut().toString() for a in self.findChildren(QAction)
                  if not a.shortcut().isEmpty()}
-        # The tools that ship with IngeTrazo (Python Console, Model Info…)
+        # The tools that ship with SipilBIM (Python Console, Model Info…)
         # keep their keys whatever an extension's setup() asks for first:
         # with Point Cloud Splat installed, the console lost Ctrl+Shift+P
         # (extension bench, 10-10). Reserved here, granted to them below.
@@ -2532,18 +2532,18 @@ class MainWindow(QMainWindow):
 
     def _on_gl_ready(self, info: dict) -> None:
         """A viewport drawn on the CPU is the usual reason a Windows machine
-        reports IngeTrazo as unusably slow; say so where the user looks."""
+        reports SipilBIM as unusably slow; say so where the user looks."""
         if info.get("software"):
             self.statusBar().showMessage(tr(
-                "IngeTrazo is drawing with the software renderer ({renderer}): "
+                "SipilBIM is drawing with the software renderer ({renderer}): "
                 "the viewport will be slow. Update the graphics driver, or "
-                "assign IngeTrazo to the high-performance GPU in Windows "
+                "assign SipilBIM to the high-performance GPU in Windows "
                 "graphics settings.", renderer=info.get("renderer", "")), 30000)
         elif QCoreApplication.instance().property("gpu_pref") == "set":
             # First run on Windows: the preference was just written, and
             # Windows applies it to the next process, not this one.
             self.statusBar().showMessage(tr(
-                "IngeTrazo asked Windows for the high-performance GPU; it "
+                "SipilBIM asked Windows for the high-performance GPU; it "
                 "applies the next time you open the program."), 20000)
 
     def _on_command_search(self) -> None:
@@ -2568,11 +2568,11 @@ class MainWindow(QMainWindow):
         new_action.triggered.connect(self._on_new)
         actions.append(new_action)
 
-        # A second IngeTrazo beside this one: each window is its own
+        # A second SipilBIM beside this one: each window is its own
         # document, and Copy/Paste now crosses between them (issue #76).
         window_action = QAction(tr("New Window"), self)
         window_action.setStatusTip(tr(
-            "Open another IngeTrazo window with its own document; copy "
+            "Open another SipilBIM window with its own document; copy "
             "and paste work between them."))
         window_action.setShortcut(QKeySequence("Ctrl+Shift+N"))
         window_action.triggered.connect(self._on_new_window)
@@ -2580,7 +2580,7 @@ class MainWindow(QMainWindow):
 
         open_action = QAction(tr("Open…"), self)
         open_action.setStatusTip(tr(
-            "Open an IngeTrazo document (.igz) in place of this one."))
+            "Open an SipilBIM document (.igz) in place of this one."))
         open_action.setShortcut(QKeySequence.Open)
         open_action.triggered.connect(self._on_open)
         actions.append(open_action)
@@ -2618,8 +2618,8 @@ class MainWindow(QMainWindow):
         # goes out — the flat list had import/export items scattered.
         import_menu = QMenu(tr("Import"), self)
         for label, tip, handler in (
-            (tr("IngeTrazo document as component (.igz)…"),
-             tr("Bring another IngeTrazo document in as one component, "
+            (tr("SipilBIM document as component (.igz)…"),
+             tr("Bring another SipilBIM document in as one component, "
                 "placed with a click."),
              self._on_import_igz),
             (tr("SKP (.skp)…"),
@@ -2731,7 +2731,7 @@ class MainWindow(QMainWindow):
 
         quit_action = QAction(tr("Quit"), self)
         quit_action.setStatusTip(tr(
-            "Close IngeTrazo, offering to save what has not been saved."))
+            "Close SipilBIM, offering to save what has not been saved."))
         quit_action.setShortcut(QKeySequence.Quit)
         quit_action.triggered.connect(self.close)
         actions.append(quit_action)
@@ -3307,7 +3307,7 @@ class MainWindow(QMainWindow):
                  if getattr(self, "_current_path", None) else "")
         path, _ = file_dialogs.getOpenFileName(
             self, tr("Components from File"), start,
-            tr("IngeTrazo document (*.igz)"))
+            tr("SipilBIM document (*.igz)"))
         if not path:
             return
         try:
@@ -4442,7 +4442,7 @@ class MainWindow(QMainWindow):
         return o, n
 
     def _sync_foreign_clipboard(self) -> None:
-        # A copy made in ANOTHER IngeTrazo window wins over this window's
+        # A copy made in ANOTHER SipilBIM window wins over this window's
         # older one, as a system clipboard does (issue #76).
         from formats import clip as clip_transfer
         try:
@@ -4904,7 +4904,7 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def _new_window_command() -> list[str]:
-        """How to start another IngeTrazo from this one. Each package needs
+        """How to start another SipilBIM from this one. Each package needs
         its own way: the AppImage's mount and the Flatpak sandbox both go
         away with the process that owns them, so the new window must get
         its own rather than run from ours."""
@@ -5002,7 +5002,7 @@ class MainWindow(QMainWindow):
         cmd = self._new_window_command()
         if not QProcess.startDetached(cmd[0], cmd[1:]):
             QMessageBox.warning(self, tr("New Window"),
-                                tr("Could not start another IngeTrazo window."))
+                                tr("Could not start another SipilBIM window."))
 
     def _on_new(self) -> None:
         if self._workspace is not None and hasattr(self._workspace, "new"):
@@ -5052,7 +5052,7 @@ class MainWindow(QMainWindow):
             return
         chosen, _ = file_dialogs.getOpenFileName(
             self, tr("Recover a discarded auto-save…"), str(folder),
-            tr("IngeTrazo auto-saves (*.igz)"))
+            tr("SipilBIM auto-saves (*.igz)"))
         if not chosen:
             return
         if not self._confirm_discard(tr("Open another drawing?")):
@@ -5124,7 +5124,7 @@ class MainWindow(QMainWindow):
             return
         path_str, _ = file_dialogs.getOpenFileName(
             self,
-            tr("Open IngeTrazo document"),
+            tr("Open SipilBIM document"),
             "",
             tr(IGZ_FILE_FILTER),
         )
@@ -5138,7 +5138,7 @@ class MainWindow(QMainWindow):
 
         ``.igz`` is our native format; ``.dae``/``.skp`` are the interchange
         formats we also register in the desktop entry, so double-clicking one
-        imports it rather than failing to parse it as an IngeTrazo document.
+        imports it rather than failing to parse it as an SipilBIM document.
         An extension may claim a suffix of its own
         (``ExtensionApp.add_file_opener``); anything else needs the model,
         so a workspace in front of it is left first."""
@@ -5298,7 +5298,7 @@ class MainWindow(QMainWindow):
         )
         path_str, _ = file_dialogs.getSaveFileName(
             self,
-            tr("Save IngeTrazo document"),
+            tr("Save SipilBIM document"),
             default_name,
             tr(IGZ_FILE_FILTER),
         )
@@ -5572,7 +5572,7 @@ class MainWindow(QMainWindow):
         dlg = QDialog(self)
         dlg.setWindowTitle(tr("3D Text"))
         form = QFormLayout(dlg)
-        text_edit = QLineEdit(params.get("text") or tr("IngeTrazo"))
+        text_edit = QLineEdit(params.get("text") or tr("SipilBIM"))
         text_edit.selectAll()
         form.addRow(tr("Text:"), text_edit)
         font_box = QFontComboBox()
@@ -5694,7 +5694,7 @@ class MainWindow(QMainWindow):
     def _on_get_models(self) -> None:
         QMessageBox.information(
             self, tr("Get more models and textures"),
-            tr("Free sources that open directly in IngeTrazo:") + "<br><br>"
+            tr("Free sources that open directly in SipilBIM:") + "<br><br>"
             "<b>Poly Haven</b> — <a href='https://polyhaven.com'>"
             "polyhaven.com</a> " + tr("(CC0: models OBJ and PBR textures)")
             + "<br><b>ambientCG</b> — <a href='https://ambientcg.com'>"
@@ -5899,9 +5899,9 @@ class MainWindow(QMainWindow):
         self._update_title()
         self.statusBar().showMessage(tr("Imported {name}", name=path.name), 3000)
 
-    # ---- SKP import: IngeTrazo's own reader (formats/skp.py) -----------------
+    # ---- SKP import: SipilBIM's own reader (formats/skp.py) -----------------
     def import_skp_path(self, skp: Path) -> bool:
-        """Import ``skp`` with IngeTrazo's own pure-Python reader (offline,
+        """Import ``skp`` with SipilBIM's own pure-Python reader (offline,
         no Wine, no external converter -- see ``formats/skp.py``). A file it
         cannot read is reported, with the way around it (export COLLADA or
         OBJ from the original program)."""
@@ -5950,11 +5950,11 @@ class MainWindow(QMainWindow):
                 return True
             dlg.close()   # the reader could not read it: said below
 
-        # No converter behind this: IngeTrazo reads .skp with its own
+        # No converter behind this: SipilBIM reads .skp with its own
         # reader only.
         QMessageBox.warning(
             self, tr("Import SKP"),
-            tr("IngeTrazo could not read {name} with its built-in .skp "
+            tr("SipilBIM could not read {name} with its built-in .skp "
                "reader.\n\nOpen it in the program it came from and export "
                "it as COLLADA (.dae) or OBJ, then import that file here.",
                name=skp.name))
@@ -6033,36 +6033,36 @@ class MainWindow(QMainWindow):
         return OBJ_UNITS[key]
 
     def _on_import_igz(self) -> None:
-        """Bring another IngeTrazo document in as ONE component, placed
+        """Bring another SipilBIM document in as ONE component, placed
         with a click — the classic import of a .skp. Furniture drawn in its
         own file (a pergola, an arch, a lamp post) lands in the plaza with
         its groups, materials and layers intact (see :mod:`core.insert`)."""
         start = (str(self._current_path.parent)
                  if self._current_path is not None else "")
         path_str, _ = file_dialogs.getOpenFileName(
-            self, tr("Import IngeTrazo document"), start, IGZ_FILE_FILTER)
+            self, tr("Import SipilBIM document"), start, IGZ_FILE_FILTER)
         if not path_str:
             return
         path = Path(path_str)
         if (self._current_path is not None
                 and path.resolve() == self._current_path.resolve()):
             QMessageBox.warning(
-                self, tr("Import IngeTrazo document"),
+                self, tr("Import SipilBIM document"),
                 tr("That is the document you are editing."))
             return
         try:
             comp = self.import_igz_path(path)
         except Exception as exc:  # noqa: BLE001
             QMessageBox.critical(
-                self, tr("Import IngeTrazo document failed"), str(exc))
+                self, tr("Import SipilBIM document failed"), str(exc))
             return
         if comp is None:
             QMessageBox.warning(
-                self, tr("Import IngeTrazo document"),
+                self, tr("Import SipilBIM document"),
                 tr("“{name}” has no geometry.", name=path.name))
 
     def import_igz_path(self, path, at=None):
-        """Insert the IngeTrazo document at ``path`` as ONE component,
+        """Insert the SipilBIM document at ``path`` as ONE component,
         without a file dialog — for extensions and scripts (issue #179,
         a palette that inserts components as the mouse moves).
 
@@ -7066,7 +7066,7 @@ class MainWindow(QMainWindow):
     def _update_title(self) -> None:
         if self._workspace is not None:
             marker = " *" if self._is_dirty() else ""
-            self.setWindowTitle(f"IngeTrazo — {self._workspace.title()}{marker}")
+            self.setWindowTitle(f"SipilBIM — {self._workspace.title()}{marker}")
             return
         if self._current_path is not None:
             name = self._current_path.name
@@ -7075,7 +7075,7 @@ class MainWindow(QMainWindow):
         else:
             name = tr("Untitled")
         marker = " *" if self._is_dirty() else ""
-        self.setWindowTitle(f"IngeTrazo — {name}{marker}")
+        self.setWindowTitle(f"SipilBIM — {name}{marker}")
         self._refresh_sheet_tabs()      # a new / opened document: its sheets
 
     # ---- Window lifecycle ---------------------------------------------------
@@ -7084,7 +7084,7 @@ class MainWindow(QMainWindow):
         if self._workspace is not None and not self.leave_workspace():
             event.ignore()
             return
-        if not self._confirm_discard(tr("Quit IngeTrazo?")):
+        if not self._confirm_discard(tr("Quit SipilBIM?")):
             event.ignore()
             return
         # A clean goodbye: whatever the user decided (save or discard), this

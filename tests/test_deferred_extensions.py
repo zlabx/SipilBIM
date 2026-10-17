@@ -101,7 +101,7 @@ def test_the_python_console_comes_after_the_model_tools(deferred):
 def test_an_extension_cannot_take_a_bundled_tools_shortcut(tmp_path, monkeypatch):
     # Extension bench (10-10): Point Cloud Splat's setup() asked for
     # Ctrl+Shift+P before the Python Console's entry was made, and the
-    # console lost its key. The tools that ship with IngeTrazo reserve theirs.
+    # console lost its key. The tools that ship with SipilBIM reserve theirs.
     from core import extensions
     from core.paths import app_root
     from views.main_window import MainWindow

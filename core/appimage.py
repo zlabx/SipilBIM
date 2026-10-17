@@ -68,7 +68,7 @@ def _desktop_entry(appimage: Path) -> str:
     return (
         "[Desktop Entry]\n"
         "Type=Application\n"
-        "Name=IngeTrazo\n"
+        "Name=SipilBIM\n"
         "GenericName=3D Modeler\n"
         "GenericName[es]=Modelador 3D\n"
         "Comment=Free 3D modeler for civil engineering and architecture\n"

@@ -4,7 +4,7 @@
 
 Writes an ASCII DXF R12 with LINE entities — the least common denominator
 every CAD opens, IngeCAD included (the bridge the ecosystem plan calls
-for: IngeTrazo produces the 2D view, IngeCAD signs and prints it).
+for: SipilBIM produces the 2D view, IngeCAD signs and prints it).
 Coordinates go out in MODEL units (metres): the drawing is the true-size
 orthographic view, not paper.
 """

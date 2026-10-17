@@ -4,7 +4,7 @@
 inside it». It is the classic tool: a protractor at the first corner
 while the base edge is drawn (length, or length;angle in the VCB) and a
 second one square to the base edge while the width and its angle are set.
-IngeTrazo had the geometry of that second step and drew neither."""
+SipilBIM had the geometry of that second step and drew neither."""
 from __future__ import annotations
 
 import math

@@ -191,7 +191,7 @@ def test_a_download_says_who_it_is(monkeypatch, tmp_path):
     ua = seen.get("ua")
     assert ua, "the request carried no User-Agent"
     assert "urllib" not in ua.lower()
-    assert "IngeTrazo" in ua
+    assert "SipilBIM" in ua
 
 
 def test_previews_are_fetched_in_the_background_and_then_come_from_disk(served):

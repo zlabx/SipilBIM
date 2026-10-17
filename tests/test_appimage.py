@@ -15,7 +15,7 @@ def test_not_an_appimage_without_the_runtime_variables(monkeypatch):
 
 
 def test_integrate_writes_launcher_and_icon_pointing_at_the_file(tmp_path, monkeypatch):
-    img = tmp_path / "IngeTrazo-0.3.20-x86_64.AppImage"
+    img = tmp_path / "SipilBIM-0.3.20-x86_64.AppImage"
     img.write_bytes(b"AI")
     appdir = tmp_path / "AppDir"
     appdir.mkdir()

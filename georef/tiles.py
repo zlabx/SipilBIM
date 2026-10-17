@@ -3,7 +3,7 @@
 """Slippy-map tiles — the satellite/street base layer (Track G, G1).
 
 Standard Web-Mercator XYZ tiles (the ``z/x/y`` scheme every web map uses), so
-IngeTrazo is provider-agnostic: pick a legal preset or paste any XYZ template.
+SipilBIM is provider-agnostic: pick a legal preset or paste any XYZ template.
 This module is the **pure, headless core** — slippy math, tile sources, URL
 templating and an on-disk LRU cache. It imports only ``math`` + stdlib, so it
 tests without a GUI or network. The async download lives in :mod:`~georef.tiles`
@@ -11,7 +11,7 @@ tests without a GUI or network. The async download lives in :mod:`~georef.tiles`
 
 Legal note (invariant #5): the shipped presets are all licensed for this use
 (Esri World Imagery, OSM, EOX Sentinel-2). A **custom XYZ** template lets the
-user paste any URL — including Google's — but IngeTrazo never ships Google's as
+user paste any URL — including Google's — but SipilBIM never ships Google's as
 a default. The risk of a pasted URL is the user's, exactly like QGIS.
 """
 from __future__ import annotations

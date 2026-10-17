@@ -8,7 +8,7 @@ can keep data IN THE DOCUMENT, add a panel to the side tray, draw over the
 viewport and offer the cursor an inference — whatever tool is active. That
 is enough to build a whole feature outside the core (the Levels plugin is
 the worked example), which is the point: what only some users need lives
-in an extension they choose, not in everyone's IngeTrazo.
+in an extension they choose, not in everyone's SipilBIM.
 
 Contract (``API_VERSION`` 2; still 0.x — see docs/plugins.md). Version 2
 adds, without changing anything version 1 did: named panels that keep
@@ -97,7 +97,7 @@ class ExtensionApp:
         vp.update()
 
     def import_igz(self, path, at=None):
-        """Insert the IngeTrazo document at ``path`` as one component, with
+        """Insert the SipilBIM document at ``path`` as one component, with
         no file dialog. ``at=None``: it follows the mouse and a click drops
         it; ``at=(x, y, z)`` (metres) or a ``QVector3D``: inserted with its
         origin there, one undo step. Returns the component, or ``None``
@@ -303,7 +303,7 @@ class ExtensionApp:
     def add_file_opener(self, suffix: str, fn) -> None:
         """Documents ending in ``suffix`` (``".xyz"``) are the extension's:
         opened from Open Recent, the command line or a double-click (once
-        the system associates the type with IngeTrazo), they go to
+        the system associates the type with SipilBIM), they go to
         ``fn(path)``, which returns True when it opened the document.
 
         Refused, with a warning logged, for one of the core's own suffixes

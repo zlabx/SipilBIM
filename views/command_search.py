@@ -634,7 +634,7 @@ def warm_up(window, delay_ms: int = 2000) -> None:
     left the main window flickering under GNOME's Wayland, a black band
     and the toolbar drawn half over the menu bar (Marco, 30-09, bisected
     to ``box.winId()`` here; it only shows with two monitors, when
-    IngeTrazo runs on Wayland). Kept off on every platform until it has
+    SipilBIM runs on Wayland). Kept off on every platform until it has
     been tried on each."""
     def ready() -> None:
         commands(window)

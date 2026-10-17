@@ -168,8 +168,8 @@ def test_a_hand_plugin_the_catalog_does_not_know_can_be_uninstalled(
 
 def test_an_extension_shipped_with_the_app_installs_from_the_manager(
         tmp_path, monkeypatch):
-    # Windowizer ships inside IngeTrazo and is not in the catalog: its card
-    # says «Included with IngeTrazo», installs from the local copy (nothing
+    # Windowizer ships inside SipilBIM and is not in the catalog: its card
+    # says «Included with SipilBIM», installs from the local copy (nothing
     # downloaded) and is managed from then on. A bundled one the catalog
     # also lists (Levels) shows once, as the catalog's.
     bundled = manager.Extension(**{
@@ -196,7 +196,7 @@ def test_an_extension_shipped_with_the_app_installs_from_the_manager(
         grid = dialog._pages["browse"]["grid"]
         row = grid.itemAt(1).widget()
         labels = _texts(row, QLabel)
-        assert "Included with IngeTrazo" in labels
+        assert "Included with SipilBIM" in labels
         assert "INCLUDED" in labels
         assert not any("Community extension" in text for text in labels)
         assert "Install" in _texts(row, QPushButton)

@@ -144,7 +144,7 @@ TARJETA_HABITUAL = {
 }
 # Divergencias a propósito, para que nadie las "arregle" sin decidirlo:
 #   U       = Empujar/Tirar   (segundo atajo del MISMO comando: la tecla que
-#                              IngeTrazo usó hasta el 2026-09-10)
+#                              SipilBIM usó hasta el 2026-09-10)
 #   Mayús+P = Perspectiva/paralela (la tarjeta no le da tecla ninguna)
 #   K       = Rectángulo rotado    (allá: aristas traseras; el rotado no
 #                                   tiene tecla allá)

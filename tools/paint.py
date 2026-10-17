@@ -23,7 +23,7 @@ Behavior (the classic Paint Bucket, ``B``):
 - Works on loose geometry and group faces alike (``pick_face_any``).
 - **Paints the side you click.** A face has a front and a back, and
   the classic behaviour paints exactly the side under the cursor: the front of a wall
-  takes the brick, its back keeps the style's default blue-grey. IngeTrazo
+  takes the brick, its back keeps the style's default blue-grey. SipilBIM
   used to show every paint on both sides («si a una cara le aplico un
   color o textura también se aplica a su revés, lo cual no debería» —
   Marco, 2026-09-11). The back's own material lives in ``attrs["back"]``

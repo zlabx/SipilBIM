@@ -8,7 +8,7 @@ former external converter used, and a straight port of IngeCAD's
 ``formats/dwg_bridge.py``, scars included. The user double-clicks a
 ``.dwg`` and never sees the DXF.
 
-Search order for the tool: the bundle shipped with IngeTrazo
+Search order for the tool: the bundle shipped with SipilBIM
 (``vendor/libredwg/bin``), the system PATH, and — a development-machine
 courtesy — the sibling IngeCAD checkout's bundle, so the two projects
 share one built LibreDWG. The build reads DWG up to r2018, which is the

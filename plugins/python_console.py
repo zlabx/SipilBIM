@@ -6,7 +6,7 @@
 The classic scripting console: inspect the model, script geometry,
 prototype the next plugin — against the running application, no restart.
 
-What makes this one a good citizen of IngeTrazo (and where it differs from
+What makes this one a good citizen of SipilBIM (and where it differs from
 the original contribution, PR #3):
 
 - **Every execution runs as a Command** (:class:`core.history.SnapshotImport`
@@ -92,7 +92,7 @@ class PythonConsoleDialog(QDialog):
         #: palette when the theme changes with the console open.
         self._lines: list[tuple[str, str]] = []
 
-        self.setWindowTitle(tr("Python Console") + " — IngeTrazo")
+        self.setWindowTitle(tr("Python Console") + " — SipilBIM")
         self.setMinimumSize(640, 480)
         self.resize(720, 540)
 
@@ -209,7 +209,7 @@ class PythonConsoleDialog(QDialog):
         self._output.ensureCursorVisible()
 
     def _print_welcome(self) -> None:
-        self._append_text("IngeTrazo — " + tr("Python Console"), "title")
+        self._append_text("SipilBIM — " + tr("Python Console"), "title")
         self._append_text(
             tr("Live objects: scene, mesh, viewport, window, selection, "
                "groups, layers. Changes are undoable (Ctrl+Z)."), "muted")

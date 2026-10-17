@@ -166,7 +166,7 @@ class TapeMeasureTool(Tool):
             # the loose mesh, so a click on a component's edge found
             # nothing and fell through to plain measuring (issue #28,
             # @pacaeiro). A group's edges are read from outside
-            # without opening it by the rest of IngeTrazo — this
+            # without opening it by the rest of SipilBIM — this
             # is the same picker the Down-arrow reference lock uses, which
             # hands a group's edge back as a world pseudo-edge.
             pick_any = getattr(viewport, "pick_edge_any", None)

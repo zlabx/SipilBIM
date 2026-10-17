@@ -127,8 +127,8 @@ class Driver:
         from PySide6.QtWidgets import QApplication
         _surface_format(vsync)
         self.app = QApplication.instance() or QApplication([])
-        self.app.setApplicationName("IngeTrazo-bench")   # own settings
-        self.app.setOrganizationName("IngeTrazo-bench")
+        self.app.setApplicationName("SipilBIM-bench")   # own settings
+        self.app.setOrganizationName("SipilBIM-bench")
         # No autosave: a run killed mid-gesture would leave a slot behind,
         # and the next open of that document would stop on the «recover the
         # auto-saved copy?» dialog instead of measuring.

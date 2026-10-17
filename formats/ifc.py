@@ -117,7 +117,7 @@ def _brep(w: _Writer, faces, context_id: int) -> int:
                  rep_type, f"(#{item})")
 
 
-def save_ifc(scene, path, project_name: str = "IngeTrazo project") -> int:
+def save_ifc(scene, path, project_name: str = "SipilBIM project") -> int:
     """Write every tagged BIM object to ``path`` as IFC4. Returns how many
     elements were exported; raises ``ValueError`` when nothing is tagged."""
     objects = collect_objects(scene)
@@ -167,7 +167,7 @@ def save_ifc(scene, path, project_name: str = "IngeTrazo project") -> int:
         qset_name, qentries, _metrado = class_quantities(obj["class"], faces)
         total = _ATTR_COUNT.get(cls, _DEFAULT_ATTRS)
         attrs = [_s(ifc_guid()), "$", _s(obj["name"] or cls), "$", "$",
-                 f"#{placement}", f"#{pds}", "'IngeTrazo'"]
+                 f"#{placement}", f"#{pds}", "'SipilBIM'"]
         if cls in ("IfcDoor", "IfcWindow"):
             # Attributes 9/10 are OverallHeight/OverallWidth — viewers and
             # schedules read the leaf dimensions from here.
@@ -205,8 +205,8 @@ def save_ifc(scene, path, project_name: str = "IngeTrazo project") -> int:
         "ISO-10303-21;\n"
         "HEADER;\n"
         "FILE_DESCRIPTION((''),'2;1');\n"
-        f"FILE_NAME('{name}','{stamp}',('IngeTrazo'),('IngeTrazo'),"
-        "'IngeTrazo','IngeTrazo','');\n"
+        f"FILE_NAME('{name}','{stamp}',('SipilBIM'),('SipilBIM'),"
+        "'SipilBIM','SipilBIM','');\n"
         "FILE_SCHEMA(('IFC4'));\n"
         "ENDSEC;\n"
         "DATA;\n"

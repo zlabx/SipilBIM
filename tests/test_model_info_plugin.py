@@ -3,10 +3,10 @@
 """Model Info plugin: the numbers must agree with the rest of the app.
 
 Each test in the second half pins one of the wrong numbers the original
-contribution (PR #2) reported: materials read from a key IngeTrazo never
+contribution (PR #2) reported: materials read from a key SipilBIM never
 writes (always empty), BIM counted per face instead of per object, totals
 double-counted while a group was open for editing, and colour swatches
-assumed 0–255 ints where IngeTrazo paints with floats 0–1.
+assumed 0–255 ints where SipilBIM paints with floats 0–1.
 """
 from __future__ import annotations
 
@@ -74,7 +74,7 @@ def test_tool_metadata():
 # ---- The four numbers PR #2 got wrong -------------------------------------
 
 def test_materials_read_the_attrs_ingetrazo_writes():
-    """PR #2 read attrs["material"], which nothing in IngeTrazo writes:
+    """PR #2 read attrs["material"], which nothing in SipilBIM writes:
     its Materials tab was empty no matter how painted the model was. The
     real keys are attrs["color"] (floats 0-1) and attrs["texture"]."""
     scene = Scene()
@@ -159,7 +159,7 @@ def test_totals_stable_while_a_group_is_open():
 
 def test_showcase_key_ifc_class_is_not_bim():
     """attrs["ifc_class"] (what PR #3's showcase script wrote) is not the
-    key IngeTrazo reads: it must NOT surface as a BIM object here, exactly
+    key SipilBIM reads: it must NOT surface as a BIM object here, exactly
     as it does not surface in the BIM tray or the IFC export."""
     scene = Scene()
     f = _quad(scene.mesh)

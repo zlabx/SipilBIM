@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Regenerate the *document* icons for IngeTrazo's file types (.igz/.dae/.skp).
+"""Regenerate the *document* icons for SipilBIM's file types (.igz/.dae/.skp).
 
 These are the icons the file manager shows on saved/opened files — a white
 document sheet with a dog-eared corner, a coloured title bar naming the format,
-faint table rows, and the IngeTrazo cube badge in the lower-right corner (the
+faint table rows, and the SipilBIM cube badge in the lower-right corner (the
 same visual family as IngePresupuestos' branded ``.db`` icon). One design,
 three accents so the formats read apart at a glance while staying clearly part
 of the same product.
@@ -32,7 +32,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ICONS = ROOT / "resources" / "icons"
-BADGE = ICONS / "ingetrazo_256.png"           # the cube mark, composited as badge
+BADGE = ICONS / "sipilbim_256.png"           # the cube mark, composited as badge
 HICOLOR = ICONS / "hicolor"
 MIME_DIR = ICONS / "mimetypes"
 

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Ahsan Mehmood (OpenSKP) — IngeTrazo plugin contribution.
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Console demo: a small pavilion, built through IngeTrazo's REAL APIs.
+"""Console demo: a small pavilion, built through SipilBIM's REAL APIs.
 
 Run it from Extensions → Python Console → "Run script file…". Everything it
 creates arrives as ONE undo step (Ctrl+Z removes the whole pavilion), the
@@ -13,7 +13,7 @@ document is marked dirty, and the BIM tab / IFC export actually see the tags
 - layers:     core.layers.Layer + face.attrs["layer"] / group.layer
 - BIM tags:   bim.tag_faces(...) / bim.tag_group(...)  — core.bim
 
-(The original showcase wrote attrs["ifc_class"], a key nothing in IngeTrazo
+(The original showcase wrote attrs["ifc_class"], a key nothing in SipilBIM
 reads: the model LOOKED tagged in Model Info but exported no BIM objects.)
 """
 # The console injects: scene, mesh, QVector3D, Mesh, Group, bim, layers.

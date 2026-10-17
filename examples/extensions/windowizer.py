@@ -1,15 +1,15 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Windowizer for IngeTrazo — a port of Rick Wilson's "Windowizer 3" (Ruby).
-# (c) 2004-2005 Rick Wilson; IngeTrazo port 2026 by Bane Andreev (Biro Andreev), an architect,
+# Windowizer for SipilBIM — a port of Rick Wilson's "Windowizer 3" (Ruby).
+# (c) 2004-2005 Rick Wilson; SipilBIM port 2026 by Bane Andreev (Biro Andreev), an architect,
 # not a programmer: written with the help of AI (Claude).
 # Adapted to the extension API (add_menu, add_context_menu, group.ext) by the
-# IngeTrazo maintainers.
+# SipilBIM maintainers.
 """Windowizer — parametric windows from selected faces.
 
 Select one or more faces (typically a rectangle drawn on a wall), then
 right-click ▸ Windowizer ▸ Windowize (or Extensions ▸ Windowizer ▸ Windowize selected faces).
 
-What it makes — the same pattern IngeTrazo uses for 3D text:
+What it makes — the same pattern SipilBIM uses for 3D text:
 
 * **the window is ONE container group** (tagged ``IfcWindow``) whose PARTS
   are the frame (``Frame``, one solid with a hole per pane) and the panes
@@ -82,7 +82,7 @@ _EPS = 1e-6
 
 
 #: Translations of the texts it shows (the example ships in every language
-#: IngeTrazo speaks; a text missing here stays in English).
+#: SipilBIM speaks; a text missing here stays in English).
 _TEXTS = {
     'es': {
         'Automatic (through the wall up to max. thickness, otherwise reveals)':

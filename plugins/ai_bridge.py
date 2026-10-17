@@ -237,9 +237,9 @@ class _Bridge(QObject):
 def mcp_command(platform: str | None = None, frozen: bool | None = None,
                 executable: str | None = None, root: Path | None = None,
                 env: dict | None = None) -> list[str]:
-    """The command an MCP client must run to reach this IngeTrazo — the
+    """The command an MCP client must run to reach this SipilBIM — the
     packaged app carries the server, so nobody needs Python installed:
-    ``ingetrazo-mcp.exe`` beside the app on Windows, ``<ingetrazo> --mcp``
+    ``sipilbim-mcp.exe`` beside the app on Windows, ``<ingetrazo> --mcp``
     for the Linux/macOS packages, and the script itself from a checkout.
 
     The Linux packages need the command that is valid FROM THE HOST and
@@ -266,7 +266,7 @@ def mcp_command(platform: str | None = None, frozen: bool | None = None,
     if frozen:
         exe = PathOf(executable)
         if windows:
-            return [str(exe.with_name("ingetrazo-mcp.exe"))]
+            return [str(exe.with_name("sipilbim-mcp.exe"))]
         return [str(exe), "--mcp"]
     root = PathOf(str(root or Path(__file__).resolve().parents[1]))
     python = "python" if windows else "python3"
@@ -294,7 +294,7 @@ OTHER_CLIENTS = (
     # its successor for individuals is Antigravity CLI (`agy`), which reads
     # this file (Marco hit the shutdown notice on 2026-09-21).
     ("Antigravity CLI (Google)", "~/.gemini/config/mcp_config.json"),
-    ("Codex CLI", "~/.codex/config.toml  ([mcp_servers.ingetrazo])"),
+    ("Codex CLI", "~/.codex/config.toml  ([mcp_servers.sipilbim])"),
 )
 
 
@@ -304,7 +304,7 @@ def connect_instructions(port: int, platform: str | None = None, **kw) -> str:
     client takes, and where each of them reads it."""
     cmd = mcp_command(platform, **kw)
     quoted = " ".join(f'"{c}"' if " " in c else c for c in cmd)
-    config = {"mcpServers": {"ingetrazo": {"command": cmd[0], "args": cmd[1:]}}}
+    config = {"mcpServers": {"sipilbim": {"command": cmd[0], "args": cmd[1:]}}}
     others = "\n".join(f"    {name}: {path}" for name, path in OTHER_CLIENTS)
     return (
         tr("The AI bridge is listening on 127.0.0.1:{port}. Connect ANY MCP "
@@ -312,15 +312,15 @@ def connect_instructions(port: int, platform: str | None = None, **kw) -> str:
            "Cursor, VS Code, Windsurf, Antigravity CLI, Codex CLI…", port=port)
         + "\n\n"
         + tr("Claude Code (in a terminal):") + "\n"
-        + f"    claude mcp add ingetrazo -- {quoted}\n\n"
+        + f"    claude mcp add sipilbim -- {quoted}\n\n"
         + tr("Antigravity CLI (Google; in a terminal):") + "\n"
-        + f"    agy mcp add ingetrazo -- {quoted}\n\n"
+        + f"    agy mcp add sipilbim -- {quoted}\n\n"
         + tr("Claude Desktop: add this to {path} and restart Claude Desktop:",
              path=desktop_config_path(platform)) + "\n"
         + json.dumps(config, indent=2) + "\n\n"
         + tr("Other clients take the same block in their own file:") + "\n"
         + others + "\n\n"
-        + tr("Keep IngeTrazo open with the bridge on; the tools answer only while it runs.")
+        + tr("Keep SipilBIM open with the bridge on; the tools answer only while it runs.")
     )
 
 

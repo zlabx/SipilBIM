@@ -255,7 +255,7 @@ def _faces_window(faces):
 class PushPullTool(Tool):
     name = "Push / Pull"
     #: P is the usual key for this tool (Marco, 2026-09-10). U, the one
-    #: IngeTrazo used until today, stays as a second
+    #: SipilBIM used until today, stays as a second
     #: shortcut on this same action — a decade of muscle memory is worth a
     #: line of code, and it costs nothing: P is what the card says.
     shortcut = "P"

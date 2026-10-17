@@ -2,7 +2,7 @@
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """The material registry: NAMED materials over the per-face attrs.
 
-IngeTrazo's ground truth for pixels has always been the face itself:
+SipilBIM's ground truth for pixels has always been the face itself:
 ``attrs["color"]`` (floats 0–1), ``attrs["texture"]`` and ``attrs["opacity"]``
 ride the attrs dict, which the engine already carries across push/pull and
 the plane rebuild. That stays exactly as is — the renderer and the engine

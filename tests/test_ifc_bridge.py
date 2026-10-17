@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""The actual bridge: IngeTrazo .ifc → IngePresupuestos importer → partidas.
+"""The actual bridge: SipilBIM .ifc → IngePresupuestos importer → partidas.
 
 Loads the sibling repo's real ``parse_ifc`` (regex STEP parser) by file path
 and asserts the budget quantities arrive EXACT in the units the estimator

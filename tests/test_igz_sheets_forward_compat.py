@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""A model saved by a NEWER IngeTrazo must still open here: sheet records
+"""A model saved by a NEWER SipilBIM must still open here: sheet records
 with fields this version does not know load with those keys dropped, and
 a sheet that cannot be rebuilt at all is skipped, never the whole file."""
 from __future__ import annotations

@@ -4,7 +4,7 @@
 
 The viewport paints a colour or a picture; a photorealistic render also
 needs to know whether that surface is matte plaster, polished marble,
-steel, glass or water. IngeTrazo stores that per named material
+steel, glass or water. SipilBIM stores that per named material
 (``Material.finish`` in the document's registry); where nobody chose one,
 it is guessed from the material's name and its picture's file name, which
 already say it in most models («water_calm», «[Water Pool Light]»,

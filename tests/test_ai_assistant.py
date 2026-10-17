@@ -573,7 +573,7 @@ def test_user_agent_defeats_cloudflare_and_headers_carry_it():
     for provider in ("groq", "anthropic", "openai"):
         _u, headers, _p = ai.build_request(
             provider, "m", "k", "SYS", [{"role": "user", "text": "x"}])
-        assert headers["User-Agent"].startswith("IngeTrazo/")
+        assert headers["User-Agent"].startswith("SipilBIM/")
 
 
 def test_provider_selector_overrides_autodetect(monkeypatch):
@@ -647,7 +647,7 @@ def test_list_models_filters_and_strips(monkeypatch):
     assert models == ["gemini-2.5-flash", "openai/gpt-oss-120b"]
     assert calls["url"] == "https://api.groq.com/openai/v1/models"
     assert calls["headers"]["Authorization"] == "Bearer gsk_k"
-    assert calls["headers"]["User-Agent"].startswith("IngeTrazo/")
+    assert calls["headers"]["User-Agent"].startswith("SipilBIM/")
 
     ai.list_models("anthropic", "sk-ant-k")
     assert "api.anthropic.com/v1/models" in calls["url"]

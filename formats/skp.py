@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""SKP import seam — IngeTrazo's own reader, behind one seam.
+"""SKP import seam — SipilBIM's own reader, behind one seam.
 
-IngeTrazo aims to open **any** ``.skp`` (old → recent). This module is the
-single seam between IngeTrazo and *how* an ``.skp`` is read, so the parser can
+SipilBIM aims to open **any** ``.skp`` (old → recent). This module is the
+single seam between SipilBIM and *how* an ``.skp`` is read, so the parser can
 evolve independently of the app. The backend is **OpenSKP**
 (https://github.com/iamahsanmehmood/openskp, MIT) or a maintained fork: pure
 Python, offline, no Wine, no proprietary code. (Until 2026-09-28 a second
@@ -75,7 +75,7 @@ class _OpenSkpBackend:
             # repo moved and ~/openskp died) otherwise degrades every .skp
             # to the Wine converter and reads as "slow / does not open".
             import sys
-            print(f"IngeTrazo: openskp backend unavailable ({exc!r}); "
+            print(f"SipilBIM: openskp backend unavailable ({exc!r}); "
                   f".skp imports fall back to the external converter",
                   file=sys.stderr)
             return False
@@ -323,7 +323,7 @@ def _apply_payload_inner(scene, payload) -> str:
             existing.add(raw["name"])
 
     # Linear dimensions (.skp dimension entities): world endpoints + an
-    # offset distance. IngeTrazo's Dimension carries the offset as a VECTOR
+    # offset distance. SipilBIM's Dimension carries the offset as a VECTOR
     # from the a–b segment to the dimension line, so turn the .skp scalar
     # into the in-plane perpendicular direction × distance.
     if payload.get("dimensions"):

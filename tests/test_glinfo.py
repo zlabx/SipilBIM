@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Who draws the viewport — the diagnosis behind "IngeTrazo is unusably
+"""Who draws the viewport — the diagnosis behind "SipilBIM is unusably
 slow on my Windows machine"."""
 from __future__ import annotations
 
@@ -49,7 +49,7 @@ def test_a_silent_driver_never_breaks_start_up():
 def test_the_report_lands_in_the_log_folder(tmp_path):
     info = {"vendor": "Intel", "renderer": "Intel(R) UHD Graphics 620",
             "version": "4.6.0 - Build 31.0.101.2111", "software": False}
-    out = write_gl_report(info, tmp_path / "logs" / "ingetrazo-gl.txt")
+    out = write_gl_report(info, tmp_path / "logs" / "sipilbim-gl.txt")
     text = out.read_text(encoding="utf-8")
     assert "renderer : Intel(R) UHD Graphics 620" in text
     assert "software : no" in text

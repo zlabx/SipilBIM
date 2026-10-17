@@ -10,7 +10,7 @@ NVIDIA Quadro P600): every context creation failed with
 3009 is hex — ``EGL_BAD_MATCH``: that driver's EGL has no desktop-OpenGL
 config to match the 3.3 Core context :func:`main._configure_surface_format`
 asks for. The same driver serves the very same request through GLX under
-X11 without a murmur, so the machine runs IngeTrazo perfectly; it just
+X11 without a murmur, so the machine runs SipilBIM perfectly; it just
 never got the chance, because nothing fell back. And because the request
 is the *default* format, it poisons Qt's own backing store too
 (``Failed to create QRhi for QBackingStoreRhiSupport``), so what the user
@@ -53,7 +53,7 @@ def _probe_message_handler(kind, _context, message) -> None:
     134)» and no reason at all (issue #6, v0.3.19)."""
     from PySide6.QtCore import QtMsgType
     if kind == QtMsgType.QtFatalMsg:
-        print(f"IngeTrazo: Qt fatal while probing OpenGL: {message}",
+        print(f"SipilBIM: Qt fatal while probing OpenGL: {message}",
               file=sys.stderr, flush=True)
 
 
@@ -123,7 +123,7 @@ def _restart_under_xcb(platform_name: str) -> str:
     argv = sys.argv[1:] if getattr(sys, "frozen", False) else sys.argv
     # Said before the exec, because after it this process no longer exists:
     # a restart nobody announced looks like a crash in the log.
-    print("IngeTrazo: this driver cannot create an OpenGL context under "
+    print("SipilBIM: this driver cannot create an OpenGL context under "
           "Wayland; restarting under X11.", file=sys.stderr, flush=True)
     try:
         os.execv(sys.executable, [sys.executable] + argv)
@@ -156,14 +156,14 @@ def ensure_gl_context(app) -> str:
     lean = leaner(wanted)
     if lean is not None and _can_create(lean):
         QSurfaceFormat.setDefaultFormat(lean)
-        print("IngeTrazo: this driver refused the full OpenGL format; "
+        print("SipilBIM: this driver refused the full OpenGL format; "
               "continuing without stencil buffer and multisampling.",
               file=sys.stderr)
         return "reduced"
 
     outcome = _restart_under_xcb(app.platformName())
     if outcome == "no-x11":
-        print("IngeTrazo: this driver cannot create an OpenGL 3.3 context "
+        print("SipilBIM: this driver cannot create an OpenGL 3.3 context "
               "under Wayland, and no X11 display is available to fall back "
               "on. Under Flatpak, grant it X11:\n"
               "  flatpak override --user --socket=x11 com.ingetrazo.IngeTrazo",

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 José Castro Basso (FADU–UDELAR) — idea and first version.
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Niveles — building levels as an IngeTrazo EXTENSION.
+"""Niveles — building levels as an SipilBIM EXTENSION.
 
 Levels (PB, PA, Azotea…) with their height; in an elevation or a section
 seen in parallel projection, a dashed guide across the drawing at each
@@ -9,14 +9,14 @@ level, and the cursor snaps to those heights — «Nivel PA» on the tip.
 
 José Castro Basso wrote the first version for teaching architectural
 representation at FADU–UDELAR (Montevideo). It is an extension and not part
-of IngeTrazo on purpose: the core stays for everyone, and what a course or
+of SipilBIM on purpose: the core stays for everyone, and what a course or
 an office needs is installed by whoever needs it — and can be maintained
 by them. It is also the worked example of the extension API
 (docs/plugins.md): document data, a side panel, a viewport overlay and an
 inference, all through ``setup(app)``.
 
 Install: copy this file into the plugins folder (Extensions ▸ Open plugins
-folder) and restart IngeTrazo. The «Niveles» tab appears in the side tray.
+folder) and restart SipilBIM. The «Niveles» tab appears in the side tray.
 """
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ from core.i18n import current_language
 
 #: Guides and snapping only when the view looks sideways: |pitch| below this.
 MAX_PITCH_DEG = 15.0
-COLOR = (0.95, 0.45, 0.16)                    # IngeTrazo's accent
+COLOR = (0.95, 0.45, 0.16)                    # SipilBIM's accent
 
 # An extension brings its own words — the core catalogues stay the core's.
 _TEXTS = {

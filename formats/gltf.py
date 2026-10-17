@@ -9,11 +9,11 @@ colours become PBR ``baseColorFactor``; textured faces become a
 ``baseColorTexture`` with the image embedded in the buffer. Opens in Blender,
 Windows 3D Viewer, Babylon Sandbox, three.js, most web viewers.
 
-glTF is **Y-up, right-handed, metres**; IngeTrazo is Z-up, so positions and
+glTF is **Y-up, right-handed, metres**; SipilBIM is Z-up, so positions and
 normals are baked ``(x, y, z) → (x, z, −y)`` and standard viewers show the model
 upright. The scene's geographic anchor (for sun/shadow studies) rides along in
 ``asset.extras`` — glTF has no standard geolocation field, so a viewer that
-doesn't know IngeTrazo simply ignores it, and IngeTrazo can read it back.
+doesn't know SipilBIM simply ignores it, and SipilBIM can read it back.
 
 No external dependencies — the GLB container is written by hand with ``struct``.
 """
@@ -33,7 +33,7 @@ _ELEMENT_ARRAY_BUFFER = 34963
 
 
 def _yup(v):
-    """Z-up (IngeTrazo) → Y-up (glTF)."""
+    """Z-up (SipilBIM) → Y-up (glTF)."""
     return (v.x(), v.z(), -v.y())
 
 
@@ -407,8 +407,8 @@ def save_glb(scene, path, face_me=None, only=None) -> None:
         gltf["scenes"] = [{"nodes": roots}]
         gltf["scene"] = 0
     if tree is None and primitives:
-        meshes.append({"name": "IngeTrazo", "primitives": primitives})
-        nodes.append({"mesh": 0, "name": "IngeTrazo"})
+        meshes.append({"name": "SipilBIM", "primitives": primitives})
+        nodes.append({"mesh": 0, "name": "SipilBIM"})
     for i, (fp, fig) in enumerate(figure_meshes if tree is None else (), 1):
         feet = fig["feet"]
         meshes.append({"name": f"Figure {i}", "primitives": fp})

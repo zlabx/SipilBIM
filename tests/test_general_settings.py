@@ -34,7 +34,7 @@ def _read_in_new_process(ini: Path, name: str) -> str:
 
 
 def test_a_general_setting_survives_a_restart(tmp_path):
-    ini = tmp_path / "IngeTrazo.conf"
+    ini = tmp_path / "SipilBIM.conf"
     st = QSettings(str(ini), QSettings.IniFormat)
     general_settings.set_value("theme", "light", st)
     st.sync()
@@ -44,7 +44,7 @@ def test_a_general_setting_survives_a_restart(tmp_path):
 
 def test_what_earlier_versions_saved_is_still_read(tmp_path):
     # Written by 0.5.7 as general/theme: the file is the reporter's.
-    ini = tmp_path / "IngeTrazo.conf"
+    ini = tmp_path / "SipilBIM.conf"
     ini.write_text("[%General]\nautosave=0\ntheme=light\nundo_steps=50\n")
     assert _read_in_new_process(ini, "theme") == "light"
     assert _read_in_new_process(ini, "autosave") == "0"

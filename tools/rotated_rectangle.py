@@ -14,7 +14,7 @@ Three clicks, the classic way:
    holds the angle); the VCB takes ``width`` or ``width;angle``.
 
 The two protractors are @pacaeiro's issue #70 — «a "Protractor" inside it,
-to help drawing the rectangle» — which is the classic tool: IngeTrazo
+to help drawing the rectangle» — which is the classic tool: SipilBIM
 had the geometry of step 3 but drew neither instrument.
 
 The plane is the whole point of the tool and it used to be missing:

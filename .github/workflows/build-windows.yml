@@ -85,37 +85,40 @@ jobs:
       - name: Compilar con PyInstaller
         shell: bash
         run: |
-          pyinstaller ingetrazo.spec --noconfirm
+          pyinstaller sipilbim.spec --noconfirm
           ls -la dist/
-          du -sh dist/ingetrazo/
+          du -sh dist/sipilbim/
 
       - name: Humo mínimo del bundle
         shell: bash
         run: |
           # El exe existe y los recursos críticos quedaron dentro.
-          test -f dist/ingetrazo/ingetrazo.exe
-          test -f dist/ingetrazo/_internal/resources/shaders/basic.vert
-          test -f dist/ingetrazo/_internal/i18n/es.json
-          test -f dist/ingetrazo/_internal/resources/components/components.json
+          test -f dist/sipilbim/sipilbim.exe
+          test -f dist/sipilbim/_internal/resources/shaders/basic.vert
+          test -f dist/sipilbim/_internal/i18n/es.json
+          test -f dist/sipilbim/_internal/resources/components/components.json
           # La plantilla .skp en blanco de openskp la generó una herramienta
-          # propietaria: desde el 2026-09-28 NO se distribuye (ingetrazo.spec
+          # propietaria: desde el 2026-09-28 NO se distribuye (sipilbim.spec
           # la excluye y no hay exportación a .skp). Si
           # un paquete la trae otra vez, falla aquí — y también --check.
-          test ! -e dist/ingetrazo/_internal/openskp/_scaffold
+          test ! -e dist/sipilbim/_internal/openskp/_scaffold
           # El conversor DWG y sus DLL (#101).
           for f in dwg2dxf.exe libredwg-0.dll libiconv-2.dll; do
-            test -f "dist/ingetrazo/_internal/vendor/libredwg/bin/$f"
+            test -f "dist/sipilbim/_internal/vendor/libredwg/bin/$f"
           done
           # …y sin la segunda copia de las DLL en la raíz (31 MB de sobra).
-          test ! -e dist/ingetrazo/_internal/libredwg-0.dll
+          test ! -e dist/sipilbim/_internal/libredwg-0.dll
           # Y el mismo --check que ya corren el tar, el AppImage y el snap
           # (release.yml), que Windows no tenía: cubre estos archivos y los
           # que se añadan después, sin que haya que acordarse de listarlos
           # aquí. Va antes que Qt, así que no abre ventana; devuelve 1 si
           # falta algo.
-          ./dist/ingetrazo/ingetrazo.exe --check
+          ./dist/sipilbim/sipilbim.exe --check
           echo "bundle OK"
 
+      # SipilBIM: the signing steps below are INACTIVE. organization-id and project-slug are upstream's
+      # SignPath organisation; without SIGNPATH_API_TOKEN every signing step is skipped and the build is
+      # unsigned. Set up SignPath (or another signer) for zlabx/SipilBIM before relying on it.
       # ── Firma (SignPath Foundation, org «IngeTrazo [OSS]») ─────────────
       # Cada firma espera a que Marco la apruebe en app.signpath.io. Sin el
       # secret (forks) se salta y sale sin firmar, como antes. El secret
@@ -147,13 +150,13 @@ jobs:
         with:
           name: exe-sin-firmar
           path: |
-            dist/ingetrazo/ingetrazo.exe
-            dist/ingetrazo/ingetrazo-mcp.exe
+            dist/sipilbim/sipilbim.exe
+            dist/sipilbim/sipilbim-mcp.exe
           if-no-files-found: error
           retention-days: 1
 
       # Configuración «programa» en SignPath: los dos .exe en la raíz del zip.
-      # Los firmados reemplazan a los de dist/ingetrazo/ antes del ZIP y de
+      # Los firmados reemplazan a los de dist/sipilbim/ antes del ZIP y de
       # Inno Setup, así ambos llevan los .exe firmados.
       - name: Firmar los .exe (SignPath)
         if: steps.firma.outputs.on == 'true'
@@ -167,40 +170,40 @@ jobs:
           github-artifact-id: ${{ steps.exe-sin-firmar.outputs.artifact-id }}
           wait-for-completion: true
           wait-for-completion-timeout-in-seconds: 3600
-          output-artifact-directory: dist/ingetrazo
+          output-artifact-directory: dist/sipilbim
 
       - name: Incluir LEEME en el bundle
         shell: bash
         run: |
-          cat > dist/ingetrazo/LEEME.txt <<'EOF'
-          IngeTrazo para Windows
+          cat > dist/sipilbim/LEEME.txt <<'EOF'
+          SipilBIM para Windows
 
-          Recomendado: usar el INSTALADOR (ingetrazo-setup-vX.Y.Z.exe).
+          Recomendado: usar el INSTALADOR (sipilbim-setup-vX.Y.Z.exe).
           Este .zip es la version portable para usuarios tecnicos.
 
           === Modo portable (este .zip) ===
 
-          1. Descomprimi esta carpeta donde quieras (ej. C:\IngeTrazo\)
-          2. Doble clic en ingetrazo.exe
+          1. Descomprimi esta carpeta donde quieras (ej. C:\SipilBIM\)
+          2. Doble clic en sipilbim.exe
           3. Si Windows muestra "Windows protegio tu PC" → "Mas informacion"
              → "Ejecutar de todas formas" (falta firma digital; se agrega
              mas adelante).
 
           Las preferencias se guardan en el registro de Windows y el cache
-          de teselas en %LOCALAPPDATA%\IngeTrazo\.
+          de teselas en %LOCALAPPDATA%\SipilBIM\.
 
           Si al abrir falla con "Failed to load python312.dll", instala:
             https://aka.ms/vs/17/release/vc_redist.x64.exe
             (Visual C++ Redistributable, oficial de Microsoft).
 
-          IngeTrazo es software libre (GPL-3.0).
-          Codigo y soporte: https://github.com/tuxiasumari/ingetrazo
+          SipilBIM es software libre (GPL-3.0).
+          Codigo y soporte: https://github.com/zlabx/SipilBIM
           EOF
 
       - name: Crear ZIP portable
         shell: pwsh
         run: |
-          Compress-Archive -Path dist/ingetrazo -DestinationPath dist/ingetrazo-windows.zip
+          Compress-Archive -Path dist/sipilbim -DestinationPath dist/sipilbim-windows.zip
 
       - name: Extraer versión (del tag o de core/version.py)
         id: ver
@@ -225,7 +228,7 @@ jobs:
             Write-Error "Inno Setup no encontrado"
             exit 1
           }
-          & $iscc "/DMyAppVersion=${{ steps.ver.outputs.version }}" "installer\ingetrazo.iss"
+          & $iscc "/DMyAppVersion=${{ steps.ver.outputs.version }}" "installer\sipilbim.iss"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Subir el instalador para firmar
@@ -234,7 +237,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: setup-sin-firmar
-          path: dist/ingetrazo-setup-v*.exe
+          path: dist/sipilbim-setup-v*.exe
           if-no-files-found: error
           retention-days: 1
 
@@ -259,7 +262,7 @@ jobs:
         if: steps.firma.outputs.on == 'true'
         shell: pwsh
         run: |
-          $files = @("dist/ingetrazo/ingetrazo.exe", "dist/ingetrazo/ingetrazo-mcp.exe") + (Get-ChildItem dist/ingetrazo-setup-v*.exe).FullName
+          $files = @("dist/sipilbim/sipilbim.exe", "dist/sipilbim/sipilbim-mcp.exe") + (Get-ChildItem dist/sipilbim-setup-v*.exe).FullName
           foreach ($f in $files) {
             $sig = Get-AuthenticodeSignature $f
             "{0}: {1} — {2}" -f (Split-Path $f -Leaf), $sig.Status, $sig.SignerCertificate.Subject
@@ -273,10 +276,10 @@ jobs:
       - name: Subir artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ingetrazo-windows
+          name: sipilbim-windows
           path: |
-            dist/ingetrazo-windows.zip
-            dist/ingetrazo-setup-v*.exe
+            dist/sipilbim-windows.zip
+            dist/sipilbim-setup-v*.exe
           retention-days: 7
 
       # En push de tag: adjunta los binarios al Release de esa versión.
@@ -285,5 +288,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/ingetrazo-windows.zip
-            dist/ingetrazo-setup-v*.exe
+            dist/sipilbim-windows.zip
+            dist/sipilbim-setup-v*.exe

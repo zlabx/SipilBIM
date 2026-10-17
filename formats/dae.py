@@ -74,7 +74,7 @@ def _xml_escape(s: str) -> str:
             .replace('"', "&quot;"))
 
 
-def save_dae(scene, path, project_name: str = "IngeTrazo model") -> None:
+def save_dae(scene, path, project_name: str = "SipilBIM model") -> None:
     """Write the scene as a COLLADA (``.dae``) file at ``path``, with a sibling
     folder of texture images copied next to it.
 
@@ -162,7 +162,7 @@ def save_dae(scene, path, project_name: str = "IngeTrazo model") -> None:
     out.append('<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" '
                'version="1.4.1">')
     out.append("<asset>")
-    out.append("<contributor><authoring_tool>IngeTrazo</authoring_tool>"
+    out.append("<contributor><authoring_tool>SipilBIM</authoring_tool>"
                "</contributor>")
     out.append(f"<created>{now}</created><modified>{now}</modified>")
     geo = geolocation(scene)
@@ -218,7 +218,7 @@ def save_dae(scene, path, project_name: str = "IngeTrazo model") -> None:
 
     # library_geometries — one geometry, shared sources, one <triangles>/material
     out.append("<library_geometries>")
-    out.append('<geometry id="geom0" name="IngeTrazo"><mesh>')
+    out.append('<geometry id="geom0" name="SipilBIM"><mesh>')
     pos_floats = " ".join(f"{c:.6f}" for xyz in positions for c in xyz)
     out.append(f'<source id="geom0-pos"><float_array id="geom0-pos-array" '
                f'count="{len(positions) * 3}">{pos_floats}</float_array>'

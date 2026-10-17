@@ -227,10 +227,10 @@ def import_shortcuts(window, data) -> tuple:
     did for Zoom and Zoom Selection in a file written from another
     program's keys (#323, @tomlai-git). Returns ``(applied, skipped,
     clashes)`` — ``clashes`` lists ``(key, kept_by, dropped_from)``; raises
-    ValueError for a file that is not an IngeTrazo shortcuts file."""
+    ValueError for a file that is not an SipilBIM shortcuts file."""
     if (not isinstance(data, dict) or data.get("format") != EXPORT_FORMAT
             or not isinstance(data.get("shortcuts"), dict)):
-        raise ValueError(tr("This is not an IngeTrazo shortcuts file."))
+        raise ValueError(tr("This is not an SipilBIM shortcuts file."))
     wanted = {str(k): str(v or "") for k, v in data["shortcuts"].items()}
     actions = collect_actions(window)
     by_key = {action_key(a): a for a in actions}
@@ -490,7 +490,7 @@ class ShortcutsPanel(QWidget):
         import json
         from views.filedialogs import file_dialogs
         path, _ = file_dialogs.getSaveFileName(
-            self, tr("Export shortcuts"), "ingetrazo-shortcuts.json",
+            self, tr("Export shortcuts"), "sipilbim-shortcuts.json",
             tr("Shortcuts (*.json)"))
         if not path:
             return

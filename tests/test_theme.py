@@ -44,7 +44,7 @@ def test_mode_resolution():
     L, D, U = Qt.ColorScheme.Light, Qt.ColorScheme.Dark, Qt.ColorScheme.Unknown
     assert theme.is_dark(theme.SYSTEM, L) is False
     assert theme.is_dark(theme.SYSTEM, D) is True
-    # A desktop that says nothing keeps IngeTrazo's historic dark chrome.
+    # A desktop that says nothing keeps SipilBIM's historic dark chrome.
     assert theme.is_dark(theme.SYSTEM, U) is True
     for scheme in (L, D, U):
         assert theme.is_dark(theme.LIGHT, scheme) is False
@@ -52,7 +52,7 @@ def test_mode_resolution():
 
 
 def test_dark_is_the_default(app):
-    # Marco, 2026-09-22: IngeTrazo opens dark; light or «same as the
+    # Marco, 2026-09-22: SipilBIM opens dark; light or «same as the
     # system» is the user's choice.
     from PySide6.QtCore import QSettings
     QSettings().remove("General/theme")

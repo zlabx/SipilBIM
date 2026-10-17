@@ -148,7 +148,7 @@ def test_the_flatpak_installs_the_converter():
 
 
 def test_the_spec_bundles_it_on_all_three_platforms():
-    spec = (_root() / "ingetrazo.spec").read_text(encoding="utf-8")
+    spec = (_root() / "sipilbim.spec").read_text(encoding="utf-8")
     for name in ('"dwg2dxf.exe"', '"libredwg-0.dll"', '"libiconv-2.dll"',
                  '"linux": ["dwg2dxf"]', '"darwin": ["dwg2dxf"]'):
         assert name in spec

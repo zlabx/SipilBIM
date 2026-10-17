@@ -141,7 +141,7 @@ def save_obj(scene, path) -> None:
             m.write("\n")
 
     with open(path, "w") as o:
-        o.write("# IngeTrazo OBJ export\n")
+        o.write("# SipilBIM OBJ export\n")
         o.write(f"mtllib {mtl_path.name}\n")
         for x, y, z in verts:
             o.write(f"v {x:.6f} {y:.6f} {z:.6f}\n")

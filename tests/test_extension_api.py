@@ -206,7 +206,7 @@ def test_levels_panel_has_a_one_click_way_to_where_the_guides_show(levels):
 
 def test_the_example_extensions_ship_but_install_only_on_request(tmp_path,
                                                                  monkeypatch):
-    """Marco: «sería bueno tener esa extensión como ejemplo en IngeTrazo para
+    """Marco: «sería bueno tener esa extensión como ejemplo en SipilBIM para
     que otros usuarios vean» — shipped with the app and loaded only once
     someone installs it. Since 0.5.8 they install from Manage extensions…
     (the Extensions menu no longer has a submenu of its own for them), as

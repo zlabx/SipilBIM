@@ -32,7 +32,7 @@ from core.triangulate import plane_axes
 
 
 def texture_cache_root() -> Path:
-    """Root of the app's texture cache: ``<user data>/IngeTrazo/textures``
+    """Root of the app's texture cache: ``<user data>/SipilBIM/textures``
     (``~/.local/share/…`` on Linux, ``%LOCALAPPDATA%\\…`` on Windows). Built
     from ``GenericDataLocation`` rather than ``AppDataLocation`` so the path
     does not depend on ``QCoreApplication``'s org/app names being set (scripts
@@ -54,7 +54,7 @@ def texture_cache_root() -> Path:
     except Exception:  # noqa: BLE001 — no Qt paths (headless odd env): use $HOME
         base = ""
     root = Path(base) if base else Path.home() / ".local" / "share"
-    return root / "IngeTrazo" / "textures"
+    return root / "SipilBIM" / "textures"
 
 
 def texture_cache_stats() -> tuple[int, int]:
@@ -231,7 +231,7 @@ def projection_basis(normal) -> tuple[tuple[float, float, float],
     the paste preview used to project with ``core.triangulate.plane_axes``
     (world X projected onto the plane) while the ``.skp`` importer already
     used this one: on a wall facing +Y or −X the two differ by 180°, so a
-    texture painted in IngeTrazo showed upside-down against the reference
+    texture painted in SipilBIM showed upside-down against the reference
     rendering of the very same file (measured through the former external
     converter, 2026-09-04). Calibrated against that ground truth for every
     orientation, not just the axis-aligned ones.
@@ -395,7 +395,7 @@ def face_uv_axes(tex: dict, normal):
     ONE definition of "where does the texture sit on this face", so the
     renderer and the ``.skp`` exporter cannot drift apart — the exporter had
     no UV recipe at all and wrote textured faces with no mapping, which is
-    why a .skp saved from IngeTrazo opened elsewhere with every texture
+    why a .skp saved from SipilBIM opened elsewhere with every texture
     gone and only its average colour left.
 
     Two sources, matching what the face carries: a fitted ``uvw`` (an import

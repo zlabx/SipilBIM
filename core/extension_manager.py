@@ -57,7 +57,7 @@ class Extension:
     tags: tuple[str, ...]
     screenshot: str | None = None
     updated_at: str | None = None
-    #: An extension that ships inside IngeTrazo (``examples/extensions``):
+    #: An extension that ships inside SipilBIM (``examples/extensions``):
     #: the local file or folder it installs from — nothing is downloaded.
     bundled: str | None = None
 
@@ -358,7 +358,7 @@ def uninstall_extension(ident: str) -> None:
     target, managed = _managed_target(ident)
     if not target.exists() or not managed or not target.is_dir():
         raise ExtensionManagerError(
-            f"{ident!r} is not an installed extension managed by IngeTrazo.")
+            f"{ident!r} is not an installed extension managed by SipilBIM.")
     shutil.rmtree(target)
 
 
@@ -473,7 +473,7 @@ def _example_screenshot(path: Path) -> str | None:
 
 def _bundle_digest(path: Path) -> str:
     """SHA-256 of a bundled extension: the file, or every file of the
-    package in a fixed order — it changes when an update of IngeTrazo
+    package in a fixed order — it changes when an update of SipilBIM
     brings a new version, so the manager offers to update the copy."""
     h = hashlib.sha256()
     if path.is_file():
@@ -489,7 +489,7 @@ def _bundle_digest(path: Path) -> str:
 
 
 def bundled_extensions() -> list[Extension]:
-    """The extensions shipped with IngeTrazo, as manager entries: installed
+    """The extensions shipped with SipilBIM, as manager entries: installed
     from the local copy, managed like a catalog one from then on (update,
     disable, uninstall). A catalog entry with the same id wins over it."""
     from core.i18n import current_language, tr
@@ -503,7 +503,7 @@ def bundled_extensions() -> list[Extension]:
         except OSError:
             continue
         out.append(Extension(
-            id=ident, version=__version__, author="IngeTrazo", license="",
+            id=ident, version=__version__, author="SipilBIM", license="",
             repository="", download="", sha256=digest,
             minimum_version=__version__, name={"en": title},
             summary={"en": tagline, lang: tr(tagline)}, tags=(),
@@ -585,7 +585,7 @@ def install_extension(extension: Extension,
     nothing, so the extension never loads twice."""
     if not compatible_with_current(extension):
         raise ExtensionManagerError(
-            f"{extension.id!r} requires IngeTrazo "
+            f"{extension.id!r} requires SipilBIM "
             f"{extension.minimum_version} or later.")
     target, managed = _managed_target(extension.id)
     if not managed:
@@ -596,7 +596,7 @@ def install_extension(extension: Extension,
     if source is not None:
         if not source.exists():
             raise ExtensionManagerError(
-                f"{extension.id!r} is not shipped with this IngeTrazo.")
+                f"{extension.id!r} is not shipped with this SipilBIM.")
         archive_data = source.read_bytes() if source.is_file() else None
     else:
         archive_data = _get(extension.download, MAX_DOWNLOAD_BYTES)

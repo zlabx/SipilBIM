@@ -85,7 +85,7 @@ def test_glb_is_valid_and_has_geometry(tmp_path):
 
 
 def test_glb_is_y_up(tmp_path):
-    # A box from z=0..3 in IngeTrazo (Z-up) must land y=0..3 in glTF (Y-up).
+    # A box from z=0..3 in SipilBIM (Z-up) must land y=0..3 in glTF (Y-up).
     scene = Scene()
     hist = History(scene)
     _cube(scene, hist, height=3.0)
