@@ -1,5 +1,5 @@
 """Copy/Paste between SipilBIM windows (issue #76): the model clipboard
-travels through the system clipboard as a small ``.igz``-based payload."""
+travels through the system clipboard as a small ``.sbim``-based payload."""
 from __future__ import annotations
 
 import pytest

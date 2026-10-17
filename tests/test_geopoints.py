@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Survey-point import (Track G, municipal flow): CSV parsing, UTM → local
-through the datum, undoable command with datum anchoring, .igz persistence."""
+through the datum, undoable command with datum anchoring, .sbim persistence."""
 from __future__ import annotations
 
 import math
@@ -111,7 +111,7 @@ def test_igz_round_trip(tmp_path):
     scene.georef = SceneDatum(-13.5, -71.9, alt=3335.2)
     scene.geo_points.append(GeoPoint(QVector3D(1.5, -2.25, 0.9),
                                      name="V1", desc="VERTICE"))
-    p = tmp_path / "puntos.igz"
+    p = tmp_path / "puntos.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Issue #179 (Georges Le Roux): insert an .igz as a component from Python,
+"""Issue #179 (Georges Le Roux): insert an .sbim as a component from Python,
 without the file dialog — for a palette that places components as the
 mouse moves. ``window.import_igz_path`` and ``app.import_igz``."""
 from __future__ import annotations
@@ -20,7 +20,7 @@ _app = QApplication.instance() or QApplication([])
 
 
 def _bench(tmp_path):
-    """A 1 x 1 x 0.5 box drawn from the origin, saved as bench.igz."""
+    """A 1 x 1 x 0.5 box drawn from the origin, saved as bench.sbim."""
     scene = Scene()
     m = scene.mesh
     p = [QVector3D(0, 0, 0), QVector3D(1, 0, 0), QVector3D(1, 1, 0),
@@ -29,7 +29,7 @@ def _bench(tmp_path):
     for loop in ((0, 3, 2, 1), (4, 5, 6, 7), (0, 1, 5, 4),
                  (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)):
         m.add_face([p[i] for i in loop])
-    path = tmp_path / "bench.igz"
+    path = tmp_path / "bench.sbim"
     igz.save_scene(scene, path)
     return path
 
@@ -84,7 +84,7 @@ def test_the_extension_api_offers_it(window, tmp_path):
 
 
 def test_an_unreadable_file_raises_and_changes_nothing(window, tmp_path):
-    bad = tmp_path / "broken.igz"
+    bad = tmp_path / "broken.sbim"
     bad.write_bytes(b"not a document")
     scene = window.viewport.scene
     n0 = len(scene.groups)

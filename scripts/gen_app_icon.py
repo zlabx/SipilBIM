@@ -9,7 +9,7 @@ Outputs, all committed because a clone must be installable without Inkscape:
     resources/icons/ingetrazo_<size>.png   16..512, for hicolor and the web
     resources/icons/sipilbim.ico          for sipilbim.spec and the Inno setup
 
-Run ``scripts/gen_doc_icons.py`` AFTER this one: the .igz document icons
+Run ``scripts/gen_doc_icons.py`` AFTER this one: the .sbim document icons
 composite ``sipilbim_256.png`` as their badge, so they must come second.
 
 HISTORY, because it changes how you edit the icon. Until 2026-08-07 the master

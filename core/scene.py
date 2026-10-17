@@ -3,7 +3,7 @@
 """Scene container, backed by a shared-vertex :class:`~core.mesh.Mesh`.
 
 ``edges`` and ``faces`` are read-only views onto the mesh (lists of
-``mesh.Edge`` / ``mesh.Face``), so render, bounds and ``.igz`` save consume them
+``mesh.Edge`` / ``mesh.Face``), so render, bounds and ``.sbim`` save consume them
 unchanged. Every mutation goes through mesh methods (via the ``Command`` layer),
 which keep shared-vertex connectivity and incidence in sync — no more
 position-matching to rediscover topology.
@@ -92,7 +92,7 @@ class Scene:
     #: the Spanish UNE) or the German/Japanese one. It belongs to the
     #: DOCUMENT and not to the machine: a setting kept in QSettings would
     #: redraw a colleague's dimensions the moment he opened the file
-    #: (Marco, 2026-09-17). Absent from an older .igz = ISO, which is what
+    #: (Marco, 2026-09-17). Absent from an older .sbim = ISO, which is what
     #: those files were drawn with.
     #: ``base_step_mm`` is how far apart the rows of a baseline run sit on
     #: PAPER — AutoCAD's DIMDLI, and Marco asked for it as a number he
@@ -109,12 +109,12 @@ class Scene:
     #: Camera stays in the position where it was before».
     camera_home: dict | None = None
     #: The model's units (issue #33): the unit a bare number is typed in and
-    #: every length is shown in, plus the decimals. Travels in the .igz;
+    #: every length is shown in, plus the decimals. Travels in the .sbim;
     #: read through ``core.units`` (``fmt_len`` & co.).
     units: dict = field(default_factory=lambda: {"length": "m", "precision": 2})
     #: Extensions' own document data, one JSON-safe value per extension key
     #: (``views.extension_api.ExtensionApp.document_data``). Travels in the
-    #: .igz; the core never reads it. Changed through
+    #: .sbim; the core never reads it. Changed through
     #: ``core.history.SetPluginDataCommand`` so each edit is undoable.
     plugin_data: dict = field(default_factory=dict)
     dimension_style: dict = field(default_factory=lambda: {

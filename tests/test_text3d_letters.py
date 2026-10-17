@@ -82,7 +82,7 @@ def test_text_group_is_a_container_of_letter_groups():
 def test_text_group_round_trips_through_igz(tmp_path):
     scene = Scene()
     scene.groups.append(make_text_group(text_params("Yanque", "Sans")))
-    p = tmp_path / "texto3d.igz"
+    p = tmp_path / "texto3d.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)
@@ -212,7 +212,7 @@ def test_a_fresh_text_is_pristine_and_stays_so_through_igz(tmp_path):
     g = make_text_group(text_params("Yanque", "Sans"))
     scene.groups.append(g)
     assert g.text3d["hash"] and text_is_pristine(g)
-    p = tmp_path / "t.igz"
+    p = tmp_path / "t.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)

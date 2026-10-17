@@ -102,7 +102,7 @@ def test_a_group_exploded_out_of_a_copy_is_its_own_when_opened():
 def test_the_sharing_survives_the_igz(tmp_path):
     from formats import igz
     scene, comp, dup = _component_and_copy()
-    path = tmp_path / "banca.igz"
+    path = tmp_path / "banca.sbim"
     igz.save_scene(scene, path)
     loaded = Scene()
     igz.load_into(loaded, path)

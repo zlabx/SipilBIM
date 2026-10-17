@@ -18,7 +18,7 @@ def test_dynamic_fields_read_the_sheet():
     comp.frames.append(MarcoVista(w_mm=200, h_mm=120, scale_n=75.0,
                                   view_key="std:front"))
     comp.cajetin = Cajetin(proyecto="Plaza Yanque", autor="MS", lamina="L-03")
-    set_field_context(comp=comp, scene=None, path="/x/pileta fuente.igz",
+    set_field_context(comp=comp, scene=None, path="/x/pileta fuente.sbim",
                       index=2, total=5)
     text = ("{proyecto} · {autor} · {lamina} · {escala} · {archivo} · "
             "{hoja}/{total} · {nombre} · {escena} · ESC. 1:{n}")

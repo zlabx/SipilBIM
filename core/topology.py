@@ -1647,7 +1647,7 @@ def heal_overlapping_faces(mesh, coverage: float = 0.5, partial=None,
     if len(mesh.faces) > _HEAL_FACE_CAP:
         # This heal exists for hand-drawing scale (the overlaps draw/delete
         # sequences leave); its mother-face pass is O(F²) and froze the UI
-        # for minutes after exploding a 9k-face import (piscina.igz user
+        # for minutes after exploding a 9k-face import (piscina.sbim user
         # report — a single Delete took >120 s). At import scale the
         # cosmetic overlap cleanup is skipped; editing stays correct.
         return []

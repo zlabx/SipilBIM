@@ -269,7 +269,7 @@ def save_glb(scene, path, face_me=None, only=None) -> None:
                 mat["pbrMetallicRoughness"]["baseColorFactor"] = [1, 1, 1, 1]
         else:
             # A colour may carry an alpha (an imported model's): the
-            # exporter refused the whole file over it (pileta.igz).
+            # exporter refused the whole file over it (pileta.sbim).
             r, g, b = tuple(info["color"])[:3]
             mat["pbrMetallicRoughness"]["baseColorFactor"] = [r, g, b, 1.0]
         # The finish (core.finish): plain glTF for every program, and the

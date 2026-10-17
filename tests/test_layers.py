@@ -74,7 +74,7 @@ def test_layers_and_labels_round_trip_igz(tmp_path):
     scene.layers.append(Layer("Muros", visible=False, locked=True))
     assign_layer(f, "Muros")
     assign_layer(e, "Muros")
-    p = tmp_path / "capas.igz"
+    p = tmp_path / "capas.sbim"
     igz.save_scene(scene, p)
 
     scene2 = Scene()
@@ -107,7 +107,7 @@ def test_annotations_take_layers_like_any_entity(tmp_path):
     born, reassignable, hidden with their layer (so a scene that hides an
     "Anotaciones" layer shows a clean model — no need to duplicate the
     fountain, Marco 2026-09-02), unselectable when locked, and the layer
-    survives the .igz round trip."""
+    survives the .sbim round trip."""
     from PySide6.QtGui import QVector3D
     from core.camera import OrbitCamera
     from core.dimension import Dimension
@@ -148,7 +148,7 @@ def test_annotations_take_layers_like_any_entity(tmp_path):
     scene.layer("Anotaciones").visible = True
 
     # The tag travels in the document.
-    path = tmp_path / "anotaciones.igz"
+    path = tmp_path / "anotaciones.sbim"
     igz_format.save_scene(scene, path)
     fresh = Scene()
     igz_format.load_into(fresh, path)

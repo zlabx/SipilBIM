@@ -878,7 +878,7 @@ def test_the_lock_is_saved_in_the_igz_and_kept_by_copies(tmp_path):
     assert copy_group(tree).locked
     scene = Scene()
     scene.groups[:] = [building, tree]
-    path = tmp_path / "locked.igz"
+    path = tmp_path / "locked.sbim"
     save_scene(scene, path)
     back = Scene()
     load_into(back, path)
@@ -1017,7 +1017,7 @@ def test_a_hidden_frame_is_saved_and_not_picked(tmp_path):
     scene = Scene()
     a, b = _two_planes(scene)
     a.hidden = True
-    path = tmp_path / "sections.igz"
+    path = tmp_path / "sections.sbim"
     save_scene(scene, path)
     back = Scene()
     load_into(back, path)

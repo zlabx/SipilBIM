@@ -275,7 +275,7 @@ def bind_scene(scene) -> None:
 
 def model_units_of(scene) -> dict:
     """The validated units of a scene — or of a raw document payload (a
-    dict), which is how the .igz loader reads them."""
+    dict), which is how the .sbim loader reads them."""
     if isinstance(scene, dict):
         u = scene.get("units")
     else:
@@ -307,7 +307,7 @@ def _of_kind(kind: str):
 
 #: The units panel's settings beyond the length (issue #33's two keys): each
 #: optional, absent = its default, so a document that never touched them —
-#: and every .igz written before them — reads exactly as it always did.
+#: and every .sbim written before them — reads exactly as it always did.
 #: ``area``/``volume`` "auto" follow the length (mm → mm², ft → ft²);
 #: ``area_precision`` None follows its precision, as areas always have.
 #: Volumes kept the three decimals they were always shown with.
@@ -342,7 +342,7 @@ NEW_DOCUMENT_KEY = "units/new_document"
 def new_document_units() -> dict:
     """The units a new, empty document starts with: the ones the user last
     chose «for new documents» in Preferences, or metres. Opening a file never
-    reads this — a document keeps its own units (an old .igz without them is
+    reads this — a document keeps its own units (an old .sbim without them is
     in metres, as it was drawn)."""
     import json
 

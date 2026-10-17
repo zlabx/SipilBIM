@@ -110,7 +110,7 @@ class PreferencesDialog(QDialog):
         form.addRow("", row)
 
         self._backup = QCheckBox(tr("Keep a backup of the previous save "
-                                    "(.igz.bak)"))
+                                    "(.sbim.bak)"))
         self._backup.setChecked(str(_gs.value("backup", "1", st)) != "0")
         form.addRow("", self._backup)
 
@@ -300,7 +300,7 @@ class PreferencesDialog(QDialog):
         # Issue #33 (@pacaeiro): «when doing architecture I work in meters
         # and with mechanical pieces all the work is in millimeters». The
         # unit a bare number is typed in and every readout shows. It is a
-        # property of the document (it travels in the .igz), shown here
+        # property of the document (it travels in the .sbim), shown here
         # because this is where people look for it (Marco, 2026-09-21).
         from core import units as _units
         from views.units_panel import UnitsPanel

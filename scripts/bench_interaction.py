@@ -38,8 +38,8 @@ Gestures (the basic operations, each on points that land ON the model):
 Usage (a real window opens; the machine should be otherwise idle):
 
     python scripts/bench_models.py S M L          # synthetic city models
-    python scripts/bench_interaction.py out.json benchmarks/models/city-S.igz \\
-        benchmarks/models/city-M.igz examples/pileta-fuente-yanque.igz
+    python scripts/bench_interaction.py out.json benchmarks/models/city-S.sbim \\
+        benchmarks/models/city-M.sbim examples/pileta-fuente-yanque.sbim
     python scripts/bench_interaction.py --compare before.json after.json
 
 ``--vsync`` keeps the wait for the monitor refresh (off by default: it

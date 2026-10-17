@@ -123,7 +123,7 @@ def test_partial_overlap_resolved_by_holing_on_flat_off_in_3d():
 
 def test_heal_skips_import_scale_meshes():
     # The overlap heal is O(F^2) in its mother-face pass: after exploding a
-    # 9k-face import, ONE Delete took >120 s (piscina.igz user report).
+    # 9k-face import, ONE Delete took >120 s (piscina.sbim user report).
     # Above the cap it must return immediately and touch nothing.
     import time
     from core import topology

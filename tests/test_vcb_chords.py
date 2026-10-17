@@ -79,7 +79,7 @@ def test_a_document_with_a_nan_corner_opens_without_it(tmp_path):
     V3 = __import__("PySide6.QtGui", fromlist=["QVector3D"]).QVector3D
     good.mesh.add_face([V3(0, 0, 0), V3(1, 0, 0), V3(1, 1, 0), V3(0, 1, 0)])
     good.mesh.add_face([V3(3, 0, 0), V3(4, 0, 0), V3(4, 1, 0)])
-    path = tmp_path / "reja.igz"
+    path = tmp_path / "reja.sbim"
     igz.save_scene(good, path)
     # Damage it the way it happened: one corner and one guide become NaN.
     # (A document without images is plain JSON; with them, a zip.)

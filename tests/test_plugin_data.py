@@ -26,7 +26,7 @@ JOB = {"units": "mm", "stock": {"x": 600.0, "y": 400.0, "z": 18.0},
 
 
 def _roundtrip(scene, tmp_path):
-    path = tmp_path / "m.igz"
+    path = tmp_path / "m.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)
@@ -49,7 +49,7 @@ def test_a_document_without_plugin_data_stays_terse(tmp_path):
 
 
 def test_opening_a_document_does_not_inherit_the_previous_ones(tmp_path):
-    path = tmp_path / "plain.igz"
+    path = tmp_path / "plain.sbim"
     igz.save_scene(Scene(), path)
     scene = Scene()
     scene.plugin_data["myext"] = JOB
@@ -77,7 +77,7 @@ def test_an_unserialisable_entry_costs_that_extension_only(tmp_path):
 
 
 def test_plugin_data_is_read_back_as_written_and_a_non_object_is_ignored(tmp_path):
-    path = tmp_path / "m.igz"
+    path = tmp_path / "m.sbim"
     igz.save_scene(Scene(), path)
     doc = json.loads(path.read_text(encoding="utf-8"))
     doc["scene"]["plugin_data"] = {"ok": {"a": 1}, "n": 7}

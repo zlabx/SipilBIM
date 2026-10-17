@@ -68,7 +68,7 @@ def test_the_open_cube_itself_is_left_as_it_was():
 
 
 def test_a_misread_flip_through_an_open_mesh_is_taken_back(monkeypatch):
-    """The parity rays can misread a solid (plaza.igz has a 51-face one
+    """The parity rays can misread a solid (plaza.sbim has a 51-face one
     they would have spoiled). Through an open mesh a flip that leaves the
     solid's shared edges LESS consistent is put back, paint included."""
     import core.orient as orient

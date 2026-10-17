@@ -156,7 +156,7 @@ def daylight_minutes(lat: float, lon: float, month: int, day: int,
 
 @dataclass
 class ShadowSettings:
-    """Document data (lives on the Scene, saved in the .igz): whether the
+    """Document data (lives on the Scene, saved in the .sbim): whether the
     sun draws shadows, and the local date/time it stands at. ``utc_offset``
     ``None`` means "derive from the site's longitude"."""
     enabled: bool = False

@@ -121,9 +121,9 @@ def test_the_document_remembers_the_exploded_view(tmp_path):
     scene, box = _assembly()
     assembled = _world(box)
     ExplodeViewCommand(box, 0.8, "z").do(scene)
-    igz.save_scene(scene, tmp_path / "e.igz")
+    igz.save_scene(scene, tmp_path / "e.sbim")
     again = Scene()
-    igz.load_into(again, tmp_path / "e.igz")
+    igz.load_into(again, tmp_path / "e.sbim")
     box2 = again.groups[0]
     assert box2.exploded == {"factor": 0.8, "mode": "z"}
     ExplodeViewCommand(box2, 0).do(again)

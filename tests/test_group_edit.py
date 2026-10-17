@@ -88,7 +88,7 @@ def test_clear_scene_exits_the_context():
 
 def test_bundled_components_import_and_insert_undoably():
     # The starter components are listed in components.json and ship as a
-    # .igz (kept offline, images packed in), a .glb or an .obj: every entry
+    # .sbim (kept offline, images packed in), a .glb or an .obj: every entry
     # must have its model and its thumbnail, load, sit on the ground, and
     # insert with exact undo. One loads for real; the rest just exist
     # (loading every model is a slow-suite job).
@@ -104,14 +104,14 @@ def test_bundled_components_import_and_insert_undoably():
     assert len(manifest) >= 1
     for entry in manifest:
         assert any((comp_dir / f"{entry['key']}{ext}").exists()
-                   for ext in (".igz", ".glb", ".obj")), entry["key"]
+                   for ext in (".sbim", ".glb", ".obj")), entry["key"]
         assert (comp_dir / "thumbs" / f"{entry['key']}.png").exists(), \
             entry["key"]
 
     scene = Scene()
     hist = History(scene)
     temp = Scene()
-    igz.load_into(temp, comp_dir / "fuente.igz")
+    igz.load_into(temp, comp_dir / "fuente.sbim")
     mesh = temp.groups[0].mesh
     assert mesh.faces
     assert sum(1 for f in mesh.faces if f.attrs.get("texture")) > 100
@@ -142,7 +142,7 @@ def test_a_glb_component_still_imports(tmp_path):
 
 
 def test_billboard_group_round_trips_and_faces_camera(tmp_path):
-    # Face-me billboards: flag + textured quad persist in .igz; the quad the
+    # Face-me billboards: flag + textured quad persist in .sbim; the quad the
     # viewport computes always faces the camera around the vertical axis.
     from core.group import make_billboard_group
     from formats import igz
@@ -153,7 +153,7 @@ def test_billboard_group_round_trips_and_faces_camera(tmp_path):
     assert g.billboard
     # excluded from the static render views (drawn per-frame instead)
     assert list(scene.render_faces()) == []
-    p = tmp_path / "bb.igz"
+    p = tmp_path / "bb.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)
@@ -414,7 +414,7 @@ def test_box_corners_lie_on_the_geometry_of_a_rotated_slab():
 
 
 def test_every_offline_component_is_one_group_with_geometry():
-    # The .igz starters are what the tray offers with no network. A file that
+    # The .sbim starters are what the tray offers with no network. A file that
     # loads to nothing would be a button that does nothing.
     import json
     from pathlib import Path
@@ -424,11 +424,11 @@ def test_every_offline_component_is_one_group_with_geometry():
     comp_dir = Path(__file__).resolve().parent.parent / "resources" / "components"
     manifest = json.loads((comp_dir / "components.json").read_text())
     keys = [e["key"] for e in manifest
-            if (comp_dir / f"{e['key']}.igz").exists()]
+            if (comp_dir / f"{e['key']}.sbim").exists()]
     assert keys, "no offline component ships"
     for key in keys:
         scene = Scene()
-        igz.load_into(scene, comp_dir / f"{key}.igz")
+        igz.load_into(scene, comp_dir / f"{key}.sbim")
         assert len(scene.groups) == 1, key
         assert scene.groups[0].mesh.faces, key
 

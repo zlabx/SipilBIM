@@ -22,7 +22,7 @@ def test_recent_list_is_ordered_deduplicated_and_capped(tmp_path):
         QSettings().setValue("recent_files", [])
         docs = []
         for i in range(12):
-            p = tmp_path / f"doc{i}.igz"
+            p = tmp_path / f"doc{i}.sbim"
             p.write_text("{}")
             docs.append(p)
             win._remember_recent(p)
@@ -38,8 +38,8 @@ def test_recent_list_is_ordered_deduplicated_and_capped(tmp_path):
         docs[-1].unlink()
         win._fill_recent_menu()
         labels = [a.text() for a in win._recent_menu.actions() if a.text()]
-        assert not any("doc11.igz" in t for t in labels)
-        assert any("doc9.igz" in t for t in labels)
+        assert not any("doc11.sbim" in t for t in labels)
+        assert any("doc9.sbim" in t for t in labels)
         assert any("Clear" in t or "Limpiar" in t for t in labels)
     finally:
         QSettings().setValue("recent_files", [])

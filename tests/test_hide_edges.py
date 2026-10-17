@@ -6,7 +6,7 @@
 these pin down is the *reversible* path: the command restores mixed states
 exactly, a hidden edge leaves the selection, the chunk fingerprint SEES the
 flag (a stale chunk would keep drawing the line inside groups), and the flag
-round-trips through the ``.igz``. Plus the Shift+eraser gesture: hide the
+round-trips through the ``.sbim``. Plus the Shift+eraser gesture: hide the
 stroke, not erase it, as one undo step.
 
 Headless: commands against a ``Scene``; the fingerprint via the staticmethod.
@@ -96,7 +96,7 @@ def test_hidden_round_trips_through_igz(tmp_path):
     from formats import igz
     scene, _ = _square()
     scene.mesh.edges[2].hidden = True
-    path = tmp_path / "hidden.igz"
+    path = tmp_path / "hidden.sbim"
     igz.save_scene(scene, path)
     loaded = Scene()
     igz.load_into(loaded, path)

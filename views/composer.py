@@ -5,7 +5,7 @@
 C2: several model-view frames per sheet, text / image / title-block items,
 drag with snapping (page edges, margins, centre, other items), corner
 resize, a composition manager (N sheets per document, persisted in the
-.igz), and composer-scoped undo. The canvas is a ``QGraphicsScene`` whose
+.sbim), and composer-scoped undo. The canvas is a ``QGraphicsScene`` whose
 units are paper MILLIMETRES; every item paints itself in mm-space through
 the same code the PDF export uses, so screen and paper always agree.
 """
@@ -5473,7 +5473,7 @@ class _PanelTabs(QTabWidget):
 class ComposerWindow(QMainWindow):
     """Page canvas on the left, composition manager + properties on the
     right. Compositions live in ``scene.compositions`` and persist in the
-    .igz; every mutation goes through the composer's own undo history."""
+    .sbim; every mutation goes through the composer's own undo history."""
 
     def _apply_desk_colour(self) -> None:
         """The desk behind the sheet: slate on the dark chrome, a soft grey
@@ -6543,7 +6543,7 @@ class ComposerWindow(QMainWindow):
             tb.addAction(a)
             return a
         self.save_action = act("save", tr("Save"), tr(
-            "Save the document — the model and every sheet — to its .igz "
+            "Save the document — the model and every sheet — to its .sbim "
             "(Ctrl+S). Auto-save (Preferences) keeps a recovery copy too."),
             self.save_document)
         tb.addSeparator()
@@ -10420,7 +10420,7 @@ class ComposerWindow(QMainWindow):
     def dimension_norma(self) -> str:
         """The drafting standard the DOCUMENT's dimensions obey — ``"iso"``
         (the default, and so UNE) or ``"din"`` (German/Japanese). It lives
-        in ``scene.dimension_style`` so it travels in the .igz with the
+        in ``scene.dimension_style`` so it travels in the .sbim with the
         drawing instead of following the machine (Marco, 2026-09-17).
         Nothing reads it yet: only ISO is on the menu for now, and a new
         cota is born ``above`` regardless (Marco, 2026-09-20)."""

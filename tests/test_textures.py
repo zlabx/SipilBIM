@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """.skp-compatible textures: planar UV projection, the SetFaceTexture
-command, OBJ export with vt + map_Kd, and .igz round-trip."""
+command, OBJ export with vt + map_Kd, and .sbim round-trip."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -104,7 +104,7 @@ def test_obj_export_writes_texture_material_and_uvs(tmp_path):
                if line.startswith("f ") for tok in line.split()[1:])
 
 
-# ---- .igz round-trip -----------------------------------------------------------
+# ---- .sbim round-trip -----------------------------------------------------------
 
 def test_texture_survives_igz_round_trip(tmp_path):
     # An image that cannot be read (here: a path that never existed) is not
@@ -116,7 +116,7 @@ def test_texture_survives_igz_round_trip(tmp_path):
     face = scene.mesh.faces[0]
     tex = {"path": "/x/brick.png", "sw": 0.5, "sh": 0.25}
     hist.execute(SetFaceTextureCommand([face], tex))
-    path = tmp_path / "tex.igz"
+    path = tmp_path / "tex.sbim"
     stats = igz.save_scene(scene, path)
     assert stats == {"embedded": 0, "missing": 1}
 
@@ -127,7 +127,7 @@ def test_texture_survives_igz_round_trip(tmp_path):
     assert painted[0].attrs["texture"] == tex
 
 
-# ---- .igz container: images ride INSIDE the document ---------------------------
+# ---- .sbim container: images ride INSIDE the document ---------------------------
 
 def _textured_cube(scene, hist, img_path, extra=None):
     _cube(scene, hist)
@@ -150,7 +150,7 @@ def test_igz_packs_texture_images_into_the_document(tmp_path, monkeypatch):
     src = tmp_path / "checker.png"
     _textured_cube(scene, hist, src)
 
-    doc = tmp_path / "casa.igz"
+    doc = tmp_path / "casa.sbim"
     assert igz.save_scene(scene, doc) == {"embedded": 1, "missing": 0}
 
     import json
@@ -182,14 +182,14 @@ def test_igz_never_embeds_a_file_that_is_not_an_image(tmp_path, monkeypatch):
     monkeypatch.setenv("INGETRAZO_TEXTURE_CACHE", str(tmp_path / "cache"))
     secret = tmp_path / "id_ed25519"
     secret.write_text("-----BEGIN OPENSSH PRIVATE KEY-----\nsecret\n")
-    crafted = tmp_path / "crafted.igz"
+    crafted = tmp_path / "crafted.sbim"
     crafted.write_text(json.dumps({"igz_format": 1, "scene": {"edges": [],
         "faces": [{"vertices": [[0, 0, 0], [1, 0, 0], [1, 1, 0]],
                    "texture": {"path": str(secret), "sw": 1.0, "sh": 1.0}}]}}))
     scene = Scene()
     igz.load_into(scene, crafted)
 
-    out = tmp_path / "resaved.igz"
+    out = tmp_path / "resaved.sbim"
     assert igz.save_scene(scene, out)["embedded"] == 0
     raw = out.read_bytes()
     if raw.startswith(b"PK"):
@@ -199,14 +199,14 @@ def test_igz_never_embeds_a_file_that_is_not_an_image(tmp_path, monkeypatch):
 
 
 def test_igz_document_opens_on_another_machine(tmp_path, monkeypatch):
-    # The whole point: the .igz travels alone — original image gone, texture
+    # The whole point: the .sbim travels alone — original image gone, texture
     # cache empty (a different computer) — and the texture is still there.
     monkeypatch.setenv("INGETRAZO_TEXTURE_CACHE", str(tmp_path / "cache-a"))
     scene = Scene()
     hist = History(scene)
     src = tmp_path / "checker.png"
     _textured_cube(scene, hist, src)
-    doc = tmp_path / "casa.igz"
+    doc = tmp_path / "casa.sbim"
     igz.save_scene(scene, doc)
     original = src.read_bytes()
     src.unlink()
@@ -222,7 +222,7 @@ def test_igz_document_opens_on_another_machine(tmp_path, monkeypatch):
     assert tex["sw"] == 1.0 and "embed" not in tex
 
     # Re-saving the reopened document keeps carrying the image.
-    again = tmp_path / "otra.igz"
+    again = tmp_path / "otra.sbim"
     assert igz.save_scene(loaded, again) == {"embedded": 1, "missing": 0}
 
 
@@ -234,7 +234,7 @@ def test_igz_stays_plain_json_without_textures(tmp_path):
     scene = Scene()
     hist = History(scene)
     _cube(scene, hist)
-    doc = tmp_path / "plain.igz"
+    doc = tmp_path / "plain.sbim"
     assert igz.save_scene(scene, doc) == {"embedded": 0, "missing": 0}
     data = json.loads(doc.read_text())
     assert data["igz_format"] == 1
@@ -245,8 +245,8 @@ def test_igz_container_is_byte_identical_across_saves(tmp_path, monkeypatch):
     scene = Scene()
     hist = History(scene)
     _textured_cube(scene, hist, tmp_path / "checker.png")
-    a = tmp_path / "a.igz"
-    b = tmp_path / "b.igz"
+    a = tmp_path / "a.sbim"
+    b = tmp_path / "b.sbim"
     igz.save_scene(scene, a)
     igz.save_scene(scene, b)
     assert a.read_bytes() == b.read_bytes()
@@ -265,7 +265,7 @@ def test_igz_packs_back_side_textures_without_touching_the_scene(tmp_path,
     top.attrs["back"] = {"texture": {"path": str(back_img),
                                      "sw": 2.0, "sh": 2.0}}
 
-    doc = tmp_path / "dos-caras.igz"
+    doc = tmp_path / "dos-caras.sbim"
     assert igz.save_scene(scene, doc) == {"embedded": 2, "missing": 0}
     assert top.attrs["back"]["texture"]["path"] == str(back_img)   # untouched
 
@@ -330,7 +330,7 @@ def test_texture_rotation_round_trips_igz(tmp_path):
     f = scene.mesh.add_face([QVector3D(0, 0, 0), QVector3D(2, 0, 0),
                              QVector3D(2, 2, 0), QVector3D(0, 2, 0)])
     f.attrs["texture"] = {"path": "x.png", "sw": 1.5, "sh": 0.75, "rot": 45.0}
-    p = tmp_path / "rot.igz"
+    p = tmp_path / "rot.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)
@@ -606,7 +606,7 @@ def test_resaving_a_document_never_stacks_hash_prefixes(tmp_path, monkeypatch):
     _textured_cube(scene, hist, src)
     digest = hashlib.sha1(src.read_bytes()).hexdigest()[:16]
 
-    doc = tmp_path / "v1.igz"
+    doc = tmp_path / "v1.sbim"
     igz.save_scene(scene, doc)
     assert _archive_members(doc) == [f"textures/{digest}-sumari.png"]
     for i in range(2, 6):
@@ -615,7 +615,7 @@ def test_resaving_a_document_never_stacks_hash_prefixes(tmp_path, monkeypatch):
         tex = next(f.attrs["texture"] for f in loaded.mesh.faces
                    if f.attrs.get("texture"))
         assert Path(tex["path"]).name == f"{digest}-sumari.png"
-        doc = tmp_path / f"v{i}.igz"
+        doc = tmp_path / f"v{i}.sbim"
         igz.save_scene(loaded, doc)
         assert _archive_members(doc) == [f"textures/{digest}-sumari.png"]
 
@@ -633,11 +633,11 @@ def test_a_document_bloated_by_old_saves_opens_and_heals(tmp_path, monkeypatch):
     src = tmp_path / "sumari.png"
     _textured_cube(scene, hist, src)
     digest = hashlib.sha1(src.read_bytes()).hexdigest()[:16]
-    clean = tmp_path / "clean.igz"
+    clean = tmp_path / "clean.sbim"
     igz.save_scene(scene, clean)
     good = f"textures/{digest}-sumari.png"
     bloated = "textures/" + "fd36615edd9d43dc-" * 19 + "sumari.png"
-    old = tmp_path / "old.igz"
+    old = tmp_path / "old.sbim"
     with zipfile.ZipFile(clean) as zin, zipfile.ZipFile(old, "w") as zout:
         for name in zin.namelist():
             data = zin.read(name)
@@ -652,7 +652,7 @@ def test_a_document_bloated_by_old_saves_opens_and_heals(tmp_path, monkeypatch):
                if f.attrs.get("texture"))
     assert Path(tex["path"]).name == f"{digest}-sumari.png"
     assert Path(tex["path"]).read_bytes() == src.read_bytes()
-    healed = tmp_path / "healed.igz"
+    healed = tmp_path / "healed.sbim"
     igz.save_scene(loaded, healed)
     assert _archive_members(healed) == [good]
 

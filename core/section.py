@@ -103,7 +103,7 @@ class SectionPlane:
         #: "spacing": metres}``, each key optional — what is missing comes
         #: from the style. ``None``: the style's fill as it is.
         self.fill = None
-        #: Stable identity for scenes (.igz SavedView references) — survives
+        #: Stable identity for scenes (.sbim SavedView references) — survives
         #: reordering and deletion of OTHER planes.
         self.uid = _take_uid(uid)
 
@@ -115,7 +115,7 @@ class SectionPlane:
         """Signed distance: > 0 is the HIDDEN side (the normal's side)."""
         return QVector3D.dotProduct(self.normal, p - self.point)
 
-    # ---- Serialisation (.igz) ------------------------------------------------
+    # ---- Serialisation (.sbim) ------------------------------------------------
     def to_dict(self) -> dict:
         entry = {
             "point": [self.point.x(), self.point.y(), self.point.z()],

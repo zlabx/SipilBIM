@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Materials: per-face colour stored in attrs, painted via the Paint tool,
-serialized to .igz, and surviving push/pull through the plane rebuild (A.3)."""
+serialized to .sbim, and surviving push/pull through the plane rebuild (A.3)."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -127,14 +127,14 @@ def test_paint_tool_paints_whole_face_selection():
     assert b.attrs["color"] == [0.5, 0.5, 0.0]         # selection painted too
 
 
-# ---- .igz round-trip -----------------------------------------------------------
+# ---- .sbim round-trip -----------------------------------------------------------
 
 def test_color_survives_igz_round_trip(tmp_path):
     scene = Scene()
     hist = History(scene)
     face = _square(scene, hist)
     face.attrs["color"] = [0.3, 0.6, 0.9]
-    path = tmp_path / "painted.igz"
+    path = tmp_path / "painted.sbim"
     igz.save_scene(scene, path)
 
     loaded = Scene()
@@ -166,7 +166,7 @@ def test_unpainted_face_writes_no_color_key(tmp_path):
     scene = Scene()
     hist = History(scene)
     _square(scene, hist)
-    path = tmp_path / "plain.igz"
+    path = tmp_path / "plain.sbim"
     igz.save_scene(scene, path)
     import json
     data = json.loads(Path(path).read_text())

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Curve entity: a drawn circle/arc's segments share a curve id so selecting one
-selects the whole curve, and it survives undo/redo + .igz."""
+selects the whole curve, and it survives undo/redo + .sbim."""
 from __future__ import annotations
 
 import math
@@ -67,7 +67,7 @@ def test_curve_id_survives_igz(tmp_path):
     hist = History(scene)
     cmd, pts = _draw_circle(scene)
     hist.execute(cmd)
-    path = tmp_path / "circle.igz"
+    path = tmp_path / "circle.sbim"
     igz.save_scene(scene, path)
 
     loaded = Scene()
@@ -278,7 +278,7 @@ def test_square_over_circle_next_to_a_solid():
 def test_two_overlapping_rectangles_split_into_three_regions():
     # Straight edges only (no curves): the cycle planner left the first
     # rectangle whole over the lens, so pushing 'the middle' grabbed the whole
-    # rectangle (rect.igz report). The scoped planar rebuild must split the
+    # rectangle (rect.sbim report). The scoped planar rebuild must split the
     # overlap into its own region — the three expected areas — while deleted
     # faces stay deleted (coverage semantics).
     from core.edits import build_add_edges
@@ -323,7 +323,7 @@ def test_two_overlapping_rectangles_split_into_three_regions():
 def test_paste_keeps_curve_identity():
     # Copy/paste re-created edges with no soft/curve flags, silently degrading
     # a pasted circle to 24 loose segments (per-segment selection — the
-    # circo.igz report). The clipboard must carry the flags and paste must
+    # circo.sbim report). The clipboard must carry the flags and paste must
     # remap curve ids to fresh ones.
     from tools.circle import CircleTool
     from tools.paste import PasteTool

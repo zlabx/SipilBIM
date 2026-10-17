@@ -3,7 +3,7 @@
 """Desktop integration for the AppImage build.
 
 An AppImage is a single file: it runs from anywhere but shows up nowhere —
-no launcher in the applications menu, no icon on the file, .igz files not
+no launcher in the applications menu, no icon on the file, .sbim files not
 associated (Rafael's review, 2026-09-10: «las AppImages arrancan bien pero
 no traen integración de escritorio»). Tools like AppImageLauncher or Gear
 Lever do that job when they are installed; this module does it from inside

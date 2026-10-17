@@ -168,7 +168,7 @@ BUILTIN_STYLES: list[Style] = [
 # ---- User style library ------------------------------------------------------
 # Saved styles live in QSettings ("styles/user", a JSON list) like the custom
 # basemap sources: small, named, survive across sessions until removed. A
-# document doesn't NEED the library — the .igz and saved views carry the full
+# document doesn't NEED the library — the .sbim and saved views carry the full
 # style dict — the library is what "Save style…" in the panel feeds and what
 # lets a composer frame or another document reference the look by name.
 

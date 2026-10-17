@@ -23,7 +23,7 @@ def test_guides_round_trip_in_the_sheet():
     comp.guides_h = [30.0]
     again = Composicion.from_dict(comp.to_dict())
     assert (again.guides_v, again.guides_h) == ([100.0, 40.5], [30.0])
-    assert Composicion.from_dict({"name": "x"}).guides_v == []   # old .igz
+    assert Composicion.from_dict({"name": "x"}).guides_v == []   # old .sbim
 
 
 def test_add_move_remove_guides_with_undo_and_snapping():

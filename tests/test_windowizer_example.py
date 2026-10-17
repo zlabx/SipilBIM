@@ -112,7 +112,7 @@ def test_a_saved_window_reopens_editable(win, monkeypatch, tmp_path):
     from core.scene import Scene
     from formats import igz
     mod, vp, g = _windowize(win, monkeypatch)
-    path = tmp_path / "wall.igz"
+    path = tmp_path / "wall.sbim"
     igz.save_scene(vp.scene, path)
     again = Scene()
     igz.load_into(again, path)

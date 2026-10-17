@@ -188,7 +188,7 @@ def test_mesh_is_read_compatible_with_igz_save(tmp_path):
     )
     m.add_edge(V(0, 0), V(0, 5))
 
-    out = tmp_path / "mesh.igz"
+    out = tmp_path / "mesh.sbim"
     save_scene(m, out)  # reads mesh.edges (.a/.b) + mesh.faces (.vertices/.holes)
     data = json.loads(out.read_text())
 

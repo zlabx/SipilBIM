@@ -141,7 +141,7 @@ class History:
     mid-mutation, the mesh is restored to its pre-command state, the failure
     is logged (stderr + ``error_log`` file), and nothing lands on the undo
     stack — a failed operation must be a no-op, never a half-committed mess
-    (an aas.igz-style aborted draw left a quarter circle, an unsplit face and
+    (an aas.sbim-style aborted draw left a quarter circle, an unsplit face and
     a duplicated edge behind, with the traceback swallowed by the Qt event
     loop). Same fail-safe doctrine as the BIM push guard, one level up."""
 
@@ -401,7 +401,7 @@ class EraseSelectionCommand(Command):
         footprint = winding_footprint(m)
         # Loop->face lookups through ONE index: _find_face_by_loop scans the
         # whole mesh per call, and deleting thousands of box-selected faces
-        # froze for ~26 s on a 28k-face mesh (piscina.igz report, round 2).
+        # froze for ~26 s on a 28k-face mesh (piscina.sbim report, round 2).
         by_loop: dict = {}
         for f in m.faces:
             by_loop.setdefault(
@@ -415,7 +415,7 @@ class EraseSelectionCommand(Command):
         # One segment->faces index for the cascade below: the per-edge scan
         # over every face was O(edges x faces) — deleting a curved tiled
         # wall (hundreds of curve segments) took 30+ s on an exploded
-        # 28k-face mesh (piscina.igz report). Kept live as faces merge/die.
+        # 28k-face mesh (piscina.sbim report). Kept live as faces merge/die.
         seg_faces: dict = {}
 
         def _index_face(f) -> None:
@@ -438,7 +438,7 @@ class EraseSelectionCommand(Command):
                 # Slit edge: ONE face walks it twice — a fence line joining an
                 # inner boundary to the outline turns the ring into a cut-open
                 # walk. Dissolving "the face with itself" deleted the face and
-                # kept the line (ss.igz report). Erasing the line must keep
+                # kept the line (ss.sbim report). Erasing the line must keep
                 # the face: drop only the edge and re-derive the plane's
                 # regions below (the ring comes back as outer + hole; other
                 # fence pieces survive as free edges).
@@ -491,7 +491,7 @@ class EraseSelectionCommand(Command):
             scene.selection.discard(f)
         # And the endpoints go with them. remove_edge only detaches, so an
         # erase used to leave its vertices in the mesh: invisible, ignored by
-        # bounds(), and written into the .igz. Nine of them 16 km out were
+        # bounds(), and written into the .sbim. Nine of them 16 km out were
         # all Marco's document had left after deleting a stray line, which is
         # why zoom-to-extents could not bring him back (2026-09-18).
         m.prune_orphan_vertices()

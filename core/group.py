@@ -21,7 +21,7 @@ _counter = itertools.count(1)
 
 
 def new_uid() -> str:
-    """A fresh group identity: random, so two documents merged (a ``.igz``
+    """A fresh group identity: random, so two documents merged (a ``.sbim``
     imported as a component) never collide."""
     import uuid
     return uuid.uuid4().hex[:16]
@@ -63,7 +63,7 @@ class Group:
         # laid out again in place. ``None`` on every other group.
         self.text3d = None
         # Extensions' own parameters for this container, by extension key
-        # ({"windowizer": {...}}): kept with copies and saved in the .igz,
+        # ({"windowizer": {...}}): kept with copies and saved in the .sbim,
         # and apart from ``ifc``, which the BIM panel replaces when it
         # retags. ``None`` when no extension wrote here.
         self.ext = None
@@ -75,9 +75,9 @@ class Group:
         self.hidden = False
         # Lock: the object stays drawn but cannot be picked, selected or
         # opened — so no tool can move or edit it — until it is unlocked
-        # from the Browser. Saved in the .igz (the Project
+        # from the Browser. Saved in the .sbim (the Project
         # Structure plugin of #87 kept it outside the document: «the
-        # padlock function is not saved in the .igz file»).
+        # padlock function is not saved in the .sbim file»).
         self.locked = False
         # Stable identity that survives save/load — what a scene names when
         # it remembers which objects it hides. Fresh per object; a copy gets
@@ -110,7 +110,7 @@ class Group:
         # component keep the sharing its .skp file gave it.
         #
         # Without them a component's internal repetition was flattened on
-        # import: the hedge in piscina.igz is 4480 + 5120 faces placed 48
+        # import: the hedge in piscina.sbim is 4480 + 5120 faces placed 48
         # times, and it arrived as 230400 real ones. Twenty-four times the
         # geometry, for the element that is 89% of that model — which is
         # why the .skp we wrote was 80 MB against the original's 14, and
@@ -328,7 +328,7 @@ def _merged_placements(group) -> Mesh:
     ``transformed_mesh`` — the per-entity walk this codebase already learned
     to avoid. Here each placement's corners are transformed as one array and
     the whole component welds once, the same recipe ``transformed_mesh`` and
-    the ``.igz`` loader use."""
+    the ``.sbim`` loader use."""
     import numpy as np
     from core.topology import _maximal_holes
     new = Mesh()
@@ -451,7 +451,7 @@ def transformed_mesh(src: Mesh, m) -> Mesh:
     carrying face attrs, soft/curve flags and re-fitted texture UV maps.
 
     Big meshes go through one vectorized ``bulk_weld`` pass (same recipe as
-    the ``.igz`` loader): the per-entity ``add_face``/``add_edge`` walk froze
+    the ``.sbim`` loader): the per-entity ``add_face``/``add_edge`` walk froze
     the UI for ~16 s copying a 17k-face plant group (piscina report) — and
     ran TWICE, once at copy and once per paste stamp. Small meshes keep the
     plain walk (the bulk pass's fixed cost loses there)."""
@@ -647,7 +647,7 @@ def _hull_2d(pts):
     Points strictly inside the quadrilateral of the four axis extremes cannot
     be hull vertices, so they are dropped first (Akl-Toussaint). That test is
     one vectorised pass and typically discards almost everything: the 189k
-    vertices of the hedge in piscina.igz come down to a few hundred before the
+    vertices of the hedge in piscina.sbim come down to a few hundred before the
     Python scan, which is the difference between half a second and a blink."""
     import numpy as np
     pts = np.asarray(pts, dtype=np.float64)
@@ -723,7 +723,7 @@ def frame_from_points(positions) -> tuple:
     a frame), so they are derived — and derived *exactly*: the minimum-area
     rectangle around a point set always has a side flush with an edge of its
     convex hull, so trying each hull edge finds the true optimum rather than
-    guessing at it. The barbecue in piscina.igz sits at 23.5 degrees and needs
+    guessing at it. The barbecue in piscina.sbim sits at 23.5 degrees and needs
     half the footprint the world axes give it.
 
     Keeping Z upright is the domain's assumption, not a shortcut: buildings,

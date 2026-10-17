@@ -1717,7 +1717,7 @@ class PushPullTool(Tool):
         wall reads as positive, the base is never hidden, and the outer face
         stands there covering the pocket forming behind it: pushing a door
         into Marco's cube looked like nothing was happening while the push
-        itself worked (cubo.igz, 2026-08-27 — a door disagreeing with all
+        itself worked (cubo.sbim, 2026-08-27 — a door disagreeing with all
         five of its coplanar neighbours).
 
         There, the coplanar faces across the boundary ARE the surface this
@@ -2112,7 +2112,7 @@ class PushPullTool(Tool):
         # whole mesh: a flat drawing with a box standing elsewhere is 'not
         # flat', but pushing one of the drawing's sheet regions must take the
         # sheet path — the volumetric plane rebuild reads an open sheet's
-        # regions as phantoms and deletes the neighbours (xc.igz: pushing a
+        # regions as phantoms and deletes the neighbours (xc.sbim: pushing a
         # circle∩square lens made the rest of the drawing disappear). A base
         # whose rim (outer + hole loops) backs onto ONLY coplanar faces and
         # whose connected component has open edges is pure sheet; any

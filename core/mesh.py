@@ -34,7 +34,7 @@ from PySide6.QtGui import QVector3D
 _KEY_DECIMALS = 4
 
 # Monotonic id for drawn curves (circle/arc). Segments of one curve share it so
-# selection groups them as one curve. Session-scoped; ``.igz`` load bumps it
+# selection groups them as one curve. Session-scoped; ``.sbim`` load bumps it
 # past any stored ids so new curves stay unique.
 _CURVE_COUNTER = 1
 
@@ -183,7 +183,7 @@ class Face:
     Connectivity is kept as vertex loops (``loop`` / ``hole_loops``). The
     ``vertices`` and ``holes`` properties return the same loops as plain
     positions, matching the legacy ``core.geometry.Face`` read interface — so
-    rendering, bounds and ``.igz`` save consume a ``mesh.Face`` unchanged (M1).
+    rendering, bounds and ``.sbim`` save consume a ``mesh.Face`` unchanged (M1).
     """
 
     __slots__ = ("loop", "hole_loops", "interior", "attrs")
@@ -568,7 +568,7 @@ class Mesh:
         self._mut_serial += 1
         return len(doomed)
 
-    # ---- Bulk construction (imports / .igz load) ----------------------------
+    # ---- Bulk construction (imports / .sbim load) ----------------------------
     def bulk_weld(self, pos):
         """Weld a ``(P, 3)`` float array of positions into shared vertices —
         the exact vectorized equivalent of calling :meth:`vertex` on each
@@ -870,7 +870,7 @@ class Mesh:
         face — radial, so an edge can carry several).
 
         Nested holes are dropped here, at the single choke point every face
-        creation path goes through (draw, push rebuild, heal, ``.igz`` load): a
+        creation path goes through (draw, push rebuild, heal, ``.sbim`` load): a
         hole inside another hole of the same face is geometric nonsense — its
         region is already void — yet it corrupts earcut (phantom wedge
         triangles across the opening) and registers the face on rim edges it

@@ -616,7 +616,7 @@ def orient_outward(mesh, seed: int = 12345, only=None) -> list:
     # Through an open mesh (the scoped path above) the flips are checked
     # before they stay: a solid whose shared edges disagree MORE after the
     # flips than before was misread by the parity rays, and keeps the
-    # windings it had. Measured on plaza.igz: of five solids this path
+    # windings it had. Measured on plaza.sbim: of five solids this path
     # would turn, four came out more consistent and one — a 51-face solid
     # consistent to begin with — would have lost 52 edges (#230).
     saved = {}

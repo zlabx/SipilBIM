@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Importar otro documento .igz como UN componente.
+"""Importar otro documento .sbim como UN componente.
 
 «Quiero agregar mobiliario que ya había trabajado como pérgolas, arco,
-luminaria y demás… son archivos .igz, ¿cómo haría?» (Marco, 2026-09-11).
+luminaria y demás… son archivos .sbim, ¿cómo haría?» (Marco, 2026-09-11).
 Como el Import de un .skp: el archivo entero llega como un
 componente que se coloca con un clic, con sus grupos, materiales y capas.
 """
@@ -141,7 +141,7 @@ def test_las_capas_que_faltan_se_crean_visibles():
 def test_el_archivo_guardado_entra_como_componente(tmp_path):
     from formats.igz import load_into, save_scene
     src, _p, _t = _pergola()
-    path = tmp_path / "pergola.igz"
+    path = tmp_path / "pergola.sbim"
     save_scene(src, path)
     temp = Scene()
     load_into(temp, path)
@@ -196,7 +196,7 @@ def test_colocar_un_contenedor_compone_su_matriz_y_no_toca_las_mallas():
 
 
 def test_el_igz_conserva_los_nombres_de_los_grupos(tmp_path):
-    """Pendiente viejo («.igz pierde nombres de grupo»): el archivo nunca
+    """Pendiente viejo («.sbim pierde nombres de grupo»): el archivo nunca
     escribía el nombre, así que una «Pérgola» volvía como «Group 7». Y el
     contador de nombres automáticos salta por encima de los guardados,
     para que un grupo nuevo no repita uno que el documento ya usa."""
@@ -206,7 +206,7 @@ def test_el_igz_conserva_los_nombres_de_los_grupos(tmp_path):
     src.groups.append(Group(_cuadrado(Mesh()), name="Pérgola"))
     auto = Group(_cuadrado(Mesh(), 5.0))          # "Group N"
     src.groups.append(auto)
-    path = tmp_path / "nombres.igz"
+    path = tmp_path / "nombres.sbim"
     save_scene(src, path)
     back = Scene()
     load_into(back, path)

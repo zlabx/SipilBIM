@@ -173,7 +173,7 @@ def test_the_position_carries_the_standard_the_line_obeys():
 
 
 def test_the_standard_lives_in_the_document_and_defaults_to_iso(tmp_path):
-    """It travels in the .igz, and an older file — which has no such key —
+    """It travels in the .sbim, and an older file — which has no such key —
     opens as ISO, which is what those drawings were made to."""
     from pathlib import Path
     from core.scene import Scene
@@ -182,7 +182,7 @@ def test_the_standard_lives_in_the_document_and_defaults_to_iso(tmp_path):
 
     scene = Scene()
     scene.dimension_style["norma"] = "din"
-    path = Path(tmp_path) / "cotas.igz"
+    path = Path(tmp_path) / "cotas.sbim"
     save_scene(scene, path)
     back = Scene()
     load_into(back, path)

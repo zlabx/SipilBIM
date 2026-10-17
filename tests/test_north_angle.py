@@ -57,7 +57,7 @@ def test_north_angle_persists_in_igz_and_stays_terse_at_zero(tmp_path):
     scene = Scene()
     scene.add_edge(QVector3D(0, 0, 0), QVector3D(1, 0, 0))
     scene.georef = SceneDatum(*YANQUE, north=33.47)
-    path = tmp_path / "north.igz"
+    path = tmp_path / "north.sbim"
     igz.save_scene(scene, path)
     loaded = Scene()
     igz.load_into(loaded, path)

@@ -181,7 +181,7 @@ def test_the_segment_is_drawn_and_survives_the_igz(tmp_path):
     assert Guide(V(3, 1), V(1, 0), V(0, 0)).origin is None   # lines never carry one
     scene = Scene()
     scene.guides.append(g)
-    path = tmp_path / "guia.igz"
+    path = tmp_path / "guia.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)

@@ -91,7 +91,7 @@ def test_the_flag_survives_the_igz_and_old_files_read_as_groups(tmp_path):
     c, d = _box_group(6, "C"), _box_group(9, "D")
     scene.groups.extend([c, d])
     hist.execute(MakeComponentOfCommand([], [], [c, d], name="Silla"))
-    path = tmp_path / "g.igz"
+    path = tmp_path / "g.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)
@@ -139,7 +139,7 @@ def test_an_older_file_reads_its_groups_of_groups_as_groups(tmp_path):
     imported = Group(Mesh(), name="Import")
     imported.adopt([placed])
     scene.groups.append(imported)
-    new = tmp_path / "new.igz"
+    new = tmp_path / "new.sbim"
     igz.save_scene(scene, new)
     doc = json.loads(new.read_text(encoding="utf-8"))   # no textures: JSON
 
@@ -149,7 +149,7 @@ def test_an_older_file_reads_its_groups_of_groups_as_groups(tmp_path):
             strip(c)
     for g in doc["scene"]["groups"]:
         strip(g)
-    old = tmp_path / "old.igz"
+    old = tmp_path / "old.sbim"
     old.write_text(json.dumps(doc), encoding="utf-8")
     back = Scene()
     igz.load_into(back, old)

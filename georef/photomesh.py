@@ -114,7 +114,7 @@ class PhotoMesh:
         self.visible = True
         # material index → the QImage actually in use (already downscaled to
         # what this GPU accepts). Carried on the mesh so saving the document
-        # never has to reach back to the 455 MB ODM export — an .igz that only
+        # never has to reach back to the 455 MB ODM export — an .sbim that only
         # works while the original folder survives would defeat the point.
         self.images: dict = {}
         # Where this survey's Z came from, so a document can say what its
@@ -369,7 +369,7 @@ ATLAS_ENTRY = "survey/atlas-{:02d}.jpg"
 
 
 def pack_mesh(mesh: PhotoMesh) -> tuple[dict, dict]:
-    """``(json_metadata, blobs)`` for storing ``mesh`` in an ``.igz``."""
+    """``(json_metadata, blobs)`` for storing ``mesh`` in an ``.sbim``."""
     import io
 
     import numpy as np

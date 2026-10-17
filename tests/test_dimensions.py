@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Static dimensions: the entity's geometry, the Add/Delete commands, the tool's
-3-click placement, and .igz round-trip."""
+3-click placement, and .sbim round-trip."""
 from __future__ import annotations
 
 from PySide6.QtCore import QPointF, Qt
@@ -105,14 +105,14 @@ def test_dimension_tool_preview_lines():
     assert len(lines) == 3                       # 2 extension + 1 dimension line
 
 
-# ---- .igz round-trip -----------------------------------------------------------
+# ---- .sbim round-trip -----------------------------------------------------------
 
 def test_dimension_survives_igz_round_trip(tmp_path):
     scene = Scene()
     hist = History(scene)
     hist.execute(AddDimensionCommand(
         Dimension(V(0, 0, 0), V(4, 0, 0), V(0, 0, 2))))
-    path = tmp_path / "dim.igz"
+    path = tmp_path / "dim.sbim"
     igz.save_scene(scene, path)
 
     loaded = Scene()
@@ -156,7 +156,7 @@ def test_format_dim_value_respects_units_and_precision():
 def test_dimension_style_survives_igz_round_trip(tmp_path):
     scene = Scene()
     scene.dimension_style.update({"decimals": 0, "units": "cm", "font_size": 14})
-    path = tmp_path / "style.igz"
+    path = tmp_path / "style.sbim"
     igz.save_scene(scene, path)
     loaded = Scene()
     igz.load_into(loaded, path)
@@ -170,7 +170,7 @@ def test_dimension_style_survives_igz_round_trip(tmp_path):
 def test_is_occluded_matches_geometry():
     # A wall between the camera and the point occludes it; a point in front
     # of the wall (or with no geometry) is visible. Exercises the cached
-    # NumPy Möller–Trumbore path headless (plaza.igz slowdown report).
+    # NumPy Möller–Trumbore path headless (plaza.sbim slowdown report).
     from PySide6.QtGui import QVector3D
     from views.viewport import Viewport
 
@@ -403,7 +403,7 @@ def test_select_double_click_edits_dimension_text(monkeypatch, tmp_path):
     """Double-clicking a cota with Select opens the text dialog,
     commits the new text as one undoable command, and a bare "<>" or the
     measured value itself returns the cota to its automatic label. The text
-    survives the .igz round trip."""
+    survives the .sbim round trip."""
     from types import SimpleNamespace
     from PySide6.QtGui import QVector3D
     from PySide6.QtWidgets import QInputDialog
@@ -451,7 +451,7 @@ def test_select_double_click_edits_dimension_text(monkeypatch, tmp_path):
     assert d.text is None
 
     d.text = "VARIABLE"
-    path = tmp_path / "cota.igz"
+    path = tmp_path / "cota.sbim"
     igz_format.save_scene(scene, path)
     fresh = Scene()
     igz_format.load_into(fresh, path)
@@ -508,7 +508,7 @@ def test_dimension_tool_places_a_linear_dimension_when_pulled_to_the_side():
 def test_linear_dimension_survives_igz_round_trip(tmp_path):
     scene = Scene()
     scene.dimensions.append(Dimension(V(0, 0, 0), V(4, 3, 0), V(0, 5, 0), axis="x"))
-    path = tmp_path / "linear.igz"
+    path = tmp_path / "linear.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)

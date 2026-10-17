@@ -40,7 +40,7 @@ def test_the_chosen_folder_is_remembered_and_reused(tmp_path):
     # a start directory the caller chose is respected
     other = tmp_path / "otra"; other.mkdir()
     assert start_in(str(other)) == str(other)
-    assert start_in(str(other / "x.igz")) == str(other / "x.igz")
+    assert start_in(str(other / "x.sbim")) == str(other / "x.sbim")
     # a remembered folder that vanished is not used
     QSettings().setValue("files/last_dir", str(tmp_path / "borrada"))
     assert last_dir(tmp_path) == str(tmp_path)
@@ -64,7 +64,7 @@ def test_the_shim_feeds_the_dialog_and_learns_from_it(tmp_path, monkeypatch):
         seen["open"] = dir
         return ("", "")                                    # cancelled
     monkeypatch.setattr(QFileDialog, "getOpenFileName", staticmethod(fake_open))
-    file_dialogs.getOpenFileName(None, "Open", "", "IGZ (*.igz)")
+    file_dialogs.getOpenFileName(None, "Open", "", "IGZ (*.sbim)")
     assert seen["open"] == str(tmp_path / "salida")
     assert last_dir() == str(tmp_path / "salida")         # a cancel changes nothing
 
@@ -74,7 +74,7 @@ def test_with_nothing_remembered_a_dialog_starts_beside_the_open_document(tmp_pa
     (tmp_path / "proyecto").mkdir()
 
     class _Win:                      # the main window, as the shim sees it
-        _current_path = tmp_path / "proyecto" / "poste.igz"
+        _current_path = tmp_path / "proyecto" / "poste.sbim"
 
     class _Composer:                 # a composer: its parent is _window
         _window = _Win()

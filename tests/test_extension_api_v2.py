@@ -193,7 +193,7 @@ def test_an_extension_opens_its_own_file_type(win):
     assert opened == [Path("/tmp/job.XYZ")]
 
 
-@pytest.mark.parametrize("suffix", [".igz", ".dae", ".skp", ".dxf", ".dwg",
+@pytest.mark.parametrize("suffix", [".sbim", ".dae", ".skp", ".dxf", ".dwg",
                                     ".obj", ".stl", ".glb"])
 def test_a_core_suffix_cannot_be_claimed(win, caplog, suffix):
     _app_for(win).add_file_opener(suffix, lambda p: True)
@@ -216,7 +216,7 @@ def test_a_suffix_already_claimed_is_refused_not_overwritten(win, caplog):
 
 def test_the_launcher_hands_an_extension_file_to_the_window():
     """A double-click or a command-line path of a registered type reaches
-    ``open_path`` (main._open_document_in), like an .igz."""
+    ``open_path`` (main._open_document_in), like an .sbim."""
     import main
 
     class W:
@@ -331,7 +331,7 @@ def test_a_workspace_that_will_not_go_stops_quitting(win):
 
 def test_opening_an_igz_leaves_the_workspace_first(win, tmp_path):
     from formats import igz
-    doc = tmp_path / "model.igz"
+    doc = tmp_path / "model.sbim"
     igz.save_scene(Scene(), doc)
     ws = FakeWorkspace()
     _app_for(win).enter_workspace(ws)

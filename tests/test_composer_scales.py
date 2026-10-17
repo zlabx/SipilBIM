@@ -32,7 +32,7 @@ def test_custom_scale_joins_the_document_and_its_frames(tmp_path):
         assert scene.custom_scales == [75.0]
 
         # It travels with the document…
-        path = tmp_path / "escalas.igz"
+        path = tmp_path / "escalas.sbim"
         igz_format.save_scene(scene, path)
         fresh = Scene()
         igz_format.load_into(fresh, path)

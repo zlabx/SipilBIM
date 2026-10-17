@@ -126,9 +126,9 @@ Root: HKCU; Subkey: "Software\Microsoft\DirectX\UserGpuPreferences"; \
     ValueType: string; ValueName: "{app}\{#MyAppExeName}"; \
     ValueData: "GpuPreference=2;"; Flags: createvalueifdoesntexist uninsdeletevalue
 
-; ── .igz — SipilBIM's own format: full association + branded document icon ──
-; Double-click opens the document in SipilBIM and Explorer shows the .igz icon.
-Root: HKA; Subkey: "Software\Classes\.igz"; ValueType: string; \
+; ── .sbim — SipilBIM's own format: full association + branded document icon ──
+; Double-click opens the document in SipilBIM and Explorer shows the .sbim icon.
+Root: HKA; Subkey: "Software\Classes\.sbim"; ValueType: string; \
     ValueData: "SipilBIM.Document"; Flags: uninsdeletevalue
 Root: HKA; Subkey: "Software\Classes\SipilBIM.Document"; ValueType: string; \
     ValueData: "{cm:IgzDocument}"; Flags: uninsdeletekey

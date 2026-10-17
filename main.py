@@ -135,7 +135,7 @@ def _configure_surface_format() -> None:
 
 
 def _open_document_in(window, doc: "Path") -> None:
-    """Open *doc* in *window*: .igz as the document, .skp imported through
+    """Open *doc* in *window*: .sbim as the document, .skp imported through
     the native backend after the first paint (big models parse for seconds —
     the window must be visible, not frozen pre-show). Shared by the initial
     launch and the single-instance second-launch handler."""
@@ -144,7 +144,7 @@ def _open_document_in(window, doc: "Path") -> None:
     if hasattr(window, "load_extensions"):
         window.load_extensions()
     ext = doc.suffix.lower()
-    if ext == ".igz" or ext in getattr(window, "file_openers", {}):
+    if ext == ".sbim" or ext in getattr(window, "file_openers", {}):
         window.open_path(doc)       # an extension's own type goes to its opener
     elif ext == ".skp":
         from PySide6.QtCore import QTimer
@@ -165,7 +165,7 @@ class _App(QApplication):
     never does that — Launch Services always starts the app with a bare
     argv and delivers the path afterwards as a ``QFileOpenEvent``
     (``QEvent.FileOpen``, Qt's wrapper for the OS's ``kAEOpenDocuments``
-    Apple Event). Without this override a macOS double-click on a ``.igz``
+    Apple Event). Without this override a macOS double-click on a ``.sbim``
     silently opened a blank "Untitled" window — the document never arrived.
     """
 
@@ -545,7 +545,7 @@ def _offer_appimage_integration(window) -> None:
         box.setWindowTitle(tr("Add SipilBIM to the applications menu?"))
         box.setText(tr(
             "You are running SipilBIM as an AppImage. Add a launcher with "
-            "its icon to your applications menu, and associate .igz files "
+            "its icon to your applications menu, and associate .sbim files "
             "with it? Nothing is copied: the launcher points at this file, "
             "so keep it where it is."))
         yes = box.addButton(tr("Add to menu"), QMessageBox.AcceptRole)

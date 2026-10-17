@@ -44,7 +44,7 @@ def test_an_opened_document_keeps_its_own_units(tmp_path):
     from core import units
     from core.scene import Scene
     from formats import igz
-    path = tmp_path / "old.igz"
+    path = tmp_path / "old.sbim"
     igz.save_scene(Scene(), path)                   # drawn in metres
     units.remember_new_document_units(MM)
     try:

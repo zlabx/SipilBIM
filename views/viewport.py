@@ -254,7 +254,7 @@ SHADER_DIR = app_root() / "resources" / "shaders"
 #: Beyond this many loose edges the snap engine gets a near-cursor subset
 #: instead of the whole mesh: compute_snap walks its edge list in Python
 #: ~a dozen times per hover, and an exploded medium import (9k faces =
-#: ~20k edges) froze every mouse move (user report, piscina.igz).
+#: ~20k edges) froze every mouse move (user report, piscina.sbim).
 _LOOSE_SNAP_CAP = 3000
 
 
@@ -4795,7 +4795,7 @@ class Viewport(QOpenGLWidget):
 
         Every scene-version bump re-uploaded each buffer whole, so an edit
         inside one group re-sent the entire model each drag frame — on
-        piscina.igz that is ~25 MB of edges plus more of faces, and the
+        piscina.sbim that is ~25 MB of edges plus more of faces, and the
         telemetry read ``sync=197ms`` against ``faces=11ms edges=7ms``: the
         frame was the upload, not the drawing.
 
@@ -5012,7 +5012,7 @@ class Viewport(QOpenGLWidget):
                 # modellers usually show one — twelve segments instead of the whole
                 # object. Highlighting the geometry meant uploading every
                 # edge AND a triangle copy of every face on each click: the
-                # 230k-face hedge in piscina.igz pushed 416k edges through
+                # 230k-face hedge in piscina.sbim pushed 416k edges through
                 # the selection buffers just to say "this is selected". The
                 # box also reads better on a dense group, where an all-orange
                 # mass says less than an outline does.
@@ -5808,7 +5808,7 @@ class Viewport(QOpenGLWidget):
         # Loose soft edges run the SAME vectorised view test as group
         # chunks: per-edge Python here froze orbits after an explode dumped
         # a group's curved surfaces into the loose mesh (38k soft edges =
-        # ~600 ms EVERY frame, piscina.igz user report). The cache bakes
+        # ~600 ms EVERY frame, piscina.sbim user report). The cache bakes
         # endpoints + face normals/centroids once per edit; each frame is
         # one einsum.
         import numpy as np

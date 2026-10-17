@@ -59,18 +59,18 @@ def test_a_bare_number_is_typed_in_the_models_unit(bound):
 def test_units_travel_in_the_igz_and_default_to_metres(tmp_path):
     scene = Scene()
     scene.units = {"length": "mm", "precision": 1}
-    path = tmp_path / "mm.igz"
+    path = tmp_path / "mm.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)
     assert back.units == {"length": "mm", "precision": 1}
     plain = Scene()
-    igz.save_scene(plain, tmp_path / "m.igz")
+    igz.save_scene(plain, tmp_path / "m.sbim")
     import json
-    doc = json.loads((tmp_path / "m.igz").read_text(encoding="utf-8"))
+    doc = json.loads((tmp_path / "m.sbim").read_text(encoding="utf-8"))
     assert "units" not in doc["scene"]                     # the default is silent
     again = Scene()
-    igz.load_into(again, tmp_path / "m.igz")
+    igz.load_into(again, tmp_path / "m.sbim")
     assert again.units == {"length": "m", "precision": 2}
     scene.clear()
     assert scene.units == {"length": "m", "precision": 2}

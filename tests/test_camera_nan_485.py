@@ -46,7 +46,7 @@ def test_an_orbit_about_a_nan_pivot_turns_about_the_target():
 
 
 def test_a_nan_view_does_not_block_the_save(tmp_path):
-    path = tmp_path / "puente.igz"
+    path = tmp_path / "puente.sbim"
     scene = Scene()
     scene.mesh.add_face([QVector3D(0, 0, 0), QVector3D(1, 0, 0),
                          QVector3D(1, 1, 0)])
@@ -60,7 +60,7 @@ def test_a_nan_view_does_not_block_the_save(tmp_path):
 
 
 def test_a_good_view_is_still_saved(tmp_path):
-    path = tmp_path / "puente.igz"
+    path = tmp_path / "puente.sbim"
     scene = Scene()
     scene.mesh.add_face([QVector3D(0, 0, 0), QVector3D(1, 0, 0),
                          QVector3D(1, 1, 0)])

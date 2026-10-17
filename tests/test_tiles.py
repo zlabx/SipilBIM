@@ -254,7 +254,7 @@ def test_tile_layer_round_trips_through_an_igz(tmp_path):
     scene.georef = SceneDatum(-15.56, -72.97)
     scene.tile_layer = layer
 
-    out = tmp_path / "doc.igz"
+    out = tmp_path / "doc.sbim"
     igz.save_scene(scene, out)
     back = Scene()
     igz.load_into(back, out)
@@ -276,7 +276,7 @@ def test_custom_source_survives_without_a_preset(tmp_path):
                      attribution="me")
     scene = Scene()
     scene.tile_layer = TileLayer(src, zoom=17)
-    out = tmp_path / "custom.igz"
+    out = tmp_path / "custom.sbim"
     igz.save_scene(scene, out)
     back = Scene()
     igz.load_into(back, out)
@@ -288,7 +288,7 @@ def test_document_without_a_base_map_loads_clean(tmp_path):
     from core.scene import Scene
     from formats import igz
 
-    out = tmp_path / "plain.igz"
+    out = tmp_path / "plain.sbim"
     igz.save_scene(Scene(), out)
     back = Scene()
     back.tile_layer = "stale"          # must be cleared, not left behind

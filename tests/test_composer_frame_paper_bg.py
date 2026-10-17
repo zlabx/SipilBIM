@@ -34,7 +34,7 @@ def test_paper_bg_round_trips_and_defaults_off():
     comp.frames = [MarcoVista(paper_bg=True)]
     again = Composicion.from_dict(comp.to_dict())
     assert again.frames[0].paper_bg is True
-    assert MarcoVista(**{"x_mm": 1.0}).paper_bg is False       # old .igz
+    assert MarcoVista(**{"x_mm": 1.0}).paper_bg is False       # old .sbim
 
 
 def test_paper_bg_renders_white_without_sky_and_keeps_the_face_mode():

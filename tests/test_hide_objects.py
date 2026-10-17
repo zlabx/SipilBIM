@@ -98,7 +98,7 @@ def test_a_hidden_face_round_trips_through_igz(tmp_path):
     scene = Scene()
     _box(scene.mesh)
     scene.mesh.faces[2].attrs["hidden"] = True
-    p = tmp_path / "cara.igz"
+    p = tmp_path / "cara.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)
@@ -150,7 +150,7 @@ def test_hidden_view_flags_travel_in_the_document_and_in_scenes(tmp_path):
     from types import SimpleNamespace
     scene = Scene()
     scene.show_hidden_objects = True
-    p = tmp_path / "vista.igz"
+    p = tmp_path / "vista.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)
@@ -208,7 +208,7 @@ def test_hidden_flag_and_uid_round_trip_through_igz(tmp_path):
     g1, g2 = _group("a"), _group("b", x0=3.0)
     g2.hidden = True
     scene.groups += [g1, g2]
-    p = tmp_path / "oculto.igz"
+    p = tmp_path / "oculto.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)

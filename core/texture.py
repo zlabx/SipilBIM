@@ -16,7 +16,7 @@ texture are independent (a face can have either or both).
 
 ``path`` is always a real file on disk (the renderer, and every exporter, load
 the image from there). Images that came in *inside* something — extracted from
-an imported ``.skp``, unpacked from an ``.igz`` container — live in the app's
+an imported ``.skp``, unpacked from an ``.sbim`` container — live in the app's
 own **texture cache** (:func:`texture_cache_root`), never next to the user's
 files.
 """
@@ -41,7 +41,7 @@ def texture_cache_root() -> Path:
     images somewhere else).
 
     Two subfolders, one per source: ``skp/`` (images extracted from an imported
-    ``.skp``) and ``embedded/`` (images unpacked from an ``.igz`` container)."""
+    ``.skp``) and ``embedded/`` (images unpacked from an ``.sbim`` container)."""
     import os
     override = os.environ.get("INGETRAZO_TEXTURE_CACHE")
     if override:
@@ -74,7 +74,7 @@ def texture_cache_stats() -> tuple[int, int]:
 
 def clear_texture_cache() -> int:
     """Delete the whole texture cache. Returns the number of files removed.
-    Documents saved as ``.igz`` containers re-extract their images the next
+    Documents saved as ``.sbim`` containers re-extract their images the next
     time they are opened; faces whose image came from a ``.skp`` import lose
     their texture until the ``.skp`` is imported again — the caller is expected
     to confirm first."""
@@ -554,7 +554,7 @@ def uv_reference_points(points, normal=None):
     NOT face vertices: the map is affine, so it can be sampled anywhere on
     the plane, and picking real corners is what broke the first attempt. A
     long thin face gives three nearly collinear corners — one sampled face in
-    piscina.igz had two of them 1.8 inches apart and the third 19 away — and
+    piscina.sbim had two of them 1.8 inches apart and the third 19 away — and
     fitting a map through that sliver amplifies float error enough to come
     back rotated. A right-angled triad on the face's own plane, sized to the
     face, is exact and always conditioned."""

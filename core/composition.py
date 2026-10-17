@@ -385,7 +385,7 @@ class TextoItem:
 @dataclass
 class ImagenItem:
     """An image (logo, photo) on the sheet. The file is referenced by path;
-    the .igz stores the path, not the pixels (same policy as textures)."""
+    the .sbim stores the path, not the pixels (same policy as textures)."""
 
     x_mm: float = 20.0
     y_mm: float = 20.0
@@ -1387,7 +1387,7 @@ class Composicion:
             out.append(self.cajetin)
         return out
 
-    # ---- Serialisation (.igz) -----------------------------------------------
+    # ---- Serialisation (.sbim) -----------------------------------------------
     def to_dict(self) -> dict:
         from dataclasses import asdict
         d = {"name": self.name, "paper": self.paper,
@@ -1423,7 +1423,7 @@ class Composicion:
 
     @classmethod
     def from_dict(cls, d: dict) -> "Composicion":
-        """Rebuild a sheet from its .igz record. Keys this version does not
+        """Rebuild a sheet from its .sbim record. Keys this version does not
         know (a sheet saved by a newer SipilBIM) are dropped, not fatal:
         the model must open whatever the sheets carry."""
         c = cls(name=d.get("name", "Lámina 1"),

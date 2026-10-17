@@ -233,7 +233,7 @@ def test_label_igz_round_trip(tmp_path):
     scene = Scene()
     scene.text_labels.append(TextLabel(
         QVector3D(1, 2, 3), QVector3D(0, 0, 1), "Cisterna\n10 m³"))
-    p = tmp_path / "texto.igz"
+    p = tmp_path / "texto.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)

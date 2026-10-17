@@ -113,7 +113,7 @@ def test_group_tag_and_igz_round_trip(tmp_path):
     slab = scene.mesh.add_face([V(10, 0), V(12, 0), V(12, 2), V(10, 2)])
     tag_faces([slab], "IfcSlab", "Losa", next_object_id(scene))
 
-    p = tmp_path / "bim.igz"
+    p = tmp_path / "bim.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)

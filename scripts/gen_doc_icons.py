@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Regenerate the *document* icons for SipilBIM's file types (.igz/.dae/.skp).
+"""Regenerate the *document* icons for SipilBIM's file types (.sbim/.dae/.skp).
 
 These are the icons the file manager shows on saved/opened files — a white
 document sheet with a dog-eared corner, a coloured title bar naming the format,
@@ -14,7 +14,7 @@ Outputs (committed to the repo):
   * resources/icons/mimetypes/ingetrazo-<fmt>.ico         ← Windows DefaultIcon
 
 Freedesktop MIME icon names (``/`` → ``-``) each format resolves to:
-  * .igz → application/x-ingetrazo         → application-x-ingetrazo
+  * .sbim → application/x-ingetrazo         → application-x-ingetrazo
   * .dae → model/vnd.collada+xml           → model-vnd.collada+xml
   * .skp → application/vnd.sketchup.skp     → application-vnd.sketchup.skp
 

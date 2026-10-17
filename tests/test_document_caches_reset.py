@@ -15,7 +15,7 @@ from pathlib import Path
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 DOC = (Path(__file__).resolve().parents[1] / "examples"
-       / "banca-pergola-yanque.igz")
+       / "banca-pergola-yanque.sbim")
 
 
 def _live_faces() -> int:

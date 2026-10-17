@@ -3,7 +3,7 @@
 """The bulk mesh builders (Mesh.bulk_weld / add_faces_welded) must produce
 exactly what the sequential add_face path produces — same vertices (welds
 included), same edge order/orientation/incidence, same faces and attrs.
-The import and .igz-load fast paths depend on this equivalence."""
+The import and .sbim-load fast paths depend on this equivalence."""
 import random
 
 import numpy as np

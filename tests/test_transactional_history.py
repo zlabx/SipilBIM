@@ -3,7 +3,7 @@
 """History.execute must be transactional: a command that throws mid-mutation
 rolls the mesh back to its pre-command state and lands nowhere on the undo
 stack. An aborted draw once left a quarter circle, an unsplit face and a
-duplicated edge behind (aas.igz), with the traceback swallowed by Qt."""
+duplicated edge behind (aas.sbim), with the traceback swallowed by Qt."""
 from __future__ import annotations
 
 from PySide6.QtGui import QVector3D

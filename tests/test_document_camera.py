@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Issue #60 (@pacaeiro): «If I do a New drawing, or open a drawing, the
-Camera stays in the position where it was before». The .igz now keeps the
+Camera stays in the position where it was before». The .sbim now keeps the
 camera it was saved with; New goes back to the default view."""
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ def test_the_camera_travels_in_the_igz(tmp_path):
     scene.camera_home = {"target": [1.0, 2.0, 3.0], "distance": 7.5,
                          "yaw": 0.3, "pitch": 0.4, "fov_deg": 50.0,
                          "perspective": False}
-    path = tmp_path / "cam.igz"
+    path = tmp_path / "cam.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)
@@ -45,7 +45,7 @@ def test_open_restores_the_authors_view_and_new_resets_it(tmp_path):
         cam.yaw = 1.1
         cam.pitch = 0.2
         cam.perspective = False
-        path = tmp_path / "doc.igz"
+        path = tmp_path / "doc.sbim"
         win._do_save(path)
         assert win.viewport.scene.camera_home["distance"] == 33.0
         # Move the camera away, then reopen: back where the author left it.
@@ -82,7 +82,7 @@ def test_the_loader_reports_progress(tmp_path):
         g = Group(m, f"g{i}")
         g.xform = QMatrix4x4()
         scene.groups.append(g)
-    path = tmp_path / "grupos.igz"
+    path = tmp_path / "grupos.sbim"
     igz.save_scene(scene, path)
     seen = []
     back = Scene()
@@ -103,7 +103,7 @@ def test_a_broken_camera_never_blocks_the_save(tmp_path):
     try:
         cam = win.viewport.camera
         win._saved_version = win.viewport.scene.version
-        path = tmp_path / "doc.igz"
+        path = tmp_path / "doc.sbim"
         win._do_save(path)
         good = dict(win.viewport.scene.camera_home)
         cam.target = QVector3D(float("nan"), 0.0, 0.0)

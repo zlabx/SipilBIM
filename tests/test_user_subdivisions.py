@@ -127,7 +127,7 @@ def test_chord_attrs_partition_survives_push():
     assert {"zocalo", "muro"} <= colors
 
 
-# ---- Lines drawn on a populated plane subdivide it (aa.igz plaza, 2026-07-12)
+# ---- Lines drawn on a populated plane subdivide it (aa.sbim plaza, 2026-07-12)
 
 
 def _slab_with_inner_rect():
@@ -150,7 +150,7 @@ def _top_faces(mesh):
 def test_line_grazing_hole_boundary_subdivides_not_stacks():
     # A line across the top from the outline to the outline, collinear with
     # the inner rect's left edge, must fence the top into left/right regions —
-    # not stack a flipped duplicate over the mother (the aa.igz failure).
+    # not stack a flipped duplicate over the mother (the aa.sbim failure).
     scene, hist = _slab_with_inner_rect()
     m = scene.mesh
     hist.execute(build_add_edge(scene, V(2, 0, 1), V(2, -4, 1)))
@@ -184,7 +184,7 @@ def test_deleting_the_fence_line_fuses_the_plane_back():
 
 
 # ---- Slit edges: a fence line joining an inner boundary to the outline
-# (ss.igz report, 2026-07-12) -------------------------------------------------
+# (ss.sbim report, 2026-07-12) -------------------------------------------------
 
 
 def _flat_ring_with_fence():

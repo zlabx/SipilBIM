@@ -46,10 +46,10 @@ datas = [
     # came up empty in the packaged build (the Flatpak copies all of
     # resources/ and was fine, which is why it went unnoticed).
     ('resources/textures/library', 'resources/textures/library'),
-    # Starter components are .igz since 0.3.7: one group per file with its
+    # Starter components are .sbim since 0.3.7: one group per file with its
     # images packed inside, so the tray works with no network. (A stale glob
     # here is a HARD PyInstaller error, not a warning — the .glb set is gone.)
-    ('resources/components/*.igz', 'resources/components'),
+    ('resources/components/*.sbim', 'resources/components'),
     ('resources/components/components.json', 'resources/components'),
     ('resources/components/people.json', 'resources/components'),
     ('resources/components/SOURCES.md', 'resources/components'),
@@ -400,7 +400,7 @@ if sys.platform == 'darwin':
             # no window, no menu bar — a GUI app must say so explicitly.
             'LSBackgroundOnly': False,
             'NSHumanReadableCopyright': 'GPL-3.0-or-later — Marco Sumari Tellez and IngeTrazo contributors',
-            # .igz / .skp double-click-to-open, same association the other
+            # .sbim / .skp double-click-to-open, same association the other
             # platforms register (packaging/ingetrazo.desktop, the .iss).
             'CFBundleDocumentTypes': [
                 {

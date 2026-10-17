@@ -11,7 +11,7 @@ It matters most right after an import. Marco brought a surveyed plaza in as
 a reference, kept one flat drawing as a guide and deleted the rest — and the
 document still carried the 13 layers and 47 materials of the big drawing,
 invisible (the Materials panel builds its "In model" swatches from painted
-faces, not from the registry) but saved into every ``.igz`` from then on.
+faces, not from the registry) but saved into every ``.sbim`` from then on.
 
 The traversal descends into nested placements. ``Group.children`` are real
 geometry that renders, picks and exports as part of its parent, so a name

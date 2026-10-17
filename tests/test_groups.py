@@ -124,8 +124,8 @@ def test_group_keeps_soft_and_curve_flags_round_trip(tmp_path):
     assert sum(1 for e in group.mesh.edges
                if e.curve is not None) == curve_before
 
-    # .igz round-trip keeps the group smooth.
-    p = tmp_path / "cyl.igz"
+    # .sbim round-trip keeps the group smooth.
+    p = tmp_path / "cyl.sbim"
     igz.save_scene(scene, p)
     scene2 = Scene()
     igz.load_into(scene2, p)

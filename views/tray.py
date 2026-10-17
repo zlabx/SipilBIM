@@ -480,7 +480,7 @@ class BaseMapPanel(QWidget):
 
         # Map opacity: fade the imagery so the model and its lines read on
         # top of it (a plan sheet over the satellite). Document state, lives
-        # on the tile layer and travels in the .igz.
+        # on the tile layer and travels in the .sbim.
         self._opacity = QSlider(Qt.Horizontal)
         style_slider(self._opacity)
         self._opacity.setRange(10, 100)
@@ -1008,7 +1008,7 @@ class BaseMapPanel(QWidget):
             self._window.viewport.update()
 
     def _sync_from_scene(self) -> None:
-        """Reflect a datum/layer already on the scene (e.g. loaded from .igz).
+        """Reflect a datum/layer already on the scene (e.g. loaded from .sbim).
 
         Widgets are updated with signals blocked so this passive sync never
         kicks off a tile reset or a camera move — it only mirrors state.
@@ -2080,7 +2080,7 @@ class MaterialsPanel(QWidget):
 
         These are invisible here — the swatches above are built from painted
         faces, not from the registry — so an import's leftovers only ever
-        show up as weight in the saved ``.igz``."""
+        show up as weight in the saved ``.sbim``."""
         from PySide6.QtWidgets import QMessageBox
         from core.history import PurgeUnusedCommand
         scene = self._window.viewport.scene
@@ -2980,7 +2980,7 @@ class ShadowsPanel(QWidget):
     """Shadow settings, driven by the REAL sun (core/sun.py):
     on/off, the local date and hour the sun stands at, and how dark the
     shade goes. Edits write ``scene.shadows`` (document data, saved in the
-    ``.igz``) and repaint — the viewport re-derives the sun position and
+    ``.sbim``) and repaint — the viewport re-derives the sun position and
     rebuilds its shadow map from the changed key, so dragging the time
     slider sweeps the shadows live: the asoleamiento study. The site is
     the model's geolocation; without one, Arequipa."""

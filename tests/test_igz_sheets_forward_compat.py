@@ -34,9 +34,9 @@ def test_a_broken_sheet_is_skipped_and_the_others_load(tmp_path):
     from formats import igz
     scene = Scene()
     scene.compositions.append(Composicion(name="buena"))
-    path = tmp_path / "m.igz"
+    path = tmp_path / "m.sbim"
     igz.save_scene(scene, path)
-    # a texture-less .igz is plain JSON: corrupt the sheet list by hand —
+    # a texture-less .sbim is plain JSON: corrupt the sheet list by hand —
     # one record that cannot be rebuilt, one fine
     doc = json.loads(path.read_text(encoding="utf-8"))
     payload = doc["scene"]

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Native SipilBIM document format (``.igz``).
+"""Native SipilBIM document format (``.sbim``).
 
 Plain JSON, schema-versioned. Trivial to inspect, edit by hand, and diff
 in source control. Will grow as new entity types (faces, groups,
@@ -24,7 +24,7 @@ Layout::
 
 **Textured documents are ZIP containers** (format 2). A texture is an image
 *file*, so a plain-JSON document could only point at one — an absolute path
-that broke the moment the ``.igz`` travelled to another machine. When the scene
+that broke the moment the ``.sbim`` travelled to another machine. When the scene
 uses textures the document becomes a ZIP holding the very same JSON as
 ``document.json`` plus the images under ``textures/``, and each texture entry
 carries ``"embed": "textures/<hash>-<name>"`` instead of ``"path"``. The
@@ -650,7 +650,7 @@ def save_scene(scene, path: Path) -> dict:
     blobs, missing = _pack_textures(payload)
     # The photogrammetric survey (Track G, G6) rides inside the document too,
     # for the same reason the textures do: a reference mesh that lives in a
-    # folder next to the .igz is one move away from being lost.
+    # folder next to the .sbim is one move away from being lost.
     survey = getattr(scene, "photo_mesh", None)
     if survey is not None and getattr(survey, "triangle_count", 0):
         from georef.photomesh import pack_mesh

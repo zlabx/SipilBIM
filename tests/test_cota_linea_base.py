@@ -150,7 +150,7 @@ def test_the_step_is_a_number_the_drafter_sets(monkeypatch):
     from views.composer import ComposerWindow
     from views.main_window import MainWindow
     assert Scene().dimension_style["base_step_mm"] == 8.0
-    # an .igz written before the field opens at the default
+    # an .sbim written before the field opens at the default
     legacy = Scene()
     legacy.dimension_style.update({"decimals": 3})
     assert legacy.dimension_style["base_step_mm"] == 8.0

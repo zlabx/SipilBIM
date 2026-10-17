@@ -40,7 +40,7 @@ class Material:
     #: a purely textured material.
     color: Optional[tuple] = None
     #: ``{"path", "sw", "sh"}`` — the ``attrs["texture"]`` dict (tile size
-    #: in metres). ``.igz`` embedding rewrites ``path``→``embed`` inside
+    #: in metres). ``.sbim`` embedding rewrites ``path``→``embed`` inside
     #: containers and back; this module never needs to know.
     texture: Optional[dict] = None
     #: 0–1 translucency, or ``None`` for opaque (the attrs convention:
@@ -61,7 +61,7 @@ class Material:
             out["opacity"] = float(self.opacity)
         return out
 
-    # ---- Serialization (.igz) -------------------------------------------
+    # ---- Serialization (.sbim) -------------------------------------------
     def to_dict(self) -> dict:
         entry: dict = {"name": self.name}
         if self.color is not None:

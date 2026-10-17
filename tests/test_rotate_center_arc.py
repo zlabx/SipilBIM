@@ -251,7 +251,7 @@ def test_scale_group_as_unit():
 
 def test_select_all_then_rotate_whole_model_is_rigid():
     # Rotating a whole model must be rigid. A window box-select that misses a
-    # protruding piece leaves it behind and the boundary warps (sigue.igz
+    # protruding piece leaves it behind and the boundary warps (sigue.sbim
     # report) — Select All (Ctrl+A) covers every vertex, so nothing folds.
     from core.history import RotateVerticesCommand
     from core.topology import _key

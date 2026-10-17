@@ -259,7 +259,7 @@ class Dimension:
 
     def bind(self, scene) -> None:
         """Anchor each endpoint to the vertex under it, if there is one —
-        at placement, and again when a document is opened (the .igz keeps
+        at placement, and again when a document is opened (the .sbim keeps
         positions, and the vertex at that very position is the one the
         drafter snapped to)."""
         self._scene = scene

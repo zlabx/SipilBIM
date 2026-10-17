@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""Tape Measure guides + Eraser strokes: entities, commands, .igz, erase flow."""
+"""Tape Measure guides + Eraser strokes: entities, commands, .sbim, erase flow."""
 from __future__ import annotations
 
 from PySide6.QtGui import QVector3D
@@ -56,7 +56,7 @@ def test_guides_igz_round_trip(tmp_path):
     scene = Scene()
     scene.guides.append(Guide(V(1, 2, 0), V(0, 1, 0)))
     scene.guides.append(Guide(V(5, 5, 0)))            # a guide point
-    path = tmp_path / "guides.igz"
+    path = tmp_path / "guides.sbim"
     igz.save_scene(scene, path)
     loaded = Scene()
     igz.load_into(loaded, path)

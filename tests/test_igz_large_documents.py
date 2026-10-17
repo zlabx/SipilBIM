@@ -17,7 +17,7 @@ def _doc(tmp_path, n_faces: int, texture=None):
         if texture:
             f["texture"] = {"path": str(texture), "sw": 1.0, "sh": 1.0}
         faces.append(f)
-    src = tmp_path / f"src{n_faces}.igz"
+    src = tmp_path / f"src{n_faces}.sbim"
     src.write_text(json.dumps({"igz_format": 1,
                                "scene": {"edges": [], "faces": faces}}))
     scene = Scene()
@@ -42,7 +42,7 @@ def _text(path) -> str:
 
 def test_a_small_document_stays_indented(tmp_path):
     scene = _doc(tmp_path, 3)
-    out = tmp_path / "small.igz"
+    out = tmp_path / "small.sbim"
     igz.save_scene(scene, out)
     assert "\n  " in _text(out)
 
@@ -51,7 +51,7 @@ def test_a_large_document_is_compact_and_reads_back_the_same(
         tmp_path, monkeypatch):
     monkeypatch.setattr(igz, "_LARGE_DOCUMENT", 10)
     scene = _doc(tmp_path, 30)
-    out = tmp_path / "large.igz"
+    out = tmp_path / "large.sbim"
     igz.save_scene(scene, out)
     text = _text(out)
     assert "\n" not in text and ", " not in text
@@ -70,7 +70,7 @@ def test_a_large_textured_container_reads_back_the_same(
     img.fill(0x3689E6)
     img.save(str(png))
     scene = _doc(tmp_path, 30, texture=png)
-    out = tmp_path / "large-tex.igz"
+    out = tmp_path / "large-tex.sbim"
     assert igz.save_scene(scene, out)["embedded"] == 1
     assert out.read_bytes().startswith(b"PK")
     assert "\n" not in _text(out)

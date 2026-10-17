@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
-"""GeoPath (Track G): the traced-path entity, its commands, and .igz round-trip.
+"""GeoPath (Track G): the traced-path entity, its commands, and .sbim round-trip.
 Headless — GeoPath is deliberately separate from the topology mesh."""
 from __future__ import annotations
 
@@ -119,7 +119,7 @@ def test_igz_round_trip(tmp_path):
     scene = Scene()
     scene.geo_paths.append(GeoPath([V(0, 0), V(10, 5), V(20, 0)], name="Road A"))
     scene.geo_paths.append(GeoPath([V(0, 0), V(4, 0), V(4, 4)], closed=True))
-    path = tmp_path / "paths.igz"
+    path = tmp_path / "paths.sbim"
     igz.save_scene(scene, path)
 
     loaded = Scene()
@@ -133,7 +133,7 @@ def test_igz_round_trip(tmp_path):
 def test_plain_document_has_no_geo_paths(tmp_path):
     scene = Scene()
     scene.add_edge(V(0, 0), V(1, 0))
-    path = tmp_path / "plain.igz"
+    path = tmp_path / "plain.sbim"
     igz.save_scene(scene, path)
     assert '"geo_paths"' not in path.read_text()
     loaded = Scene()

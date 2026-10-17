@@ -35,7 +35,7 @@ def scene():
 # ---- settings ----------------------------------------------------------------
 
 def test_absent_settings_read_as_before(scene):
-    """A document that never opened the panel (every .igz written before
+    """A document that never opened the panel (every .sbim written before
     it) shows exactly what it always did."""
     assert units.model_units_of(scene) == {"length": "m", "precision": 2}
     assert units.fmt_area(4.0) == "4.00 m²"
@@ -110,12 +110,12 @@ def test_saved_and_reopened(tmp_path):
     s.units = {"length": "cm", "precision": 1, "area": "m2", "area_precision": 2,
                "volume": "l", "volume_precision": 0, "angle": "rad",
                "angle_precision": 3, "decimal": ","}
-    path = tmp_path / "unidades.igz"
+    path = tmp_path / "unidades.sbim"
     igz.save_scene(s, path)
     back = Scene()
     igz.load_into(back, path)
     assert back.units == s.units
-    old = tmp_path / "antiguo.igz"            # a file from before the panel
+    old = tmp_path / "antiguo.sbim"            # a file from before the panel
     s.units = {"length": "m", "precision": 2}
     igz.save_scene(s, old)
     back = Scene()

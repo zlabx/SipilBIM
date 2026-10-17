@@ -16,7 +16,7 @@ their place and have a Window-menu entry, the projection an overlay needs,
 opening an extension's own file type, and workspaces.
 
 - **Document data** is ONE JSON-safe value per extension (its key: the
-  plugin's file name). It is saved in the .igz, reset by New/Open, and every
+  plugin's file name). It is saved in the .sbim, reset by New/Open, and every
   change through :meth:`ExtensionApp.set_document_data` is one undo step.
 - **Overlays** draw with a ``QPainter`` over the finished frame, after the
   active tool's own; each call is wrapped in save/restore.
@@ -31,7 +31,7 @@ opening an extension's own file type, and workspaces.
   user put them.
 - **File openers** take a suffix for the extension: a document of that
   type opened from Open Recent, the command line or a double-click goes to
-  the extension, never to the .igz reader. A core suffix, or one another
+  the extension, never to the .sbim reader. A core suffix, or one another
   extension already claimed, is refused (logged, not raised).
 - A **workspace** shows the extension's own document instead of the model,
   which waits untouched ("parked") until the workspace is left.
@@ -49,7 +49,7 @@ API_VERSION = 2
 #: ``file_openers`` first — it's the extension's own opener that would
 #: silently steal Open Recent / CLI / double-click from the core reader.
 CORE_FILE_SUFFIXES = frozenset({
-    ".igz", ".dae", ".skp", ".dxf", ".dwg", ".obj", ".stl", ".glb",
+    ".sbim", ".dae", ".skp", ".dxf", ".dwg", ".obj", ".stl", ".glb",
 })
 
 
@@ -307,7 +307,7 @@ class ExtensionApp:
         ``fn(path)``, which returns True when it opened the document.
 
         Refused, with a warning logged, for one of the core's own suffixes
-        (:data:`CORE_FILE_SUFFIXES` — ``.igz``, ``.dae``, ``.skp``, ``.dxf``,
+        (:data:`CORE_FILE_SUFFIXES` — ``.sbim``, ``.dae``, ``.skp``, ``.dxf``,
         ``.dwg``, ``.obj``, ``.stl``, ``.glb``) or one an earlier extension
         already claimed: :meth:`views.main_window.MainWindow.open_path`
         consults ``file_openers`` before anything else, so a claim that

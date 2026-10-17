@@ -32,7 +32,7 @@ def doc(tmp_path):
                     QVector3D(x + 2, 2, 0), QVector3D(x, 2, 0)])
         scene.groups.append(Group(m, name=f"B{i}"))
     scene.version += 1
-    path = tmp_path / "plan.igz"
+    path = tmp_path / "plan.sbim"
     w0._do_save(path)
     w0._saved_version = scene.version
     w0.close()

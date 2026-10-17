@@ -67,7 +67,7 @@ def test_register_renames_on_recipe_conflict():
     assert len(reg) == 2
 
 
-# ---- .igz round trip ------------------------------------------------------
+# ---- .sbim round trip ------------------------------------------------------
 
 def test_igz_roundtrip_plain(tmp_path):
     scene = Scene()
@@ -75,7 +75,7 @@ def test_igz_roundtrip_plain(tmp_path):
     f.attrs.update(Material("Ladrillo", color=(0.7, 0.3, 0.2)).face_attrs())
     scene.materials["Ladrillo"] = Material("Ladrillo", color=(0.7, 0.3, 0.2))
 
-    path = tmp_path / "doc.igz"
+    path = tmp_path / "doc.sbim"
     igz_format.save_scene(scene, path)
     loaded = Scene()
     igz_format.load_into(loaded, path)
@@ -102,7 +102,7 @@ def test_igz_embeds_registry_texture(tmp_path):
     f = _quad(scene.mesh)
     f.attrs.update(mat.face_attrs())
 
-    path = tmp_path / "doc.igz"
+    path = tmp_path / "doc.sbim"
     igz_format.save_scene(scene, path)
     assert zipfile.is_zipfile(path)                    # container form
     with zipfile.ZipFile(path) as zf:

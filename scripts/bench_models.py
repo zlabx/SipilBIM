@@ -13,9 +13,9 @@ holes, the earcut path — on every floor, a round column (a curved surface,
 soft edges), and trees as COMPONENT copies sharing one prototype mesh (the
 instancing path). Same seed, same document, every run.
 
-    python scripts/bench_models.py S M L XL      # -> benchmarks/models/*.igz (git-ignored)
+    python scripts/bench_models.py S M L XL      # -> benchmarks/models/*.sbim (git-ignored)
 
-Sizes (buildings / tree copies / faces drawn / .igz, measured):
+Sizes (buildings / tree copies / faces drawn / .sbim, measured):
 
     S    3×3 /    30 /     8 k /   5 MB
     M    8×8 /   250 /    73 k /  45 MB
@@ -175,7 +175,7 @@ def main(argv) -> int:
     for size in sizes:
         t0 = time.perf_counter()
         scene = build(size)
-        path = OUT_DIR / f"city-{size}.igz"
+        path = OUT_DIR / f"city-{size}.sbim"
         save_scene(scene, path)
         print(f"city-{size}: {len(scene.groups)} objects, "
               f"{faces_drawn(scene):,} faces drawn, "

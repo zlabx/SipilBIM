@@ -194,7 +194,7 @@ def test_replacement_survives_the_igz(tmp_path):
     from formats import igz
     scene, hist, sillas, mesas, _c, _h = _model()
     hist.execute(ReplaceComponentCommand(sillas, mesas[0]))
-    path = tmp_path / "r.igz"
+    path = tmp_path / "r.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)
@@ -405,7 +405,7 @@ def test_kept_definitions_survive_the_igz_and_share_with_copies(tmp_path):
     hist.execute(KeepComponentCommand(mesas[0]))
     for g in mesas:                                 # none placed any more
         scene.groups.remove(g)
-    path = tmp_path / "k.igz"
+    path = tmp_path / "k.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)
@@ -756,7 +756,7 @@ def test_components_from_another_file_arrive_kept_and_placeable(tmp_path):
     lib.groups.append(lamp)
     hist.execute(KeepComponentCommand(lamp))
     lib.groups.remove(lamp)
-    path = tmp_path / "biblioteca.igz"
+    path = tmp_path / "biblioteca.sbim"
     igz.save_scene(lib, path)
 
     from views.main_window import MainWindow
@@ -782,7 +782,7 @@ def test_a_file_without_components_changes_nothing(tmp_path):
     from formats import igz
     plain = Scene()
     plain.groups.append(Group(_quad(2.0), name="Muro"))
-    path = tmp_path / "muro.igz"
+    path = tmp_path / "muro.sbim"
     igz.save_scene(plain, path)
     from views.main_window import MainWindow
     win = MainWindow()

@@ -176,7 +176,7 @@ def test_document_carries_the_picture_inside_it(tmp_path):
     scene.image_planes.append(
         ImagePlane(str(src), V(1, 2), V(8, 0), V(0, 4), aspect=aspect,
                    name="plan"))
-    doc = tmp_path / "model.igz"
+    doc = tmp_path / "model.sbim"
     save_scene(scene, doc)
     src.unlink()                                 # the original is gone
 
@@ -193,7 +193,7 @@ def test_document_carries_the_picture_inside_it(tmp_path):
 def test_a_document_without_images_loads_clean(tmp_path):
     from formats.igz import load_into, save_scene
 
-    doc = tmp_path / "empty.igz"
+    doc = tmp_path / "empty.sbim"
     save_scene(Scene(), doc)
     loaded = Scene()
     loaded.image_planes.append(_image())         # stale state must be cleared

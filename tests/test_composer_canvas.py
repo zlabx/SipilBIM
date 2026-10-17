@@ -733,7 +733,7 @@ class TestGroundLine:
         f = again.shapes[0]
         assert (f.ground, f.tick_mm, f.tick_step_mm, f.band_mm) == \
             ("hatch", 4.0, 2.0, 9.0)
-        # an old .igz without the fields: the classic ticks
+        # an old .sbim without the fields: the classic ticks
         old = FormaItem(**{"kind": "terreno", "w_mm": 50.0, "h_mm": 0.0})
         assert old.ground == "ticks"
 

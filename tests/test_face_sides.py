@@ -209,7 +209,7 @@ def test_igz_guarda_la_cara_de_dos_lados_como_true(tmp_path):
     propio.attrs["back"] = {"color": [0.0, 0.0, 1.0]}
     solo = scene.mesh.add_face([V(10, 0), V(12, 0), V(12, 2), V(10, 2)])
     solo.attrs["color"] = [1.0, 0.0, 0.0]
-    path = tmp_path / "lados.igz"
+    path = tmp_path / "lados.sbim"
     save_scene(scene, path)
     back = Scene()
     load_into(back, path)

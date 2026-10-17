@@ -157,7 +157,7 @@ class SavedView:
             scene.show_hidden_objects = bool(self.hidden_shown.get("objects"))
             scene.show_hidden_geometry = bool(self.hidden_shown.get("geometry"))
 
-    # ---- Serialisation (.igz) ------------------------------------------------
+    # ---- Serialisation (.sbim) ------------------------------------------------
     def to_dict(self) -> dict:
         entry: dict = {
             "name": self.name,

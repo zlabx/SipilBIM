@@ -104,7 +104,7 @@ def plan_edge_commands(
             # on a wall with the Rectangle tool split the wall's bottom edge in
             # three while the FLOOR kept the original long one, so the two no
             # longer shared it and the box stopped being closed (Marco's
-            # cubo.igz: four edges carrying one face each, all on that line).
+            # cubo.sbim: four edges carrying one face each, all on that line).
             # Everything volumetric then quietly stops working on it —
             # orient_outward has no volume to judge windings against, the
             # push's recess rule reads the wrong sign, the coplanar merge
@@ -329,7 +329,7 @@ def _append_flat_curve_rebuild(scene, commands, points) -> None:
             # Whole-flat, straight edges only, faces present: the SCOPED
             # rebuild with coverage semantics. Two overlapping rectangles must
             # split into three regions (the classic behaviour) — the planner leaves
-            # the first rectangle whole over the lens (rect.igz report) — but
+            # the first rectangle whole over the lens (rect.sbim report) — but
             # regions nobody covered stay empty (no resurrecting faces the
             # user deleted).
             origin, normal = coplanar_plane(verts)
@@ -362,7 +362,7 @@ def _append_face_plane_rebuild(scene, commands, points) -> None:
     (a line across a slab top grazing an inner rectangle's edge): instead of
     subdividing the mother it stacks a duplicate, sometimes flipped, region
     face on top — and erasing any of those edges later cascade-deletes the
-    whole plane instead of merging (aa.igz plaza report, 2026-07-12). The
+    whole plane instead of merging (aa.sbim plaza report, 2026-07-12). The
     deterministic arrangement with coverage semantics is the machinery that
     already solves this for curves; a populated plane deserves it too."""
     from core.history import RebuildPlanarFacesCommand, RebuildPlaneFacesCommand

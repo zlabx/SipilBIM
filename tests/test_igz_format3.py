@@ -87,10 +87,10 @@ def _save_and_load(scene, path) -> Scene:
 
 
 def test_binary_and_json_reopen_identical(tmp_path, monkeypatch):
-    json_back = _save_and_load(_scene(tmp_path), tmp_path / "json.igz")
+    json_back = _save_and_load(_scene(tmp_path), tmp_path / "json.sbim")
     monkeypatch.setattr(igz, "_LARGE_DOCUMENT", 0)
     monkeypatch.setattr(igz, "_BULK_MIN", 1)
-    bin_path = tmp_path / "bin.igz"
+    bin_path = tmp_path / "bin.sbim"
     bin_back = _save_and_load(_scene(tmp_path), bin_path)
     with zipfile.ZipFile(bin_path) as zf:
         doc = json.loads(zf.read("document.json"))
@@ -103,7 +103,7 @@ def test_binary_and_json_reopen_identical(tmp_path, monkeypatch):
 
 
 def test_the_texture_travels_with_a_binary_mesh(tmp_path, binary):
-    back = _save_and_load(_scene(tmp_path), tmp_path / "t.igz")
+    back = _save_and_load(_scene(tmp_path), tmp_path / "t.sbim")
     slab = next(f for f in back.mesh.faces if f.attrs.get("mat") == "Madera")
     assert slab.attrs["texture"]["path"].endswith("wood.png")
     assert len(slab.hole_loops) == 1             # the nested hole was dropped
@@ -114,7 +114,7 @@ def test_faces_sharing_attributes_do_not_share_the_dicts(tmp_path, binary):
     for i in range(3):
         f = scene.mesh.add_face([V(i, 0, 0), V(i + 1, 0, 0), V(i, 1, 0)])
         f.attrs["texture"] = {"path": "/x.png", "sw": 1.0, "sh": 1.0}
-    back = _save_and_load(scene, tmp_path / "s.igz")
+    back = _save_and_load(scene, tmp_path / "s.sbim")
     texs = [f.attrs["texture"] for f in back.mesh.faces]
     texs[0]["sw"] = 9.0                           # editing one face…
     assert texs[1]["sw"] == 1.0                   # …leaves the others alone
@@ -122,13 +122,13 @@ def test_faces_sharing_attributes_do_not_share_the_dicts(tmp_path, binary):
 
 def test_two_saves_are_byte_identical(tmp_path, binary):
     scene = _scene(tmp_path)
-    igz.save_scene(scene, tmp_path / "a.igz")
-    igz.save_scene(scene, tmp_path / "b.igz")
-    assert (tmp_path / "a.igz").read_bytes() == (tmp_path / "b.igz").read_bytes()
+    igz.save_scene(scene, tmp_path / "a.sbim")
+    igz.save_scene(scene, tmp_path / "b.sbim")
+    assert (tmp_path / "a.sbim").read_bytes() == (tmp_path / "b.sbim").read_bytes()
 
 
 def test_a_small_document_is_not_binary(tmp_path):
-    out = tmp_path / "small.igz"
+    out = tmp_path / "small.sbim"
     igz.save_scene(_scene(tmp_path), out)
     with zipfile.ZipFile(out) as zf:
         assert not any(n.startswith("geom/") for n in zf.namelist())
@@ -136,7 +136,7 @@ def test_a_small_document_is_not_binary(tmp_path):
 
 
 def test_a_newer_format_is_refused_with_a_message(tmp_path):
-    out = tmp_path / "future.igz"
+    out = tmp_path / "future.sbim"
     out.write_text(json.dumps({"igz_format": igz.CURRENT_FORMAT + 1,
                                "scene": {}}))
     with pytest.raises(ValueError, match="newer than this build"):
@@ -168,7 +168,7 @@ def _tamper(path, mutate):
     lambda doc, m: m.pop(doc["scene"]["geom"]["member"]),
 ])
 def test_a_damaged_block_fails_cleanly(tmp_path, binary, mutate):
-    out = tmp_path / "d.igz"
+    out = tmp_path / "d.sbim"
     igz.save_scene(_scene(tmp_path), out)
     _tamper(out, mutate)
     with pytest.raises(ValueError):
@@ -179,7 +179,7 @@ def test_a_nan_point_is_refused_on_save(tmp_path, binary):
     scene = Scene()
     f = scene.mesh.add_face([V(0, 0, 0), V(1, 0, 0), V(0, 1, 0)])
     f.loop[0].position = V(float("nan"), 0, 0)
-    out = tmp_path / "nan.igz"
+    out = tmp_path / "nan.sbim"
     with pytest.raises(igz.NonFiniteDocumentError):
         igz.save_scene(scene, out)
     assert not out.exists()

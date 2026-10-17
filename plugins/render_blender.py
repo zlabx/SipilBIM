@@ -11,7 +11,7 @@ closely and save. Blender is not bundled: it is found where it is installed,
 and when it is not, the panel says how to get it for this package.
 
 An extension through ``setup(app)`` (views/extension_api.py), like Levels:
-the lights and the ambience live in the document (saved in the .igz, every
+the lights and the ambience live in the document (saved in the .sbim, every
 change one undo step), the tab sits beside Properties / Terrain, and the
 lights are drawn over the viewport. The logic is in ``core/render_blender.py``
 and the Blender side in ``resources/blender/render_scene.py``.

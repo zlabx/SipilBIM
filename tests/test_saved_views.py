@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Saved views ("Scenes"): capture/apply, importer conversion,
-and .igz persistence."""
+and .sbim persistence."""
 import math
 
 import pytest
@@ -87,7 +87,7 @@ def test_igz_round_trips_saved_views(tmp_path):
         "Planta", target=(1.0, 2.0, 3.0), distance=51.7, yaw=-1.0, pitch=1.55,
         fov_deg=35.0, perspective=False, hidden_layers=["Curvas"]))
     scene.saved_views.append(SavedView("Vista"))
-    p = tmp_path / "doc.igz"
+    p = tmp_path / "doc.sbim"
     igz.save_scene(scene, p)
 
     out = Scene()
@@ -153,7 +153,7 @@ def test_scene_remembers_whether_the_base_map_is_shown(tmp_path):
     # The flag survives the document round trip.
     scene.terrain = None                       # a stub the writer can't save
     scene.saved_views += [planta, detalle]
-    p = tmp_path / "escenas.igz"
+    p = tmp_path / "escenas.sbim"
     igz.save_scene(scene, p)
     out = Scene()
     igz.load_into(out, p)
@@ -162,7 +162,7 @@ def test_scene_remembers_whether_the_base_map_is_shown(tmp_path):
 
 def test_base_map_opacity_travels_in_the_document(tmp_path):
     """The map's opacity (a faded satellite under a plan sheet) is document
-    state on the tile layer and survives the .igz round trip; older files
+    state on the tile layer and survives the .sbim round trip; older files
     without it open fully opaque."""
     from formats import igz
     from georef.datum import SceneDatum
@@ -173,7 +173,7 @@ def test_base_map_opacity_travels_in_the_document(tmp_path):
     scene.tile_layer = TileLayer(next(iter(PRESETS.values())))
     assert scene.tile_layer.opacity == 1.0
     scene.tile_layer.opacity = 0.4
-    p = tmp_path / "mapa.igz"
+    p = tmp_path / "mapa.sbim"
     igz.save_scene(scene, p)
     out = Scene()
     igz.load_into(out, p)
@@ -211,7 +211,7 @@ def test_scene_remembers_its_shadow_settings(tmp_path):
     assert not sh.enabled
 
     scene.saved_views += [con, sin]
-    p = tmp_path / "sol.igz"
+    p = tmp_path / "sol.sbim"
     igz.save_scene(scene, p)
     out = Scene()
     igz.load_into(out, p)

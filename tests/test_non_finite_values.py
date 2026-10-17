@@ -40,7 +40,7 @@ def test_ordinary_numbers_still_parse():
 
 
 def test_a_nan_is_never_saved_and_the_old_file_survives(tmp_path):
-    path = tmp_path / "reja.igz"
+    path = tmp_path / "reja.sbim"
     scene = Scene()
     scene.mesh.add_face([QVector3D(0, 0, 0), QVector3D(1, 0, 0),
                          QVector3D(1, 1, 0)])
@@ -51,11 +51,11 @@ def test_a_nan_is_never_saved_and_the_old_file_survives(tmp_path):
         igz.save_scene(scene, path)
     assert "scene" in err.value.where
     assert path.read_bytes() == good                  # untouched on disk
-    assert not (tmp_path / "reja.igz.part").exists()
+    assert not (tmp_path / "reja.sbim.part").exists()
 
 
 def test_a_clean_document_is_strict_json(tmp_path):
-    path = tmp_path / "ok.igz"
+    path = tmp_path / "ok.sbim"
     scene = Scene()
     scene.mesh.add_edge(QVector3D(0, 0, 0), QVector3D(2, 0, 0))
     igz.save_scene(scene, path)

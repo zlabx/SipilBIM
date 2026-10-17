@@ -4,7 +4,7 @@
 derecha para el apartado renderizar… lo único que le falta es puntos de
 luz o focos, como para renderizar de noche»). Render with Blender lives in
 the side tray, not a menu; point lights and spots are clicked onto the
-model, kept in the document (undoable, saved in the .igz) and become real
+model, kept in the document (undoable, saved in the .sbim) and become real
 Blender lights; an ambience of day, night or overcast sets the sky."""
 from __future__ import annotations
 
@@ -143,7 +143,7 @@ def test_a_light_clicked_onto_the_model_is_kept_and_undone(window, tmp_path):
     # Saved with the document, ambience included.
     panel._ambience.setCurrentIndex(panel._ambience.findData("night"))
     panel._on_ambience(0)
-    path = tmp_path / "noche.igz"
+    path = tmp_path / "noche.sbim"
     from formats import igz
     igz.save_scene(vp.scene, path)
     again = Scene()

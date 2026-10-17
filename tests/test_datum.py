@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Scene datum (Track G, G0): UTM zone/hemisphere, geodetic ↔ local-metre
-round-trip precision, and .igz persistence."""
+round-trip precision, and .sbim persistence."""
 from __future__ import annotations
 
 import math
@@ -122,7 +122,7 @@ def test_datum_survives_igz_round_trip(tmp_path):
     scene = Scene()
     scene.add_edge(QVector3D(0, 0, 0), QVector3D(1, 0, 0))
     scene.georef = SceneDatum(-12.0464, -77.0428, 154.0)
-    path = tmp_path / "geo.igz"
+    path = tmp_path / "geo.sbim"
     igz.save_scene(scene, path)
 
     loaded = Scene()
@@ -136,7 +136,7 @@ def test_datum_survives_igz_round_trip(tmp_path):
 def test_ungeoreferenced_document_has_no_georef(tmp_path):
     scene = Scene()
     scene.add_edge(QVector3D(0, 0, 0), QVector3D(1, 0, 0))
-    path = tmp_path / "plain.igz"
+    path = tmp_path / "plain.sbim"
     igz.save_scene(scene, path)
     assert '"georef"' not in path.read_text()   # terse: no block written
 

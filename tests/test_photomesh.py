@@ -487,13 +487,13 @@ def test_profile_csv_states_its_vertical_reference():
 # ---- storing the survey in the document ------------------------------------
 
 def _round_trip(tmp_path, mesh):
-    """Save a scene holding ``mesh`` to an .igz and load it back."""
+    """Save a scene holding ``mesh`` to an .sbim and load it back."""
     from core.scene import Scene
     from formats import igz
 
     scene = Scene()
     scene.photo_mesh = mesh
-    out = tmp_path / "doc.igz"
+    out = tmp_path / "doc.sbim"
     igz.save_scene(scene, out)
 
     back = Scene()
@@ -600,7 +600,7 @@ def test_document_without_a_survey_stays_plain_json(tmp_path):
     from core.scene import Scene
     from formats import igz
 
-    out = tmp_path / "plain.igz"
+    out = tmp_path / "plain.sbim"
     igz.save_scene(Scene(), out)
     assert out.read_bytes()[:2] != b"PK"
 

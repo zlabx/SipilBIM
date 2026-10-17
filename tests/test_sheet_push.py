@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Pushing a region of a flat drawing while a solid stands elsewhere in the
-scene (the xc.igz report). 'Solid' must be a property of the REGION being
+scene (the xc.sbim report). 'Solid' must be a property of the REGION being
 pushed: with the whole-mesh gate, the volumetric plane rebuild read the open
 sheet's regions as phantoms and DELETED the neighbours — pushing the
 circle∩square lens made the rest of the drawing disappear."""

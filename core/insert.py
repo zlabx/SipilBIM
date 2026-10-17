@@ -5,7 +5,7 @@
 Like importing a .skp file: the whole file arrives as a single
 component you place with a click — a pergola, an arch, a lamp post drawn
 in their own files, brought into the plaza («quiero agregar mobiliario
-que ya había trabajado como pérgolas, arco, luminaria… son archivos .igz»,
+que ya había trabajado como pérgolas, arco, luminaria… son archivos .sbim»,
 Marco, 2026-09-11).
 
 What the file holds becomes the component's tree, nothing gets baked: its

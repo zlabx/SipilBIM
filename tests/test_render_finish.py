@@ -66,7 +66,7 @@ def test_choosing_a_finish_is_undoable_and_saved(tmp_path):
     hist = History(scene)
     hist.execute(SetMaterialFinishCommand("Porcelanato", "metal"))
     assert scene.materials["Porcelanato"].finish == "metal"
-    path = tmp_path / "doc.igz"
+    path = tmp_path / "doc.sbim"
     igz.save_scene(scene, path)
     again = Scene()
     igz.load_into(again, path)

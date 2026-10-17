@@ -109,7 +109,7 @@ def _texture_dir(skp_path) -> Path:
     litter the user's folders, which is what the old ``<stem>/`` next to the
     ``.skp`` did. One subfolder per source file, keyed by its path + size +
     mtime, so re-importing the same file reuses the images and an edited file
-    gets its own. Saving the document as ``.igz`` copies the images INTO the
+    gets its own. Saving the document as ``.sbim`` copies the images INTO the
     container, so the cache is disposable. Falls back to a temp dir when the
     cache is not writable."""
     from core.texture import texture_cache_root
@@ -220,7 +220,7 @@ def _material_attrs(model, skp_path):
     ``"mat"``: the .skp material NAME — "Concreto visto" stops
     dissolving into an anonymous colour at the border. Returns
     ``(attrs, materials)`` where *materials* is the registry payload
-    (one dict per named material, `.igz`-shaped)."""
+    (one dict per named material, `.sbim`-shaped)."""
     attrs: dict = {}
     tex_dir = None
     for mid, mat in (getattr(model, "materials_by_id", None) or {}).items():
@@ -1163,7 +1163,7 @@ def _adapt(model, name: str, skp_path=None):
     # A prototype KEEPS the prototypes its own subtree places, as ``children``
     # (proto index + local matrix). Flattening them instead — the old
     # "no proto-in-proto" rule — threw away the sharing the file had already
-    # done inside a component: the hedge in piscina.igz is 4480 + 5120 faces
+    # done inside a component: the hedge in piscina.sbim is 4480 + 5120 faces
     # placed 48 times, and it arrived as 230400 real ones, twenty-four times
     # over, for the element that is 89% of that model.
     protos: list = []

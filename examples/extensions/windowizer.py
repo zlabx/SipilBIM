@@ -752,7 +752,7 @@ def normalize_params(p: dict) -> dict:
 
 # ---------------------------------------------------------------------------
 # Registry (document data): current settings + the wall opening of each
-# window, keyed by the container's uid (which the .igz keeps)
+# window, keyed by the container's uid (which the .sbim keeps)
 # ---------------------------------------------------------------------------
 
 def registry(scene) -> dict:

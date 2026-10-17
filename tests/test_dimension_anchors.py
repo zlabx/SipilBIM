@@ -245,7 +245,7 @@ def test_the_igz_round_trip_binds_again(tmp_path):
     _square(scene)
     hist = History(scene)
     hist.execute(AddDimensionCommand(Dimension(V(0, 0), V(4, 0), V(0, -1))))
-    path = tmp_path / "cota.igz"
+    path = tmp_path / "cota.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)
@@ -325,7 +325,7 @@ def test_new_documents_take_arrows_and_old_ones_keep_their_ticks(tmp_path):
     assert Scene().dimension_style["ends"] == "arrow"
     scene = Scene()
     scene.dimension_style["ends"] = "none"
-    path = tmp_path / "ends.igz"
+    path = tmp_path / "ends.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)
@@ -339,7 +339,7 @@ def test_new_documents_take_arrows_and_old_ones_keep_their_ticks(tmp_path):
     payload = {"igz_format": 1, "scene": {
         "vertices": [], "edges": [], "faces": [],
         "dimension_style": {"decimals": 3, "units": "cm"}}}
-    old = tmp_path / "old.igz"
+    old = tmp_path / "old.sbim"
     old.write_text(json.dumps(payload), encoding="utf-8")
     back = Scene()
     igz.load_into(back, old)

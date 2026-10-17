@@ -77,7 +77,7 @@ def test_circle_radius_via_vcb():
     assert all(abs(v.length() - 5.0) < 1e-4 for v in f.vertices)
 
 
-def test_circle_tangent_to_edge_vertex_commits(  # circc.igz report (2026-07-12)
+def test_circle_tangent_to_edge_vertex_commits(  # circc.sbim report (2026-07-12)
 ):
     """A circle whose rim snaps onto an existing edge endpoint must commit.
 
@@ -322,7 +322,7 @@ def test_soft_survives_snapshot_and_igz(tmp_path):
     vp.history.undo()
     vp.history.redo()
     assert sum(1 for e in scene.mesh.edges if e.soft) == n_soft
-    path = tmp_path / "cyl.igz"
+    path = tmp_path / "cyl.sbim"
     igz.save_scene(scene, path)
     loaded = Scene()
     igz.load_into(loaded, path)
@@ -473,7 +473,7 @@ def test_a_rectangle_drawn_on_a_box_keeps_the_box_closed():
     and that flag also gated the propagation of an edge SPLIT into the other
     faces carrying that edge. So the wall's bottom edge became three while the
     FLOOR kept the original long one: coincident, but not shared, and the box
-    stopped being closed (Marco's cubo.igz — four edges with a single face
+    stopped being closed (Marco's cubo.sbim — four edges with a single face
     each, all on that line). Everything volumetric quietly stops working on an
     open shell: orient_outward has no volume to judge windings against, the
     push reads the wrong sign, the coplanar merge dissolves the door.

@@ -83,7 +83,7 @@ from views.icons import tool_icon
 from views.viewport import Viewport
 
 
-IGZ_FILE_FILTER = "SipilBIM document (*.igz);;All files (*)"
+IGZ_FILE_FILTER = "SipilBIM document (*.sbim);;All files (*)"
 
 # What each command does, for the status bar, the button tooltips and F3
 # (Blender's descriptions): a sentence, in English — ``tr`` translates it
@@ -110,7 +110,7 @@ _STYLE_TIPS = {
     "Wireframe": "Only the edges: the faces are not drawn.",
     "X-ray": "See-through faces, so the edges behind them show.",
 }
-_SAVE_TIP = ("Save the document — the model and every sheet — to its .igz "
+_SAVE_TIP = ("Save the document — the model and every sheet — to its .sbim "
              "file.")
 _TEXT3D_TIP = ("Build a text as an extruded solid, in the font and height "
                "you choose.")
@@ -291,7 +291,7 @@ class MainWindow(QMainWindow):
 
         self._current_path: Optional[Path] = None
         # Name of an IMPORTED file (.skp/.dae) shown in the title until the
-        # model is saved as .igz — opening a .skp file natively should
+        # model is saved as .sbim — opening a .skp file natively should
         # read as opening THAT file (user request).
         self._import_name: Optional[str] = None
         #: An extension's workspace shown instead of the model, and the model
@@ -2580,7 +2580,7 @@ class MainWindow(QMainWindow):
 
         open_action = QAction(tr("Open…"), self)
         open_action.setStatusTip(tr(
-            "Open an SipilBIM document (.igz) in place of this one."))
+            "Open an SipilBIM document (.sbim) in place of this one."))
         open_action.setShortcut(QKeySequence.Open)
         open_action.triggered.connect(self._on_open)
         actions.append(open_action)
@@ -2618,7 +2618,7 @@ class MainWindow(QMainWindow):
         # goes out — the flat list had import/export items scattered.
         import_menu = QMenu(tr("Import"), self)
         for label, tip, handler in (
-            (tr("SipilBIM document as component (.igz)…"),
+            (tr("SipilBIM document as component (.sbim)…"),
              tr("Bring another SipilBIM document in as one component, "
                 "placed with a click."),
              self._on_import_igz),
@@ -3307,7 +3307,7 @@ class MainWindow(QMainWindow):
                  if getattr(self, "_current_path", None) else "")
         path, _ = file_dialogs.getOpenFileName(
             self, tr("Components from File"), start,
-            tr("SipilBIM document (*.igz)"))
+            tr("SipilBIM document (*.sbim)"))
         if not path:
             return
         try:
@@ -4784,7 +4784,7 @@ class MainWindow(QMainWindow):
         """Select every entity (Ctrl+A) — edges (soft included), faces, groups
         and dimensions. The safe way to rotate/move/scale a WHOLE model: a
         window box-select that misses one protruding piece leaves it behind
-        and the transform warps the boundary (the sigue.igz report)."""
+        and the transform warps the boundary (the sigue.sbim report)."""
         sel = self.viewport.scene.selection
         sel.clear()
         sel.update(self.viewport.scene.edges)
@@ -5045,14 +5045,14 @@ class MainWindow(QMainWindow):
         copy came from."""
         from core import autosave
         folder = autosave.discarded_dir()
-        if not any(folder.glob("*.igz")):
+        if not any(folder.glob("*.sbim")):
             QMessageBox.information(
                 self, tr("Recover a discarded auto-save…"),
                 tr("No discarded auto-saved copies yet."))
             return
         chosen, _ = file_dialogs.getOpenFileName(
             self, tr("Recover a discarded auto-save…"), str(folder),
-            tr("SipilBIM auto-saves (*.igz)"))
+            tr("SipilBIM auto-saves (*.sbim)"))
         if not chosen:
             return
         if not self._confirm_discard(tr("Open another drawing?")):
@@ -5078,7 +5078,7 @@ class MainWindow(QMainWindow):
     def _remember_recent(self, path) -> None:
         """Put ``path`` at the top of File ▸ Open Recent (native documents
         only: an import is not a document you reopen)."""
-        if path is None or Path(path).suffix.lower() != ".igz":
+        if path is None or Path(path).suffix.lower() != ".sbim":
             return
         key = str(Path(path).resolve())
         recent = [x for x in self._recent_paths() if x != key]
@@ -5136,7 +5136,7 @@ class MainWindow(QMainWindow):
         """Open a document at ``path`` (File dialog, CLI argument, or the OS
         file association's double-click all land here).
 
-        ``.igz`` is our native format; ``.dae``/``.skp`` are the interchange
+        ``.sbim`` is our native format; ``.dae``/``.skp`` are the interchange
         formats we also register in the desktop entry, so double-clicking one
         imports it rather than failing to parse it as an SipilBIM document.
         An extension may claim a suffix of its own
@@ -5294,7 +5294,7 @@ class MainWindow(QMainWindow):
             return
         self.viewport.end_group_edit()
         default_name = (
-            self._current_path.name if self._current_path is not None else "untitled.igz"
+            self._current_path.name if self._current_path is not None else "untitled.sbim"
         )
         path_str, _ = file_dialogs.getSaveFileName(
             self,
@@ -5305,8 +5305,8 @@ class MainWindow(QMainWindow):
         if not path_str:
             return
         path = Path(path_str)
-        if path.suffix.lower() != ".igz":
-            path = path.with_suffix(".igz")
+        if path.suffix.lower() != ".sbim":
+            path = path.with_suffix(".sbim")
         self._do_save(path)
 
     def _do_save(self, path: Path) -> None:
@@ -5445,7 +5445,7 @@ class MainWindow(QMainWindow):
 
     def _on_insert_component(self, key: str, name: str | None = None) -> None:
         """Insert a bundled starter component as a Group at the origin,
-        selected and ready to Move into place. Components are ``.igz``
+        selected and ready to Move into place. Components are ``.sbim``
         (models kept for offline use, textures packed in), ``.glb`` (the
         Sketchfab CC-BY set) or ``.obj``."""
         from core.group import Group
@@ -5454,7 +5454,7 @@ class MainWindow(QMainWindow):
         from core.paths import app_root
         base = app_root() / "resources" / "components"
         temp = _Scene()
-        igz_path = base / f"{key}.igz"
+        igz_path = base / f"{key}.sbim"
         glb_path = base / f"{key}.glb"
         obj_path = base / f"{key}.obj"
         if igz_path.exists():
@@ -5970,7 +5970,7 @@ class MainWindow(QMainWindow):
 
     def _on_clear_texture_cache(self) -> None:
         """Empty the app's texture cache (images extracted from .skp imports
-        and unpacked from .igz containers). Saved .igz documents carry their
+        and unpacked from .sbim containers). Saved .sbim documents carry their
         own copy and re-extract on open; .skp-imported faces lose their texture
         until the file is imported again — hence the confirmation."""
         from core.texture import (clear_texture_cache, texture_cache_root,
@@ -5985,7 +5985,7 @@ class MainWindow(QMainWindow):
         answer = QMessageBox.question(
             self, tr("Clear texture cache"),
             tr("Delete {count} image(s) ({mb:.1f} MB) from:\n{path}\n\n"
-               "Saved .igz documents carry their own copy and rebuild it when "
+               "Saved .sbim documents carry their own copy and rebuild it when "
                "opened. Faces textured by a .skp import that was never saved "
                "lose their texture until you import the .skp again.",
                count=count, mb=size / (1024 * 1024),

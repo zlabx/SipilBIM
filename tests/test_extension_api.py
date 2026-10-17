@@ -29,7 +29,7 @@ def test_extension_data_travels_in_the_igz_and_new_clears_it(tmp_path):
     scene = Scene()
     scene.plugin_data["niveles"] = {"levels": [{"name": "PA", "z": 2.6}]}
     scene.plugin_data["roto"] = {1, 2}          # not JSON: dropped, not fatal
-    path = tmp_path / "m.igz"
+    path = tmp_path / "m.sbim"
     igz.save_scene(scene, path)
     other = Scene()
     igz.load_into(other, path)

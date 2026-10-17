@@ -23,7 +23,7 @@ def test_open_forgets_every_id_keyed_cache(tmp_path):
     from core.scene import Scene
     from formats import igz
     from views.main_window import MainWindow
-    path = tmp_path / "other.igz"
+    path = tmp_path / "other.sbim"
     igz.save_scene(Scene(), path)
     win = MainWindow()
     vp = win.viewport

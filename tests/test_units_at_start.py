@@ -131,7 +131,7 @@ def test_preferences_turn_it_back_on(win, monkeypatch):
 
 def test_a_document_already_open_is_not_asked_about(win, monkeypatch, tmp_path):
     seen = _answer(monkeypatch, "imperial")
-    win._current_path = tmp_path / "plano.igz"          # opened from argv
+    win._current_path = tmp_path / "plano.sbim"          # opened from argv
     win.offer_units_at_start()
     assert seen == {}
     win._current_path = None

@@ -229,7 +229,7 @@ def test_igz_roundtrip_preserves_holes(tmp_path):
     scene, hist = _history()
     hist.execute(AddFaceCommand(SQUARE_4))
     hist.execute(AddFaceCommand(HOLE_2))
-    path = tmp_path / "donut.igz"
+    path = tmp_path / "donut.sbim"
     igz.save_scene(scene, path)
 
     loaded = Scene()

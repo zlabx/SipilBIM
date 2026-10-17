@@ -7,8 +7,8 @@ the clipboard on the SYSTEM clipboard under :data:`MIME`, and Paste adopts
 it when it came from another window.
 
 The payload is a small zip: ``clip.json`` (reference point and the loose
-edges) plus ``scene.igz``, a throwaway document holding the copied faces and
-groups — written by the regular ``.igz`` writer, so materials, textures,
+edges) plus ``scene.sbim``, a throwaway document holding the copied faces and
+groups — written by the regular ``.sbim`` writer, so materials, textures,
 component definitions and group axes travel exactly as they do in a file.
 
 Encoding is LAZY: :class:`ClipMime` builds the bytes only when another
@@ -57,13 +57,13 @@ def encode(clip: dict) -> bytes:
                   for a, b, soft, curve in clip.get("edges", ())],
     }
     with tempfile.TemporaryDirectory(prefix="ingetrazo-clip-") as tmp:
-        path = Path(tmp) / "scene.igz"
+        path = Path(tmp) / "scene.sbim"
         igz.save_scene(scene, path)
         doc = path.read_bytes()
     out = io.BytesIO()
     with zipfile.ZipFile(out, "w", zipfile.ZIP_STORED) as z:
         z.writestr("clip.json", json.dumps(head))
-        z.writestr("scene.igz", doc)
+        z.writestr("scene.sbim", doc)
     return out.getvalue()
 
 
@@ -76,14 +76,14 @@ def decode(data: bytes) -> dict | None:
     try:
         with zipfile.ZipFile(io.BytesIO(bytes(data))) as z:
             head = json.loads(z.read("clip.json"))
-            doc = z.read("scene.igz")
+            doc = z.read("scene.sbim")
     except (zipfile.BadZipFile, KeyError, ValueError):
         return None
     if head.get("format") != _FORMAT:
         return None
     scene = Scene()
     with tempfile.TemporaryDirectory(prefix="ingetrazo-clip-") as tmp:
-        path = Path(tmp) / "scene.igz"
+        path = Path(tmp) / "scene.sbim"
         path.write_bytes(doc)
         igz.load_into(scene, path)
     faces = [([QVector3D(v) for v in f.vertices],

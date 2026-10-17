@@ -919,7 +919,7 @@ def test_pushing_a_hexagon_keeps_its_real_edges():
 
 def _wall_with_door(scene):
     """An OPEN shell (no volume for orient_outward to judge): a wall with a
-    door carved out of it, the door wound the OTHER way — Marco's cubo.igz."""
+    door carved out of it, the door wound the OTHER way — Marco's cubo.sbim."""
     door_ring = [V(1, 0, 0), V(1, 0, 2), V(2.5, 0, 2), V(2.5, 0, 0)]
     # wall minus the door notch, wound so its normal points -Y (outward)
     outer = [V(0, 0, 0), V(1, 0, 0), V(1, 0, 2), V(2.5, 0, 2),

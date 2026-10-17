@@ -156,7 +156,7 @@ def test_igz_roundtrip_and_scene_recall(tmp_path):
     cam = OrbitCamera()
     scene.saved_views.append(SavedView.capture("Corte", scene, cam))
 
-    path = tmp_path / "secciones.igz"
+    path = tmp_path / "secciones.sbim"
     igz_format.save_scene(scene, path)
     fresh = Scene()
     igz_format.load_into(fresh, path)
@@ -317,7 +317,7 @@ def test_scene_made_before_any_section_switches_the_cut_off(tmp_path):
     assert scene.active_section() is cut
 
     # The separation survives the document round trip.
-    path = tmp_path / "escenas.igz"
+    path = tmp_path / "escenas.sbim"
     igz_format.save_scene(scene, path)
     fresh = Scene()
     igz_format.load_into(fresh, path)

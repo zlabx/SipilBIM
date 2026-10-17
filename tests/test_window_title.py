@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Marco Sumari Tellez and IngeTrazo contributors.
 """Window title: an imported .skp/.dae/.obj shows ITS name until the model
-is saved as .igz (user report: opening a .skp file left "Untitled")."""
+is saved as .sbim (user report: opening a .skp file left "Untitled")."""
 from __future__ import annotations
 
 import os
@@ -26,15 +26,15 @@ def test_title_shows_imported_name_until_igz_takes_over():
         win._update_title()
         assert "casa bueno.skp" in win.windowTitle()
 
-        win._current_path = Path("/tmp/obra.igz")   # Save As wins over it
+        win._current_path = Path("/tmp/obra.sbim")   # Save As wins over it
         win._update_title()
-        assert "obra.igz" in win.windowTitle()
+        assert "obra.sbim" in win.windowTitle()
         assert "casa bueno" not in win.windowTitle()
 
         win._current_path = None                 # New clears the import name
         win._import_name = None
         win._update_title()
-        assert "obra.igz" not in win.windowTitle()
+        assert "obra.sbim" not in win.windowTitle()
     finally:
         win._saved_version = win.viewport.scene.version
         win.close()

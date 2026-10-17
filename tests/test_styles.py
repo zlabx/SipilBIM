@@ -51,7 +51,7 @@ def test_igz_roundtrip_keeps_the_style(tmp_path):
     scene.mesh.add_edge(_v(0, 0), _v(1, 0))
     scene.display_style = Style(name="Monochrome", face_mode="monochrome",
                                 background=(1.0, 1.0, 1.0), sky=False)
-    path = tmp_path / "estilo.igz"
+    path = tmp_path / "estilo.sbim"
     igz_format.save_scene(scene, path)
 
     fresh = Scene()
@@ -81,7 +81,7 @@ def test_saved_view_remembers_the_style():
     view.apply(scene, cam)                     # recalling the scene restores it
     assert scene.display_style.face_mode == "hidden_line"
 
-    # Round-trip through the .igz dict form.
+    # Round-trip through the .sbim dict form.
     again = SavedView.from_dict(view.to_dict())
     scene.display_style = Style()
     again.apply(scene, cam)

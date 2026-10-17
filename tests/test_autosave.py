@@ -41,24 +41,24 @@ def _scene_with_square():
 
 
 def test_slots_are_per_absolute_path():
-    a = autosave.slot_for(Path("/proyectos/casa.igz"))
-    b = autosave.slot_for(Path("/otro/casa.igz"))
+    a = autosave.slot_for(Path("/proyectos/casa.sbim"))
+    b = autosave.slot_for(Path("/otro/casa.sbim"))
     assert a != b                       # same stem, different folder
-    assert a == autosave.slot_for(Path("/proyectos/casa.igz"))
-    assert a.name.startswith("casa-") and a.suffix == ".igz"
-    assert autosave.slot_for(None).name == "untitled.igz"
+    assert a == autosave.slot_for(Path("/proyectos/casa.sbim"))
+    assert a.name.startswith("casa-") and a.suffix == ".sbim"
+    assert autosave.slot_for(None).name == "untitled.sbim"
 
 
 def test_write_pending_clear_round_trip():
     scene = _scene_with_square()
-    doc = Path("/proyectos/piscina.igz")
+    doc = Path("/proyectos/piscina.sbim")
     assert autosave.pending(doc) is None
 
     slot = autosave.write(scene, doc)
     assert autosave.pending(doc) == slot
     assert autosave.pending(None) is None   # the untitled slot is separate
 
-    # The slot is a loadable .igz with the drawing in it.
+    # The slot is a loadable .sbim with the drawing in it.
     from formats import igz
     restored = Scene()
     igz.load_into(restored, slot)
@@ -75,13 +75,13 @@ def test_clear_retires_the_slot_instead_of_deleting_it(slot_dir, monkeypatch):
     copy of a session: the slot moves to descartados/ and the newest
     KEEP_DISCARDED stay there."""
     scene = _scene_with_square()
-    doc = Path("/tmp/proyecto/banca.igz")
+    doc = Path("/tmp/proyecto/banca.sbim")
     slot = autosave.write(scene, doc)
     assert autosave.pending(doc) == slot
     data = slot.read_bytes()
     autosave.clear(doc)
     assert autosave.pending(doc) is None                 # clean goodbye
-    kept = list(autosave.discarded_dir().glob("*.igz"))
+    kept = list(autosave.discarded_dir().glob("*.sbim"))
     assert len(kept) == 1 and kept[0].read_bytes() == data
     assert kept[0].name.startswith("banca-")
     # pruning: only the newest KEEP_DISCARDED survive
@@ -90,8 +90,8 @@ def test_clear_retires_the_slot_instead_of_deleting_it(slot_dir, monkeypatch):
     for i in range(5):
         autosave.write(scene, doc)
         autosave.clear(doc)
-        for j, f in enumerate(sorted(autosave.discarded_dir().glob("*.igz"))):
+        for j, f in enumerate(sorted(autosave.discarded_dir().glob("*.sbim"))):
             os.utime(f, (time.time() - 100 + j, time.time() - 100 + j))
-    assert len(list(autosave.discarded_dir().glob("*.igz"))) <= 3
+    assert len(list(autosave.discarded_dir().glob("*.sbim"))) <= 3
     # clearing a document without a slot is a no-op
-    autosave.clear(Path("/tmp/proyecto/otro.igz"))
+    autosave.clear(Path("/tmp/proyecto/otro.sbim"))

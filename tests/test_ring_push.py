@@ -188,7 +188,7 @@ def test_add_face_drops_nested_holes():
     corrupts earcut (phantom wedge triangles across the opening — the 'eye'
     model's visible symptom) and registers the face on rim edges it does not
     touch, letting ``is_closed`` bless a broken solid. ``mesh.add_face`` is the
-    single choke point (draw, push rebuild, heal, ``.igz`` load) — it must keep
+    single choke point (draw, push rebuild, heal, ``.sbim`` load) — it must keep
     only the outermost hole."""
     sc = Scene()
     outer = [QVector3D(x, y, 2.0) for x, y in

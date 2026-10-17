@@ -26,7 +26,7 @@ def _file_open_event(path: str) -> QFileOpenEvent:
 
 class TestMacFileOpenEvent:
     def test_opens_straight_into_an_existing_window(self, tmp_path):
-        doc = tmp_path / "model.igz"
+        doc = tmp_path / "model.sbim"
         doc.write_text("{}")
         window = _StubWindow()
         app_stub = SimpleNamespace(open_window=window, pending_open_path=None)
@@ -39,7 +39,7 @@ class TestMacFileOpenEvent:
 
     def test_queues_the_path_when_no_window_exists_yet(self, tmp_path):
         # A cold launch: the Apple Event can arrive before MainWindow() runs.
-        doc = tmp_path / "model.igz"
+        doc = tmp_path / "model.sbim"
         doc.write_text("{}")
         app_stub = SimpleNamespace(open_window=None, pending_open_path=None)
 

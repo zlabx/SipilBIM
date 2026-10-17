@@ -115,7 +115,7 @@ def test_the_axes_survive_the_igz(tmp_path):
     turn.rotate(30.0, 0, 0, 1)
     g.axes = turn
     scene.groups.append(g)
-    path = tmp_path / "ejes.igz"
+    path = tmp_path / "ejes.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)

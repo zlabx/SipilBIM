@@ -192,7 +192,7 @@ def test_igz_round_trip_keeps_the_tree_and_writes_the_prototype_once(tmp_path):
     top, proto = _tree()
     top.layer = "vegetacion"
     scene.groups.append(top)
-    path = tmp_path / "arbolito.igz"
+    path = tmp_path / "arbolito.sbim"
     save_scene(scene, path)
 
     raw = _read_document(path)[0]["scene"]

@@ -91,7 +91,7 @@ def test_the_group_material_survives_the_igz(tmp_path):
     scene = Scene()
     g, _blue = _two_face_group(scene)
     g.material = dict(RED)
-    path = tmp_path / "pintado.igz"
+    path = tmp_path / "pintado.sbim"
     igz.save_scene(scene, path)
     back = Scene()
     igz.load_into(back, path)

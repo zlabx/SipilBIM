@@ -252,7 +252,7 @@ class TestIgzPersistence:
         scene = Scene()
         scene.compositions.append(_full_comp())
         scene.compositions.append(Composicion(name="Lámina 2", paper="A3"))
-        path = tmp_path / "doc.igz"
+        path = tmp_path / "doc.sbim"
         save_scene(scene, path)
 
         fresh = Scene()

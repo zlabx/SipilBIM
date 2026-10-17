@@ -15,7 +15,7 @@ Nine vertices, no edges, no faces, sixteen kilometres out. ``remove_edge``
 detaches an edge from its endpoints and leaves the endpoints in the mesh, so
 every erase since has left its vertices behind. They do not draw and
 ``bounds()`` ignores them, which is exactly why nobody noticed — but they go
-into the ``.igz`` and they accumulate.
+into the ``.sbim`` and they accumulate.
 
 Undo is unaffected: the command snapshots the mesh before it touches
 anything, and ``restore_state`` puts back the vertex list AND the position

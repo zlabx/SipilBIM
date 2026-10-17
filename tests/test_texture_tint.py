@@ -126,7 +126,7 @@ def test_the_igz_carries_the_base_so_the_tint_stays_editable(stone, tmp_path):
         {"path": str(stone), "sw": 1.0, "sh": 1.0},
         (0.8, 0.2, 0.2), COLORIZE_TINT)
     horneada = f.attrs["texture"]["path"]
-    doc = tmp_path / "prueba.igz"
+    doc = tmp_path / "prueba.sbim"
     igz.save_scene(scene, doc)
 
     vuelta = Scene()

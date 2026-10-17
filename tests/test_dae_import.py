@@ -393,7 +393,7 @@ def test_repeated_components_share_one_prototype(tmp_path, monkeypatch):
 
     # igz round-trip keeps the sharing
     from formats import igz
-    out = tmp_path / "bancas.igz"
+    out = tmp_path / "bancas.sbim"
     igz.save_scene(scene, out)
     scene2 = Scene()
     igz.load_into(scene2, out)

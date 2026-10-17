@@ -3,7 +3,7 @@
 """Shadows as document data + the light's fitted projection + the panel.
 
 The GL passes need a screen; what CAN be pinned headless is everything the
-render derives from: the settings round-trip through the .igz, the sun's
+render derives from: the settings round-trip through the .sbim, the sun's
 ortho view-projection actually containing the model, and the tray panel
 writing ``scene.shadows``.
 """
@@ -38,7 +38,7 @@ def test_shadows_round_trip_through_igz(tmp_path):
     scene.add_edge(V(0, 0, 0), V(2, 0, 0))
     scene.shadows = ShadowSettings(enabled=True, month=6, day=21,
                                    hour=15, minute=30, darkness=0.4)
-    path = tmp_path / "sombras.igz"
+    path = tmp_path / "sombras.sbim"
     igz.save_scene(scene, path)
 
     loaded = Scene()
@@ -48,7 +48,7 @@ def test_shadows_round_trip_through_igz(tmp_path):
     # A document saved WITHOUT shadows loads with the defaults (off).
     plain = Scene()
     plain.add_edge(V(0, 0, 0), V(1, 0, 0))
-    p2 = tmp_path / "plano.igz"
+    p2 = tmp_path / "plano.sbim"
     igz.save_scene(plain, p2)
     igz.load_into(loaded, p2)
     assert loaded.shadows == ShadowSettings()
