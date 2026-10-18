@@ -34,6 +34,8 @@ yang bersih. Hasilnya di-commit apa adanya ke repo ini. Hak cipta dan pemberitah
 - **Versi**: `0.5.8` menjadi `2027.0` (SipilBIM memakai skema versinya sendiri).
 - **Workflow**: hanya `build-windows.yml` yang dipertahankan; `ci.yml`, `release*.yml` dihapus (Linux/macOS tidak
   dibangun di sini). Langkah tanda tangan SignPath di dalamnya **nonaktif** (organisasi SignPath milik upstream).
+  `actions/upload-artifact` dinaikkan dari v4 ke v7 dan `softprops/action-gh-release` dari v2 ke v3 (keduanya berpindah dari Node 20 ke
+  Node 24; GitHub memaksa Node 24 dan menampilkan peringatan deprecation untuk versi lama).
 - **Ditambahkan**: `README.md` (README upstream dipindah ke `README.upstream.md`), berkas ini, dan `site/`
   (halaman unduhan untuk https://sipilstock.com/sipilbim/).
 

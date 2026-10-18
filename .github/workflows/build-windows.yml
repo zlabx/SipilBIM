@@ -146,7 +146,7 @@ jobs:
       - name: Subir los .exe para firmar
         id: exe-sin-firmar
         if: steps.firma.outputs.on == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: exe-sin-firmar
           path: |
@@ -234,7 +234,7 @@ jobs:
       - name: Subir el instalador para firmar
         id: setup-sin-firmar
         if: steps.firma.outputs.on == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: setup-sin-firmar
           path: dist/sipilbim-setup-v*.exe
@@ -274,7 +274,7 @@ jobs:
         run: ls -lh dist/
 
       - name: Subir artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sipilbim-windows
           path: |
@@ -285,7 +285,7 @@ jobs:
       # En push de tag: adjunta los binarios al Release de esa versión.
       - name: Publicar en el Release (solo tags)
         if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             dist/sipilbim-windows.zip
