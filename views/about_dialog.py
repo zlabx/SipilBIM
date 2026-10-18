@@ -246,13 +246,10 @@ class AboutDialog(QDialog):
              f"{tr('Free 3D modeler for architecture, engineering and 3D design.')}<br>"
              f"IngeTrazo — {tr('Created by')} <b>Marco Sumari Tellez</b> — "
              f"{tr('Civil Engineer — Arequipa, Peru')}")
-        para("<small>SipilBIM is a build of IngeTrazo, free software by Marco Sumari Tellez and "
-             "contributors, with its own name and icon. Source of this build: "
-             "<a href='https://github.com/zlabx/SipilBIM'>github.com/zlabx/SipilBIM</a></small>")
-        head = para(f"<b>{tr('With contributions from')}</b>")
-        head.setContentsMargins(0, 8, 0, 0)
-        self.credits = _Credits(CONTRIBUTORS, self)
-        col.addWidget(self.credits)
+        note = para("<small>SipilBIM is a build of IngeTrazo, free software by Marco Sumari Tellez and "
+                    "contributors, with its own name and icon. Source of this build: "
+                    "<a href='https://github.com/zlabx/SipilBIM'>github.com/zlabx/SipilBIM</a></small>")
+        note.setContentsMargins(0, 8, 0, 0)
         para(f"<small>{tr('And thanks to everyone who tries SipilBIM and reports what they find.')}</small>")
         para(f"<small>{tr('Licensed under GPL-3.0-or-later.')} · "
              "<a href='https://github.com/ingelibre/ingetrazo'>"

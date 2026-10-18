@@ -1,7 +1,7 @@
 # Perubahan terhadap upstream
 
 Dasar: [ingelibre/ingetrazo](https://github.com/ingelibre/ingetrazo), versi `0.5.8`,
-commit `e5c016e5df74a18204b785edd0a8401300cb4353` (GPL-3.0-or-later). Build ini: **SipilBIM 0.5.8.2**.
+commit `e5c016e5df74a18204b785edd0a8401300cb4353` (GPL-3.0-or-later). Build ini: **SipilBIM 2027.0**.
 
 Semua perubahan dibuat oleh satu skrip yang bisa diulang, `rebrand/ingetrazo/` di
 [zlabx/Apps](https://github.com/zlabx/Apps/tree/main/rebrand/ingetrazo), dijalankan pada checkout upstream
@@ -26,11 +26,12 @@ yang bersih. Hasilnya di-commit apa adanya ke repo ini. Hak cipta dan pemberitah
   dan komponen pustaka bawaan diganti namanya ke `.sbim`.
 - **User-Agent** permintaan jaringan (tile peta, geokode, pustaka): `SipilBIM/<versi> (...; based on IngeTrazo)`,
   supaya lalu lintas build ini tidak tercatat atas nama upstream.
-- **Dialog About**: ditambah keterangan bahwa SipilBIM adalah build dari IngeTrazo, dengan tautan ke repo ini;
-  kredit pembuat dan kontributor upstream dipertahankan.
+- **Dialog About**: ditambah keterangan bahwa SipilBIM adalah build dari IngeTrazo, dengan tautan ke repo ini; kredit pembuat
+  upstream dipertahankan. Judul "With contributions from" dan daftar kontributor yang bergulir **dihapus** dari dialog
+  (daftarnya tetap ada di kode dan di `AUTHORS`; hak cipta dan lisensi tidak berubah).
 - **Ikon**: set ikon SipilBIM (app, `.ico`, `.icns`, PNG) dan ikon dokumen `.sbim/.dae/.skp` dengan logo SipilBIM
   di sudutnya; batang judul ikon dokumen `.sbim` bertuliskan "SBIM".
-- **Versi**: `0.5.8` menjadi `0.5.8.2` (revisi build SipilBIM di atas versi upstream).
+- **Versi**: `0.5.8` menjadi `2027.0` (SipilBIM memakai skema versinya sendiri).
 - **Workflow**: hanya `build-windows.yml` yang dipertahankan; `ci.yml`, `release*.yml` dihapus (Linux/macOS tidak
   dibangun di sini). Langkah tanda tangan SignPath di dalamnya **nonaktif** (organisasi SignPath milik upstream).
 - **Ditambahkan**: `README.md` (README upstream dipindah ke `README.upstream.md`), berkas ini, dan `site/`
