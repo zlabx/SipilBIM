@@ -6,17 +6,16 @@ Marco Sumari Tellez dan kontributor IngeTrazo.
 
 | | |
 |---|---|
-| Versi | `2027.0` |
+| Versi | `2027.1` |
 | Upstream | [ingelibre/ingetrazo](https://github.com/ingelibre/ingetrazo), versi `0.5.8` (commit `e5c016e`) |
 | Lisensi | GPL-3.0-or-later (lihat `LICENSE`) |
 | Perubahan | [`MODIFICATIONS.md`](MODIFICATIONS.md) |
 
 ## Unduh
 
-Installer dan ZIP portabel ada di halaman [Releases](https://github.com/zlabx/SipilBIM/releases/latest):
+Installer ada di halaman [Releases](https://github.com/zlabx/SipilBIM/releases/latest):
 
 - `sipilbim-setup-v<versi>.exe`: installer Windows
-- `sipilbim-windows.zip`: versi portabel
 
 Build ini **belum ditandatangani**, jadi Windows SmartScreen bisa menampilkan peringatan
 (More info, lalu Run anyway).
@@ -37,7 +36,7 @@ milik upstream.
 
 ## Cara build
 
-Mendorong tag `v<versi>` (sama dengan `core/version.py`, mis. `v2027.0`) menjalankan
+Mendorong tag `v<versi>` (sama dengan `core/version.py`, mis. `v2027.1`) menjalankan
 `.github/workflows/build-windows.yml`: PyInstaller, lalu Inno Setup, lalu lampiran ke Release. Build manual:
 Actions, lalu *Build Windows*, lalu *Run workflow*.
 

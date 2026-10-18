@@ -1,7 +1,7 @@
 # Perubahan terhadap upstream
 
 Dasar: [ingelibre/ingetrazo](https://github.com/ingelibre/ingetrazo), versi `0.5.8`,
-commit `e5c016e5df74a18204b785edd0a8401300cb4353` (GPL-3.0-or-later). Build ini: **SipilBIM 2027.0**.
+commit `e5c016e5df74a18204b785edd0a8401300cb4353` (GPL-3.0-or-later). Build ini: **SipilBIM 2027.1**.
 
 Semua perubahan dibuat oleh satu skrip yang bisa diulang, `rebrand/ingetrazo/` di
 [zlabx/Apps](https://github.com/zlabx/Apps/tree/main/rebrand/ingetrazo), dijalankan pada checkout upstream
@@ -13,7 +13,7 @@ yang bersih. Hasilnya di-commit apa adanya ke repo ini. Hak cipta dan pemberitah
 - **Nama produk**: "IngeTrazo" menjadi "SipilBIM" di teks antarmuka, terjemahan (`i18n/*.json`, kunci dan nilai
   bersama-sama), jendela, dialog, dan pesan.
 - **Berkas dan identitas Windows**: `sipilbim.exe`, `sipilbim-mcp.exe`, `dist/sipilbim`, `sipilbim.spec`,
-  `installer/sipilbim.iss`, `sipilbim-setup-v<versi>.exe`, `sipilbim-windows.zip`, nama log (`sipilbim-errors.log`,
+  `installer/sipilbim.iss`, `sipilbim-setup-v<versi>.exe`, nama log (`sipilbim-errors.log`,
   `sipilbim-gl.txt`), soket instance tunggal, nama server MCP (`sipilbim`), nama berkas ekspor pintasan.
   Folder data dan log mengikuti nama aplikasi (`%LOCALAPPDATA%\SipilBIM`, kunci pengaturan SipilBIM).
 - **Installer**: `AppId` baru (SipilBIM terpasang sebagai produk sendiri dan tidak menimpa IngeTrazo),
@@ -31,9 +31,11 @@ yang bersih. Hasilnya di-commit apa adanya ke repo ini. Hak cipta dan pemberitah
   (daftarnya tetap ada di kode dan di `AUTHORS`; hak cipta dan lisensi tidak berubah).
 - **Ikon**: set ikon SipilBIM (app, `.ico`, `.icns`, PNG) dan ikon dokumen `.sbim/.dae/.skp` dengan logo SipilBIM
   di sudutnya; batang judul ikon dokumen `.sbim` bertuliskan "SBIM".
-- **Versi**: `0.5.8` menjadi `2027.0` (SipilBIM memakai skema versinya sendiri).
+- **Versi**: `0.5.8` menjadi `2027.1` (SipilBIM memakai skema versinya sendiri).
 - **Workflow**: hanya `build-windows.yml` yang dipertahankan; `ci.yml`, `release*.yml` dihapus (Linux/macOS tidak
   dibangun di sini). Langkah tanda tangan SignPath di dalamnya **nonaktif** (organisasi SignPath milik upstream).
+  Hanya installer yang dibangun dan dilampirkan ke Release: langkah `Incluir LEEME en el bundle` dan `Crear ZIP portable` dibuang
+  (tidak ada ZIP portabel; `LEEME.txt` upstream berisi petunjuk mode portable).
   `actions/upload-artifact` dinaikkan dari v4 ke v7 dan `softprops/action-gh-release` dari v2 ke v3 (keduanya berpindah dari Node 20 ke
   Node 24; GitHub memaksa Node 24 dan menampilkan peringatan deprecation untuk versi lama).
 - **Ditambahkan**: `README.md` (README upstream dipindah ke `README.upstream.md`), berkas ini, dan `site/`
