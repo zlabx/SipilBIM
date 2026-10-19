@@ -1,7 +1,7 @@
 # Perubahan terhadap upstream
 
 Dasar: [ingelibre/ingetrazo](https://github.com/ingelibre/ingetrazo), versi `0.5.8`,
-commit `e5c016e5df74a18204b785edd0a8401300cb4353` (GPL-3.0-or-later). Build ini: **SipilBIM 2027.1**.
+commit `e5c016e5df74a18204b785edd0a8401300cb4353` (GPL-3.0-or-later). Build ini: **SipilBIM 2027.2**.
 
 Semua perubahan dibuat oleh satu skrip yang bisa diulang, `rebrand/ingetrazo/` di
 [zlabx/Apps](https://github.com/zlabx/Apps/tree/main/rebrand/ingetrazo), dijalankan pada checkout upstream
@@ -33,7 +33,7 @@ yang bersih. Hasilnya di-commit apa adanya ke repo ini. Hak cipta dan pemberitah
   (daftarnya tetap ada di kode dan di `AUTHORS`; hak cipta dan lisensi tidak berubah).
 - **Ikon**: set ikon SipilBIM (app, `.ico`, `.icns`, PNG) dan ikon dokumen `.sbim/.dae/.skp` dengan logo SipilBIM
   di sudutnya; batang judul ikon dokumen `.sbim` bertuliskan "SBIM".
-- **Versi**: `0.5.8` menjadi `2027.1` (SipilBIM memakai skema versinya sendiri).
+- **Versi**: `0.5.8` menjadi `2027.2` (SipilBIM memakai skema versinya sendiri).
 - **Workflow**: hanya `build-windows.yml` yang dipertahankan; `ci.yml`, `release*.yml` dihapus (Linux/macOS tidak
   dibangun di sini). Langkah tanda tangan SignPath di dalamnya **nonaktif** (organisasi SignPath milik upstream).
   Hanya installer yang dibangun dan dilampirkan ke Release: langkah `Incluir LEEME en el bundle` dan `Crear ZIP portable` dibuang

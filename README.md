@@ -6,7 +6,7 @@ Marco Sumari Tellez dan kontributor IngeTrazo.
 
 | | |
 |---|---|
-| Versi | `2027.1` |
+| Versi | `2027.2` |
 | Upstream | [ingelibre/ingetrazo](https://github.com/ingelibre/ingetrazo), versi `0.5.8` (commit `e5c016e`) |
 | Lisensi | GPL-3.0-or-later (lihat `LICENSE`) |
 | Perubahan | [`MODIFICATIONS.md`](MODIFICATIONS.md) |
@@ -36,7 +36,7 @@ milik upstream.
 
 ## Cara build
 
-Mendorong tag `v<versi>` (sama dengan `core/version.py`, mis. `v2027.1`) menjalankan
+Mendorong tag `v<versi>` (sama dengan `core/version.py`, mis. `v2027.2`) menjalankan
 `.github/workflows/build-windows.yml`: PyInstaller, lalu Inno Setup, lalu lampiran ke Release. Build manual:
 Actions, lalu *Build Windows*, lalu *Run workflow*.
 
