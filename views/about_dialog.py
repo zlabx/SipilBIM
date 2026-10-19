@@ -238,17 +238,17 @@ class AboutDialog(QDialog):
             col.addWidget(lab)
             return lab
 
-        # Short About, like the other SipilStock apps. The links carry the GPL attribution (see rebrand.py).
+        # Short About, like the other SipilStock apps: title and description in one tight block, the links
+        # just below, then OK. The links carry the GPL attribution (see rebrand.py).
         para("<b style='font-size:15px'>SipilBIM</b> "
-             f"{tr('Version')} {version}")
-        blurb = para("SipilBIM is a 3D and BIM modeler for architecture and civil engineering by SipilStock.")
-        blurb.setContentsMargins(0, 4, 0, 0)
-        repo = "https://github.com/zlabx/SipilBIM"
+             f"{tr('Version')} {version}<br>"
+             "SipilBIM is a 3D and BIM modeler for architecture and civil engineering by SipilStock.")
         links = " · ".join(f"<a href='{url}'>{label}</a>" for label, url in (
-            ("License", f"{repo}/blob/main/LICENSE"),
-            ("Source", repo),
+            ("License", "https://sipilstock.com/sipilbim/LICENSE.txt"),
+            ("Source", "https://github.com/zlabx/SipilBIM"),
         ))
-        para(links).setContentsMargins(0, 4, 0, 4)
+        para(links).setContentsMargins(0, 2, 0, 0)
+        col.addSpacing(8)
         buttons = QDialogButtonBox(QDialogButtonBox.Ok, self)
         buttons.accepted.connect(self.accept)
         col.addWidget(buttons)

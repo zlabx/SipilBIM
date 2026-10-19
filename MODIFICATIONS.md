@@ -29,7 +29,7 @@ yang bersih. Hasilnya di-commit apa adanya ke repo ini. Hak cipta dan pemberitah
 - **Tema default**: terang (upstream membuka gelap). Tema gelap dan "Same as the system" tetap bisa dipilih di Window ▸ Preferences ▸ Theme;
   pilihan yang sudah tersimpan tidak berubah.
 - **Dialog About**: dibuat singkat seperti app SipilStock lain: ikon, nama dan versi, satu kalimat tentang app, dan tautan
-  License dan Source (repo ini); kredit untuk IngeTrazo ada di `README.md`, berkas ini, dan header berkas sumber. Daftar kontributor yang bergulir dan baris OpenGL dihapus dari dialog
+  License (`LICENSE.txt` di situs, salinan `LICENSE`) dan Source (repo ini); kredit untuk IngeTrazo ada di `README.md`, berkas ini, dan header berkas sumber. Daftar kontributor yang bergulir dan baris OpenGL dihapus dari dialog
   (daftarnya tetap ada di kode dan di `AUTHORS`; hak cipta dan lisensi tidak berubah).
 - **Ikon**: set ikon SipilBIM (app, `.ico`, `.icns`, PNG) dan ikon dokumen `.sbim/.dae/.skp` dengan logo SipilBIM
   di sudutnya; batang judul ikon dokumen `.sbim` bertuliskan "SBIM".
@@ -41,7 +41,7 @@ yang bersih. Hasilnya di-commit apa adanya ke repo ini. Hak cipta dan pemberitah
   `actions/upload-artifact` dinaikkan dari v4 ke v7 dan `softprops/action-gh-release` dari v2 ke v3 (keduanya berpindah dari Node 20 ke
   Node 24; GitHub memaksa Node 24 dan menampilkan peringatan deprecation untuk versi lama).
 - **Ditambahkan**: `README.md` (README upstream dipindah ke `README.upstream.md`), berkas ini, dan `site/`
-  (halaman unduhan untuk https://sipilstock.com/sipilbim/).
+  (halaman unduhan untuk https://sipilstock.com/sipilbim/, beserta `site/LICENSE.txt`: salinan `LICENSE` yang tidak diubah).
 
 ## Yang sengaja tidak diubah
 
