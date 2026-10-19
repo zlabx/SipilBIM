@@ -26,6 +26,8 @@ yang bersih. Hasilnya di-commit apa adanya ke repo ini. Hak cipta dan pemberitah
   dan komponen pustaka bawaan diganti namanya ke `.sbim`.
 - **User-Agent** permintaan jaringan (tile peta, geokode, pustaka): `SipilBIM/<versi> (...; based on IngeTrazo)`,
   supaya lalu lintas build ini tidak tercatat atas nama upstream.
+- **Tema default**: terang (upstream membuka gelap). Tema gelap dan "Same as the system" tetap bisa dipilih di Window ▸ Preferences ▸ Theme;
+  pilihan yang sudah tersimpan tidak berubah.
 - **Dialog About**: ditambah keterangan bahwa SipilBIM adalah build dari IngeTrazo, dengan tautan ke repo ini; kredit pembuat
   upstream dipertahankan. Judul "With contributions from" dan daftar kontributor yang bergulir **dihapus** dari dialog
   (daftarnya tetap ada di kode dan di `AUTHORS`; hak cipta dan lisensi tidak berubah).

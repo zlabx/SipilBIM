@@ -1,8 +1,7 @@
 """Light / dark UI chrome that follows the desktop, or a fixed choice.
 
-Window ▸ Preferences ▸ Theme stores the General setting ``theme``: ``dark`` (the
-default — SipilBIM's look, Marco 2026-09-22: the user opts into the rest),
-``light``, or ``system``, which follows the OS colour scheme and flips live
+Window ▸ Preferences ▸ Theme stores the General setting ``theme``: ``light`` (the
+default in this build; upstream opens dark), ``dark``, or ``system``, which follows the OS colour scheme and flips live
 when the user switches it — GNOME/KDE portals, Windows 10/11 and macOS all
 report it to Qt through ``QStyleHints.colorScheme``. Only the
 chrome changes: the 3D viewport keeps the model's display style, and the
@@ -33,13 +32,13 @@ _HIGHLIGHT = QColor(42, 93, 143)
 
 def saved_theme() -> str:
     from core import general_settings
-    mode = str(general_settings.value(_KEY, DARK) or DARK)
-    return mode if mode in THEMES else DARK
+    mode = str(general_settings.value(_KEY, LIGHT) or LIGHT)
+    return mode if mode in THEMES else LIGHT
 
 
 def save_theme(mode: str) -> None:
     from core import general_settings
-    general_settings.set_value(_KEY, mode if mode in THEMES else DARK)
+    general_settings.set_value(_KEY, mode if mode in THEMES else LIGHT)
 
 
 def is_dark(mode: str, system_scheme: Qt.ColorScheme) -> bool:
