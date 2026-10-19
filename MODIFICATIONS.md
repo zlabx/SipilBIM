@@ -29,7 +29,7 @@ yang bersih. Hasilnya di-commit apa adanya ke repo ini. Hak cipta dan pemberitah
 - **Tema default**: terang (upstream membuka gelap). Tema gelap dan "Same as the system" tetap bisa dipilih di Window ▸ Preferences ▸ Theme;
   pilihan yang sudah tersimpan tidak berubah.
 - **Dialog About**: dibuat singkat seperti app SipilStock lain: ikon, nama dan versi, satu kalimat tentang app, dan tautan
-  Upstream (IngeTrazo), License, dan Source (repo ini). Daftar kontributor yang bergulir dan baris OpenGL dihapus dari dialog
+  License dan Source (repo ini); kredit untuk IngeTrazo ada di `README.md`, berkas ini, dan header berkas sumber. Daftar kontributor yang bergulir dan baris OpenGL dihapus dari dialog
   (daftarnya tetap ada di kode dan di `AUTHORS`; hak cipta dan lisensi tidak berubah).
 - **Ikon**: set ikon SipilBIM (app, `.ico`, `.icns`, PNG) dan ikon dokumen `.sbim/.dae/.skp` dengan logo SipilBIM
   di sudutnya; batang judul ikon dokumen `.sbim` bertuliskan "SBIM".

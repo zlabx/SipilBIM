@@ -245,7 +245,6 @@ class AboutDialog(QDialog):
         blurb.setContentsMargins(0, 4, 0, 0)
         repo = "https://github.com/zlabx/SipilBIM"
         links = " · ".join(f"<a href='{url}'>{label}</a>" for label, url in (
-            ("Upstream", "https://github.com/ingelibre/ingetrazo"),
             ("License", f"{repo}/blob/main/LICENSE"),
             ("Source", repo),
         ))
