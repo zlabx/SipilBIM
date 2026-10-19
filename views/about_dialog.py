@@ -248,8 +248,6 @@ class AboutDialog(QDialog):
             ("Upstream", "https://github.com/ingelibre/ingetrazo"),
             ("License", f"{repo}/blob/main/LICENSE"),
             ("Source", repo),
-            ("Changes", f"{repo}/blob/main/MODIFICATIONS.md"),
-            ("Authors", f"{repo}/blob/main/AUTHORS"),
         ))
         para(links).setContentsMargins(0, 4, 0, 4)
         buttons = QDialogButtonBox(QDialogButtonBox.Ok, self)
