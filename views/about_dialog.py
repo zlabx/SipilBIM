@@ -238,22 +238,20 @@ class AboutDialog(QDialog):
             col.addWidget(lab)
             return lab
 
-        # The top is one compact block, so the credits below get the room
-        # (Marco, 23-09).
-        gl = f"<br><small>OpenGL: {gl_line}</small>" if gl_line else ""
+        # Short About, like the other SipilStock apps. The links carry the GPL attribution (see rebrand.py).
         para("<b style='font-size:15px'>SipilBIM</b> "
-             f"{tr('Version')} {version}{gl}<br>"
-             f"{tr('Free 3D modeler for architecture, engineering and 3D design.')}<br>"
-             f"IngeTrazo — {tr('Created by')} <b>Marco Sumari Tellez</b> — "
-             f"{tr('Civil Engineer — Arequipa, Peru')}")
-        note = para("<small>SipilBIM is a build of IngeTrazo, free software by Marco Sumari Tellez and "
-                    "contributors, with its own name and icon. Source of this build: "
-                    "<a href='https://github.com/zlabx/SipilBIM'>github.com/zlabx/SipilBIM</a></small>")
-        note.setContentsMargins(0, 8, 0, 0)
-        para(f"<small>{tr('And thanks to everyone who tries SipilBIM and reports what they find.')}</small>")
-        para(f"<small>{tr('Licensed under GPL-3.0-or-later.')} · "
-             "<a href='https://github.com/ingelibre/ingetrazo'>"
-             "github.com/ingelibre/ingetrazo</a></small>")
+             f"{tr('Version')} {version}")
+        blurb = para("SipilBIM is a 3D and BIM modeler for architecture and civil engineering by SipilStock.")
+        blurb.setContentsMargins(0, 4, 0, 0)
+        repo = "https://github.com/zlabx/SipilBIM"
+        links = " · ".join(f"<a href='{url}'>{label}</a>" for label, url in (
+            ("Upstream", "https://github.com/ingelibre/ingetrazo"),
+            ("License", f"{repo}/blob/main/LICENSE"),
+            ("Source", repo),
+            ("Changes", f"{repo}/blob/main/MODIFICATIONS.md"),
+            ("Authors", f"{repo}/blob/main/AUTHORS"),
+        ))
+        para(links).setContentsMargins(0, 4, 0, 4)
         buttons = QDialogButtonBox(QDialogButtonBox.Ok, self)
         buttons.accepted.connect(self.accept)
         col.addWidget(buttons)
