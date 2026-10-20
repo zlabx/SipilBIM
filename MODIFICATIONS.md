@@ -3,13 +3,13 @@
 SipilBIM is derived from IngeTrazo (https://github.com/ingelibre/ingetrazo),
 GPL-3.0-or-later. Changes made by the rebrand overlay (GPL-3.0 section 5(a)):
 
-- Product name, file extension and file names replaced in 231 source, packaging, CI, test and
+- Product name, file extension and file names replaced in 250 source, packaging, CI, test and
   translation files; 14 files renamed (`ingetrazo.spec`, the installer script, 12 bundled
   documents to `.sbim`).
 - App icon set replaced; the `.sbim` document icon carries an "SBIM" title bar.
 - Upstream copyright, SPDX and licence notices (`LICENSE`, `AUTHORS`, header lines) are kept; the GLB/glTF
   `generator` tag and the credits for upstream contributors are left as written.
-- Version set to 2027.3 (this build is based on IngeTrazo 0.5.8, commit `e5c016e5df74a18204b785edd0a8401300cb4353`).
+- Version set to 2027.4 (this build is based on IngeTrazo 0.5.9, commit `24e7ada6df9f0b4f5f761f287aaade9e40e6728c`).
   Network user agents read `SipilBIM/<version> (+https://sipilstock.com/sipilbim/; based on IngeTrazo)`.
 - About dialog reduced to one page: name, version, a one-line description and the links to the licence
   and this repository; the contributors list stays in the code, unused.
