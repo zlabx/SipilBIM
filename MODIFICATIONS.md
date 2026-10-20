@@ -1,40 +1,35 @@
 # Modifications
 
-SipilBIM is a modified version of [IngeTrazo](https://github.com/ingelibre/ingetrazo) 0.5.8
-(commit `e5c016e5df74a18204b785edd0a8401300cb4353`, GPL-3.0-or-later). This build is **SipilBIM 2027.3**.
+SipilBIM is derived from [IngeTrazo](https://github.com/ingelibre/ingetrazo) 0.5.8
+(commit `e5c016e5df74a18204b785edd0a8401300cb4353`, GPL-3.0-or-later). This build is SipilBIM 2027.3.
+All changes are made by the rebrand script [`rebrand/ingetrazo`](https://github.com/zlabx/Apps/tree/main/rebrand/ingetrazo)
+run on a clean upstream checkout; upstream copyright and licence notices are kept.
 
-All changes are produced by a single repeatable script, [`rebrand/ingetrazo`](https://github.com/zlabx/Apps/tree/main/rebrand/ingetrazo),
-run against a clean upstream checkout. The output is committed here unchanged. Upstream copyright and license
-notices (`LICENSE`, `AUTHORS`, and the `Copyright` and `SPDX` lines in every file) are preserved.
+- Product name replaced in 231 source, packaging, CI, test and translation files
+  (`*.py`, `*.iss`, `*.spec`, `*.yml`, `*.qss`, `i18n/*.json`; not `docs/`, `packaging/`, `vendor/`):
+  "IngeTrazo" to "SipilBIM", `.igz` to `.sbim`, and the executable, installer, icon, log, socket,
+  MCP server and shortcut-export file names. Copyright and SPDX lines, the GLB/glTF `generator` tag
+  and upstream contributor credits are left as written.
+- Version `0.5.8` to `2027.3`. Network user agents (`core/version.py`, `georef/geocode.py`,
+  `georef/tile_fetcher.py`) read `SipilBIM/<version> (+https://sipilstock.com/sipilbim/; based on IngeTrazo)`.
+- About dialog (`views/about_dialog.py`) reduced to name, version, one line and License and Source links;
+  the contributors list stays in the code, unused.
+- Default theme is light (`views/theme.py`); dark and system stay selectable and saved choices are unchanged.
+- Installer (`installer/sipilbim.iss`): new `AppId` (installs alongside IngeTrazo), publisher `SipilStock`,
+  website, support and update URLs point to `zlabx/SipilBIM`.
+- `.github/workflows/`: only `build-windows.yml` is kept; removed `ci.yml`, `release-flatpak.yml`, `release-macos.yml`, `release.yml`.
+  It points to this repository, marks the SignPath signing steps as inactive, moves
+  `actions/upload-artifact` v4 to v7 and `softprops/action-gh-release` v2 to v3 (Node 24),
+  and drops the portable ZIP (installer only).
+- Renamed: `ingetrazo.spec` and the installer script to `sipilbim.*`, and 12 bundled `.igz` documents
+  (examples, library components) to `.sbim`. The `.sbim` format is the same JSON/ZIP as `.igz`.
+- Icon set replaced (`resources/icons/`: app icon, `.dae`/`.skp`/document icons, `hicolor` PNGs); the
+  `.sbim` document icon carries an "SBIM" title bar.
+- `pytest.ini`: 7 tests deselected (they need files this repository does not carry, or assume
+  upstream's dark theme, About credits or version).
 
-## Changed
+Left as upstream: the `igz_format` key and `formats.igz` module (documents stay interchangeable by renaming),
+`INGETRAZO_*` variables and `ingetrazo.*` logger names, the extensions catalogue and online component library
+hosted by upstream, and everything under `docs/`, `packaging/` and `vendor/`.
 
-- **Branding**: "IngeTrazo" is replaced with "SipilBIM" in the UI, dialogs, messages, and translations (`i18n/*.json`).
-- **Windows identity**: `sipilbim.exe`, `sipilbim-mcp.exe`, `sipilbim.spec`, `installer/sipilbim.iss`,
-  `sipilbim-setup-v<version>.exe`, log names, single-instance socket, MCP server name, and the data folder
-  (`%LOCALAPPDATA%\SipilBIM`).
-- **Installer**: new `AppId`, so SipilBIM installs alongside IngeTrazo rather than replacing it. Publisher is
-  `SipilStock`; website, support, and update links point to this repository. Document ProgID is `SipilBIM.Document`.
-- **Document format**: SipilBIM saves and opens `.sbim` (previously `.igz`). The contents are identical, so a
-  renamed file opens in either app. The installer does not associate `.igz`, leaving it to IngeTrazo if installed.
-- **User-Agent**: network requests (map tiles, geocoding, library) identify as `SipilBIM/<version> (based on IngeTrazo)`.
-- **Default theme**: light. Dark and system themes remain available; saved preferences are unaffected.
-- **About dialog**: shortened to icon, name, version, one-line description, and License and Source links.
-  IngeTrazo credit is kept in `README.md`, this file, and source headers; contributors remain in `AUTHORS`.
-- **Icons**: SipilBIM app and `.sbim`/`.dae`/`.skp` document icons.
-- **Version**: `0.5.8` to `2027.3`.
-- **CI**: only `build-windows.yml` is kept; it builds the installer and attaches it to the Release. SignPath
-  signing is disabled (the SignPath organization belongs to upstream), and the portable ZIP step is removed.
-  `actions/upload-artifact` is updated to v7 and `softprops/action-gh-release` to v3 (Node 24).
-- **Added**: `README.md` (upstream README moved to `README.upstream.md`), this file, and `site/`
-  (download page for <https://sipilstock.com/sipilbim/>, with an unmodified copy of `LICENSE`).
-
-## Unchanged
-
-- Internal format identifiers: the `igz_format` key, the `formats.igz` module, and the GLB/glTF `generator` tag.
-- Plugin and environment compatibility: `INGETRAZO_*` variables, `ingetrazo.*` logger names,
-  `application/x-ingetrazo-*` MIME types, and the `%APPDATA%\ingetrazo\plugins` folder, so IngeTrazo plugins keep working.
-- Upstream-hosted services used as-is: the extensions catalog (`ingelibre/ingetrazo-extensions`) and the online
-  component library (`ingetrazo.com/biblioteca`).
-- `docs/`, `packaging/` (Flatpak, AppImage, macOS, snap), `resources/mime/`, and all upstream `*.md` files.
-  The Linux and macOS packaging is not built in this repository and still uses the IngeTrazo name.
+Added: `MODIFICATIONS.md`, `README.md`, `site/LICENSE.txt`, `site/index.html`. The upstream `README.md` is moved to `README.upstream.md`.
