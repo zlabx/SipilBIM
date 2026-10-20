@@ -1,56 +1,40 @@
-# Perubahan terhadap upstream
+# Modifications
 
-Dasar: [ingelibre/ingetrazo](https://github.com/ingelibre/ingetrazo), versi `0.5.8`,
-commit `e5c016e5df74a18204b785edd0a8401300cb4353` (GPL-3.0-or-later). Build ini: **SipilBIM 2027.3**.
+SipilBIM is a modified version of [IngeTrazo](https://github.com/ingelibre/ingetrazo) 0.5.8
+(commit `e5c016e5df74a18204b785edd0a8401300cb4353`, GPL-3.0-or-later). This build is **SipilBIM 2027.3**.
 
-Semua perubahan dibuat oleh satu skrip yang bisa diulang, `rebrand/ingetrazo/` di
-[zlabx/Apps](https://github.com/zlabx/Apps/tree/main/rebrand/ingetrazo), dijalankan pada checkout upstream
-yang bersih. Hasilnya di-commit apa adanya ke repo ini. Hak cipta dan pemberitahuan lisensi upstream
-(`LICENSE`, `AUTHORS`, baris `Copyright` dan `SPDX` di setiap berkas) tidak diubah.
+All changes are produced by a single repeatable script, [`rebrand/ingetrazo`](https://github.com/zlabx/Apps/tree/main/rebrand/ingetrazo),
+run against a clean upstream checkout. The output is committed here unchanged. Upstream copyright and license
+notices (`LICENSE`, `AUTHORS`, and the `Copyright` and `SPDX` lines in every file) are preserved.
 
-## Yang diganti
+## Changed
 
-- **Nama produk**: "IngeTrazo" menjadi "SipilBIM" di teks antarmuka, terjemahan (`i18n/*.json`, kunci dan nilai
-  bersama-sama), jendela, dialog, dan pesan.
-- **Berkas dan identitas Windows**: `sipilbim.exe`, `sipilbim-mcp.exe`, `dist/sipilbim`, `sipilbim.spec`,
-  `installer/sipilbim.iss`, `sipilbim-setup-v<versi>.exe`, nama log (`sipilbim-errors.log`,
-  `sipilbim-gl.txt`), soket instance tunggal, nama server MCP (`sipilbim`), nama berkas ekspor pintasan.
-  Folder data dan log mengikuti nama aplikasi (`%LOCALAPPDATA%\SipilBIM`, kunci pengaturan SipilBIM).
-- **Installer**: `AppId` baru (SipilBIM terpasang sebagai produk sendiri dan tidak menimpa IngeTrazo),
-  penerbit `SipilStock`, URL situs, dukungan, dan pembaruan mengarah ke repo ini. ProgID dokumen menjadi
-  `SipilBIM.Document`.
-- **Format dokumen**: SipilBIM menyimpan dan membuka `.sbim` (sebelumnya `.igz`). Isinya sama dengan `.igz`
-  (JSON, atau ZIP bila ada tekstur): berkas `.sbim` yang diganti nama menjadi `.igz` terbuka di IngeTrazo, dan
-  sebaliknya. `.igz` tidak ada di dialog Buka/Simpan dan tidak lagi diasosiasikan oleh installer; Windows tidak lagi
-  mengaitkannya dengan SipilBIM, sehingga IngeTrazo yang terpasang berdampingan tetap memegang `.igz`. Berkas contoh
-  dan komponen pustaka bawaan diganti namanya ke `.sbim`.
-- **User-Agent** permintaan jaringan (tile peta, geokode, pustaka): `SipilBIM/<versi> (...; based on IngeTrazo)`,
-  supaya lalu lintas build ini tidak tercatat atas nama upstream.
-- **Tema default**: terang (upstream membuka gelap). Tema gelap dan "Same as the system" tetap bisa dipilih di Window ▸ Preferences ▸ Theme;
-  pilihan yang sudah tersimpan tidak berubah.
-- **Dialog About**: dibuat singkat seperti app SipilStock lain: ikon, nama dan versi, satu kalimat tentang app, dan tautan
-  License (`LICENSE.txt` di situs, salinan `LICENSE`) dan Source (repo ini); kredit untuk IngeTrazo ada di `README.md`, berkas ini, dan header berkas sumber. Daftar kontributor yang bergulir dan baris OpenGL dihapus dari dialog
-  (daftarnya tetap ada di kode dan di `AUTHORS`; hak cipta dan lisensi tidak berubah).
-- **Ikon**: set ikon SipilBIM (app, `.ico`, `.icns`, PNG) dan ikon dokumen `.sbim/.dae/.skp` dengan logo SipilBIM
-  di sudutnya; batang judul ikon dokumen `.sbim` bertuliskan "SBIM".
-- **Versi**: `0.5.8` menjadi `2027.3` (SipilBIM memakai skema versinya sendiri).
-- **Workflow**: hanya `build-windows.yml` yang dipertahankan; `ci.yml`, `release*.yml` dihapus (Linux/macOS tidak
-  dibangun di sini). Langkah tanda tangan SignPath di dalamnya **nonaktif** (organisasi SignPath milik upstream).
-  Hanya installer yang dibangun dan dilampirkan ke Release: langkah `Incluir LEEME en el bundle` dan `Crear ZIP portable` dibuang
-  (tidak ada ZIP portabel; `LEEME.txt` upstream berisi petunjuk mode portable).
-  `actions/upload-artifact` dinaikkan dari v4 ke v7 dan `softprops/action-gh-release` dari v2 ke v3 (keduanya berpindah dari Node 20 ke
-  Node 24; GitHub memaksa Node 24 dan menampilkan peringatan deprecation untuk versi lama).
-- **Ditambahkan**: `README.md` (README upstream dipindah ke `README.upstream.md`), berkas ini, dan `site/`
-  (halaman unduhan untuk https://sipilstock.com/sipilbim/, beserta `site/LICENSE.txt`: salinan `LICENSE` yang tidak diubah).
+- **Branding**: "IngeTrazo" is replaced with "SipilBIM" in the UI, dialogs, messages, and translations (`i18n/*.json`).
+- **Windows identity**: `sipilbim.exe`, `sipilbim-mcp.exe`, `sipilbim.spec`, `installer/sipilbim.iss`,
+  `sipilbim-setup-v<version>.exe`, log names, single-instance socket, MCP server name, and the data folder
+  (`%LOCALAPPDATA%\SipilBIM`).
+- **Installer**: new `AppId`, so SipilBIM installs alongside IngeTrazo rather than replacing it. Publisher is
+  `SipilStock`; website, support, and update links point to this repository. Document ProgID is `SipilBIM.Document`.
+- **Document format**: SipilBIM saves and opens `.sbim` (previously `.igz`). The contents are identical, so a
+  renamed file opens in either app. The installer does not associate `.igz`, leaving it to IngeTrazo if installed.
+- **User-Agent**: network requests (map tiles, geocoding, library) identify as `SipilBIM/<version> (based on IngeTrazo)`.
+- **Default theme**: light. Dark and system themes remain available; saved preferences are unaffected.
+- **About dialog**: shortened to icon, name, version, one-line description, and License and Source links.
+  IngeTrazo credit is kept in `README.md`, this file, and source headers; contributors remain in `AUTHORS`.
+- **Icons**: SipilBIM app and `.sbim`/`.dae`/`.skp` document icons.
+- **Version**: `0.5.8` to `2027.3`.
+- **CI**: only `build-windows.yml` is kept; it builds the installer and attaches it to the Release. SignPath
+  signing is disabled (the SignPath organization belongs to upstream), and the portable ZIP step is removed.
+  `actions/upload-artifact` is updated to v7 and `softprops/action-gh-release` to v3 (Node 24).
+- **Added**: `README.md` (upstream README moved to `README.upstream.md`), this file, and `site/`
+  (download page for <https://sipilstock.com/sipilbim/>, with an unmodified copy of `LICENSE`).
 
-## Yang sengaja tidak diubah
+## Unchanged
 
-- Isi format dokumen: kunci `igz_format` di dalam berkas dan nama modul `formats.igz` tetap (hanya ekstensinya yang
-  berubah). Tag `generator` pada GLB/glTF juga tetap, supaya pembaca mengenalinya.
-- Variabel lingkungan `INGETRAZO_*`, nama logger `ingetrazo.plugins` dan `ingetrazo.extensions`, tipe MIME
-  `application/x-ingetrazo-*`, dan folder plugin pengguna `%APPDATA%\ingetrazo\plugins` (plugin untuk IngeTrazo tetap
-  berlaku; dokumentasi API plugin upstream tetap akurat).
-- Layanan yang dijalankan upstream dan dipakai app apa adanya: katalog Ekstensi
-  (`raw.githubusercontent.com/ingelibre/ingetrazo-extensions`) dan pustaka komponen daring (`ingetrazo.com/biblioteca`).
-- `docs/`, `packaging/` (Flatpak, AppImage, macOS, snap), `resources/mime/`, dan semua berkas `*.md` upstream.
-  Berkas Linux/macOS tersebut tidak dibangun di repo ini dan masih memakai nama IngeTrazo.
+- Internal format identifiers: the `igz_format` key, the `formats.igz` module, and the GLB/glTF `generator` tag.
+- Plugin and environment compatibility: `INGETRAZO_*` variables, `ingetrazo.*` logger names,
+  `application/x-ingetrazo-*` MIME types, and the `%APPDATA%\ingetrazo\plugins` folder, so IngeTrazo plugins keep working.
+- Upstream-hosted services used as-is: the extensions catalog (`ingelibre/ingetrazo-extensions`) and the online
+  component library (`ingetrazo.com/biblioteca`).
+- `docs/`, `packaging/` (Flatpak, AppImage, macOS, snap), `resources/mime/`, and all upstream `*.md` files.
+  The Linux and macOS packaging is not built in this repository and still uses the IngeTrazo name.
