@@ -36,6 +36,9 @@ Additional changes applied by the build after those substitutions:
 - modified: `views/about_dialog.py`
 - modified: `views/theme.py`
 - added or replaced: `README.md`
+- added or replaced: `site/favicon.svg`
+- added or replaced: `site/icon.svg`
 - added or replaced: `site/index.html`
+- added or replaced: `site/screenshot.webp`
 - added: `site/LICENSE.txt` (LICENSE, text unchanged)
 - added: `README.upstream.md` (the upstream README, moved)
