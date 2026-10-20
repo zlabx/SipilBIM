@@ -32,4 +32,17 @@ Left as upstream: the `igz_format` key and `formats.igz` module (documents stay 
 `INGETRAZO_*` variables and `ingetrazo.*` logger names, the extensions catalogue and online component library
 hosted by upstream, and everything under `docs/`, `packaging/` and `vendor/`.
 
-Added: `MODIFICATIONS.md`, `README.md`, `site/LICENSE.txt`, `site/index.html`. The upstream `README.md` is moved to `README.upstream.md`.
+Additional changes applied by the build after those substitutions:
+
+- modified: `.github/workflows/build-windows.yml`
+- modified: `core/version.py`
+- modified: `georef/geocode.py`
+- modified: `georef/tile_fetcher.py`
+- modified: `installer/sipilbim.iss`
+- modified: `pytest.ini`
+- modified: `views/about_dialog.py`
+- modified: `views/theme.py`
+- added or replaced: `README.md`
+- added or replaced: `site/index.html`
+- added: `site/LICENSE.txt` (LICENSE, text unchanged)
+- added: `README.upstream.md` (the upstream README, moved)
