@@ -13,7 +13,6 @@
   --bg:#f3f7fa; --fg:#0f1c27; --muted:#55646f; --card:#ffffff; --line:#dbe4ec;
   --btn:#0a78b5; --btn-hover:#08638c; --btn-fg:#ffffff; --link:#0b6fa8;
   --glow:rgba(14,165,233,.16); --tile:#eaf4fa; --tile-fg:#0b6fa8;
-  --warn:#fff6e0; --warn-line:#ead79c;
   --shadow:0 1px 2px rgba(15,28,39,.06),0 18px 40px -18px rgba(15,28,39,.28);
 }
 @media (prefers-color-scheme:dark){
@@ -21,7 +20,6 @@
     --bg:#0d1419; --fg:#e8eef3; --muted:#9aabb8; --card:#151f27; --line:#25333e;
     --btn:#0a78b5; --btn-hover:#0e8bd0; --link:#5cc0f2;
     --glow:rgba(14,165,233,.14); --tile:#10202b; --tile-fg:#5cc0f2;
-    --warn:#2a2412; --warn-line:#5a4c1c;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px -18px rgba(0,0,0,.7);
   }
 }
@@ -35,20 +33,13 @@ body{
 a{color:var(--link)}
 a:focus-visible,.btn:focus-visible{outline:3px solid var(--btn); outline-offset:3px; border-radius:.35rem}
 code{font-size:.92em}
-.wrap{max-width:70rem; margin:0 auto; padding:0 1.25rem}
+.wrap{max-width:70rem; margin:0 auto; padding:0 1.25rem 4rem}
 
-.top{display:flex; align-items:center; justify-content:space-between; padding:1.25rem 0}
+.top{display:flex; align-items:center; padding:1.25rem 0}
 .brand{display:flex; align-items:center; gap:.65rem; font-weight:700; font-size:1.1rem; color:var(--fg); text-decoration:none}
 .brand img{width:32px; height:32px; display:block}
-.top a.back{font-size:.92rem; color:var(--muted); text-decoration:none}
-.top a.back:hover{color:var(--link); text-decoration:underline}
 
-.hero{text-align:center; padding:2.5rem 0 2.25rem; max-width:46rem; margin:0 auto}
-.badge{
-  display:inline-block; font-size:.8rem; font-weight:600; letter-spacing:.02em;
-  color:var(--tile-fg); background:var(--tile); border:1px solid var(--line);
-  padding:.25rem .8rem; border-radius:999px; margin-bottom:1rem;
-}
+.hero{text-align:center; padding:2.75rem 0 2.25rem; max-width:46rem; margin:0 auto}
 h1{font-size:clamp(2rem,4.6vw,3rem); line-height:1.12; letter-spacing:-.025em; margin:0 0 .9rem}
 .lead{font-size:1.15rem; color:var(--muted); margin:0}
 
@@ -63,10 +54,11 @@ h1{font-size:clamp(2rem,4.6vw,3rem); line-height:1.12; letter-spacing:-.025em; m
 }
 .shot figcaption{font-size:.88rem; color:var(--muted); padding:.8rem .35rem .2rem}
 
-.dl{padding:2rem 1.75rem; display:flex; flex-direction:column; justify-content:center; text-align:center}
-.dl-icon{width:84px; height:84px; margin:0 auto .9rem; display:block}
-.dl h2{font-size:1.6rem; line-height:1.2; margin:0; letter-spacing:-.015em}
-.ver{margin:.35rem 0 1.5rem; color:var(--muted); font-size:.95rem}
+.dl{padding:2rem 1.75rem; display:flex; flex-direction:column; justify-content:center}
+.dl-head{display:flex; align-items:center; justify-content:center; gap:1rem; margin-bottom:1.6rem}
+.dl-icon{width:68px; height:68px; display:block; flex:none}
+.dl-title h2{font-size:1.5rem; line-height:1.2; margin:0; letter-spacing:-.015em}
+.ver{margin:.1rem 0 0; color:var(--muted); font-size:.95rem}
 .btn{
   display:flex; align-items:center; justify-content:center; gap:.6rem; width:100%;
   padding:1rem 1.25rem; border-radius:.8rem; font-size:1.05rem; font-weight:700;
@@ -77,16 +69,9 @@ h1{font-size:clamp(2rem,4.6vw,3rem); line-height:1.12; letter-spacing:-.025em; m
 .btn:hover{background:var(--btn-hover)}
 .btn:active{transform:translateY(1px)}
 .btn svg{width:1.25rem; height:1.25rem; flex:none}
-.os{margin:.8rem 0 0; font-size:.875rem; color:var(--muted)}
-.dl-links{
-  margin:1.6rem 0 0; padding-top:1.2rem; border-top:1px solid var(--line);
-  display:flex; justify-content:center; flex-wrap:wrap; gap:.4rem 1.2rem; font-size:.9rem;
-}
-
-.note{
-  background:var(--warn); border:1px solid var(--warn-line); border-radius:.8rem;
-  padding:.85rem 1.1rem; margin:1.5rem 0 0; font-size:.95rem;
-}
+.os{margin:.8rem 0 0; font-size:.875rem; color:var(--muted); text-align:center}
+.warn{margin:1.4rem 0 0; font-size:.76rem; line-height:1.55; color:var(--muted); text-align:center}
+.warn a{color:inherit}
 
 section{margin-top:3.25rem}
 h2.sec{font-size:1.4rem; letter-spacing:-.01em; margin:0 0 1.1rem}
@@ -100,21 +85,11 @@ h2.sec{font-size:1.4rem; letter-spacing:-.01em; margin:0 0 1.1rem}
 .feat h3{font-size:1.02rem; margin:0 0 .3rem}
 .feat p{margin:0; font-size:.93rem; color:var(--muted)}
 
-.about{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.6fr); gap:1.5rem}
-.about .card{padding:1.4rem 1.5rem}
-.about h2.sec{font-size:1.15rem; margin-bottom:.8rem}
-.about p{margin:0}
-dl{display:grid; grid-template-columns:max-content 1fr; gap:.4rem 1.25rem; margin:0}
-dt{color:var(--muted)}
-dd{margin:0; word-break:break-word}
-
-footer{margin:3.5rem 0 0; padding:1.25rem 0 2.5rem; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem}
-
 @media (max-width:60rem){
   .features{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:54rem){
-  .cards,.about{grid-template-columns:minmax(0,1fr)}
+  .cards{grid-template-columns:minmax(0,1fr)}
   .dl{order:-1; padding:1.75rem 1.25rem}
   .hero{padding-top:1.25rem}
 }
@@ -130,12 +105,10 @@ footer{margin:3.5rem 0 0; padding:1.25rem 0 2.5rem; border-top:1px solid var(--l
 <div class="wrap">
   <header class="top">
     <a class="brand" href="./"><img src="favicon.svg" alt="" width="32" height="32">SipilBIM</a>
-    <a class="back" href="https://sipilstock.com/">sipilstock.com</a>
   </header>
 
   <main>
     <div class="hero">
-      <span class="badge">Gratis &middot; Open source (GPL-3.0)</span>
       <h1>Pemodel 3D dan BIM untuk arsitektur dan teknik sipil</h1>
       <p class="lead">Gambar dan tarik bentuk seperti menggambar tangan, lalu beri label BIM dan keluarkan kuantitas IFC.</p>
     </div>
@@ -147,26 +120,25 @@ footer{margin:3.5rem 0 0; padding:1.25rem 0 2.5rem; border-top:1px solid var(--l
       </figure>
 
       <div class="card dl">
-        <img class="dl-icon" src="icon.svg" alt="" width="84" height="84">
-        <h2>SipilBIM</h2>
-        <p class="ver">Versi 2027.4</p>
+        <div class="dl-head">
+          <img class="dl-icon" src="icon.svg" alt="" width="68" height="68">
+          <div class="dl-title">
+            <h2>SipilBIM</h2>
+            <p class="ver">Versi 2027.4</p>
+          </div>
+        </div>
         <a class="btn" href="https://github.com/zlabx/SipilBIM/releases/latest">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg>
           Unduh SipilBIM
         </a>
         <p class="os">For Windows 11/10 64-bit</p>
-        <p class="dl-links">
-          <a href="https://github.com/zlabx/SipilBIM/releases">Semua versi</a>
-          <a href="https://github.com/zlabx/SipilBIM">Source code</a>
+        <p class="warn">
+          <strong>Build ini belum ditandatangani.</strong> Windows SmartScreen bisa menampilkan
+          peringatan saat pertama kali dijalankan: pilih <em>More info</em>, lalu <em>Run anyway</em>.
+          Jika muncul galat <code>Failed to load python312.dll</code>, pasang
+          <a href="https://aka.ms/vs/17/release/vc_redist.x64.exe">Visual C++ Redistributable</a> dari Microsoft.
         </p>
       </div>
-    </div>
-
-    <div class="note">
-      <strong>Build ini belum ditandatangani.</strong> Windows SmartScreen bisa menampilkan
-      peringatan saat pertama kali dijalankan: pilih <em>More info</em>, lalu <em>Run anyway</em>.
-      Jika muncul galat <code>Failed to load python312.dll</code>, pasang
-      <a href="https://aka.ms/vs/17/release/vc_redist.x64.exe">Visual C++ Redistributable</a> dari Microsoft.
     </div>
 
     <section>
@@ -194,32 +166,7 @@ footer{margin:3.5rem 0 0; padding:1.25rem 0 2.5rem; border-top:1px solid var(--l
         </div>
       </div>
     </section>
-
-    <section class="about">
-      <div class="card">
-        <h2 class="sec">Tentang versi ini</h2>
-        <dl>
-          <dt>Versi</dt><dd>2027.4</dd>
-          <dt>Platform</dt><dd>Windows (installer)</dd>
-          <dt>Dasar</dt><dd>IngeTrazo 0.5.9</dd>
-          <dt>Lisensi</dt><dd>GPL-3.0-or-later</dd>
-        </dl>
-      </div>
-      <div class="card">
-        <h2 class="sec">Sumber dan atribusi</h2>
-        <p>SipilBIM adalah build dari <strong>IngeTrazo</strong> karya Marco Sumari Tellez dan kontributor
-          (<a href="https://github.com/ingelibre/ingetrazo">ingelibre/ingetrazo</a>, versi <code>0.5.9</code>,
-          commit <code>24e7ada</code>), dengan nama dan ikon SipilStock. Source lengkap build ini ada di
-          <a href="https://github.com/zlabx/SipilBIM">github.com/zlabx/SipilBIM</a>; daftar perbedaan dengan upstream ada di
-          <a href="https://github.com/zlabx/SipilBIM/blob/main/MODIFICATIONS.md"><code>MODIFICATIONS.md</code></a>.
-          Teks lisensi: <a href="LICENSE.txt">LICENSE</a>.</p>
-      </div>
-    </section>
   </main>
-
-  <footer>
-    Bagian dari <a href="https://sipilstock.com/">SipilStock</a>.
-  </footer>
 </div>
 </body>
 </html>
