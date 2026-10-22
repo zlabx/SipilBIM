@@ -322,6 +322,14 @@ Wilson's Windowizer 3 by Bane Andreev, an architect, written with AI help.
   layers / BIM statistics). A read-only, dialog-based plugin.
 - `plugins/python_console.py` — the Python Console. A stateful,
   command-layer-integrated plugin.
+- `plugins/kolom_beton.py` — Kolom beton (SipilBIM): a parametric concrete
+  column (rectangular or round) placed with one click from a toolbar button
+  and edited from the right-click «Properti kolom…» dialog. The worked
+  example of a persistent click tool built in `setup(app)` (its constructor
+  takes an argument, so the loader does not list it), of parameters kept in
+  `group.ext` with a rebuild command (`ColumnCommand`), and of
+  `add_context_menu`. Tagged `IfcColumn`, so it feeds the IFC export and the
+  takeoff.
 - `plugins/solid_inspector.py` — Solid Inspector: per-edge watertightness
   diagnosis with viewport highlighting, step-by-step navigation and a
   one-undo-step repair (`RepairSolidsCommand`, snapshot undo over several

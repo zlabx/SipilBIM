@@ -122,8 +122,12 @@ def face_set_volume(faces):
 
 def collect_objects(scene) -> list[dict]:
     """Every tagged BIM object in the document, with live quantities:
-    ``{"key", "class", "name", "area", "volume" (or None), "faces" | "group"}``.
-    Loose-face objects group by tag id; each tagged group is one object."""
+    ``{"key", "class", "name", "area", "volume" (or None), "faces"}`` plus
+    ``"group"`` for a tagged group. Loose-face objects group by tag id; each
+    tagged group is one object, and its ``"faces"`` are the WORLD-space ones
+    the quantities were measured on — a container or component instance has
+    an empty ``group.mesh``, so the IFC export, the CSV and the BIM tray
+    read these instead of the group's own mesh."""
     out: list[dict] = []
     by_id: dict = {}
     for f in scene.loose_mesh.faces:
@@ -158,6 +162,7 @@ def collect_objects(scene) -> list[dict]:
             "name": tag.get("name", ""),
             "area": face_set_area(faces),
             "volume": face_set_volume(faces),
+            "faces": faces,
             "group": g,
         })
     return out

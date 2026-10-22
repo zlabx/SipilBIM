@@ -42,3 +42,11 @@ Additional changes applied by the build after those substitutions:
 - added or replaced: `site/screenshot.webp`
 - added: `site/LICENSE.txt` (LICENSE, text unchanged)
 - added: `README.upstream.md` (the upstream README, moved)
+
+Changes made in this repository after the rebrand:
+
+- added: `plugins/kolom_beton.py` and `tests/test_plugin_kolom_beton.py` (parametric concrete column: toolbar
+  button, click-to-place tool, right-click «Properti kolom…» dialog; tagged `IfcColumn`); `docs/plugins.md` lists it.
+- modified: `core/bim.py` — `collect_objects` now also returns `"faces"` (world space) for tagged groups, so the
+  IFC export, the takeoff CSV and the BIM tray measure containers and component instances (their own `group.mesh`
+  is empty) instead of skipping them.
