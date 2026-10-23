@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 SipilStock.
-"""Plugin Kolom beton (plugins/kolom_beton.py): geometri, takeoff, IFC, undo,
-dan pemasangannya di jendela utama (alat klik, menu klik kanan, dialog)."""
+"""Paket Structure: kolom (geometri, takeoff, IFC, undo), tab Structure di
+sidebar, tombol kosong, dan pemuatnya di jendela utama."""
 from __future__ import annotations
 
 import importlib.util
@@ -9,6 +9,7 @@ import math
 import os
 import shutil
 import sys
+import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -25,10 +26,18 @@ from core.scene import Scene  # noqa: E402
 
 _app = QApplication.instance() or QApplication([])
 
-PLUGIN = Path(__file__).resolve().parents[1] / "plugins" / "kolom_beton.py"
-_spec = importlib.util.spec_from_file_location("kolom_beton_under_test", PLUGIN)
-kb = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(kb)
+REPO = Path(__file__).resolve().parents[1]
+# Salinan paket di folder sendiri: pemuat hanya memuat «structure», bukan
+# semua plugin bawaan (AI, Blender…).
+PKG_DIR = Path(tempfile.mkdtemp(prefix="ingetrazo-test-structure-"))
+shutil.copytree(REPO / "plugins" / "structure", PKG_DIR / "structure",
+                ignore=shutil.ignore_patterns("__pycache__"))
+
+# Dimuat lewat pemuat plugin SipilBIM yang sama dengan aplikasi (paket
+# dengan __init__.py), supaya impor relatif dan nama modul sama persis.
+_plugins, _errors = extensions.discover_plugins([PKG_DIR])
+assert not _errors, _errors
+kb = importlib.import_module("ingetrazo_plugin_structure.column")
 
 
 @pytest.fixture(autouse=True)
@@ -286,9 +295,12 @@ def test_the_browser_describes_the_section(vp):
 
 def test_placing_is_refused_while_a_group_is_open(vp, monkeypatch):
     vp.scene.edit_group = object()
-    monkeypatch.setattr(kb, "_warn", lambda *_a, **_k: None)
+    seen = []
+    common = importlib.import_module("ingetrazo_plugin_structure.common")
+    monkeypatch.setattr(common, "warn", lambda _vp, text: seen.append(text))
     assert not kb.place_column(vp, V(0, 0, 0), {"params": dict(kb.DEFAULTS)})
     assert vp.scene.groups == []
+    assert seen and "group" in seen[0]
 
 
 # ---- alat ---------------------------------------------------------------
@@ -313,12 +325,11 @@ def test_the_tool_is_not_listed_by_the_loader():
     assert not extensions._builds_bare(kb.ColumnPlaceTool)
 
 
-# ---- jendela utama: menu, klik kanan, dialog ---------------------------
+# ---- jendela utama: tab Structure, palet, properti ----------------------
 
 @pytest.fixture
-def win(tmp_path, monkeypatch):
-    shutil.copy(PLUGIN, tmp_path / "kolom_beton.py")
-    monkeypatch.setattr(extensions, "plugin_dirs", lambda: [tmp_path])
+def win(monkeypatch):
+    monkeypatch.setattr(extensions, "plugin_dirs", lambda: [PKG_DIR])
     from views.main_window import MainWindow
     w = MainWindow()
     yield w
@@ -326,58 +337,15 @@ def win(tmp_path, monkeypatch):
     w.close()
 
 
-def _mod():
-    return next(m for n, m in sys.modules.items()
-                if n.endswith("kolom_beton") and hasattr(m, "ColumnPanel")
-                and m is not kb)
-
-
-def _bar(win):
-    from PySide6.QtWidgets import QToolBar
-    return win.findChild(QToolBar, "extension_kolom_beton_toolbar")
-
-
-def _columns(mod, vp):
-    """Jendela baru sudah berisi figur bawaan: hanya hitung kolom."""
-    return [g for g in vp.scene.groups if mod.column_data(g) is not None]
-
-
-def test_setup_adds_the_menu_the_toolbar_button_and_the_context_hook(win):
-    titles = [a.text() for a in win._ext_menu.actions()]
-    assert any("Kolom beton" in t for t in titles)
-    bar = _bar(win)
-    assert bar is not None
-    assert [a.text() for a in bar.actions()] == ["Kolom"]
-
-
-def test_the_toolbar_button_arms_the_tool_and_clicks_make_columns(win):
-    mod, vp = _mod(), win.viewport
-    _bar(win).actions()[0].trigger()
-    assert isinstance(vp.active_tool, mod.ColumnPlaceTool)
-    vp.active_tool.on_click(SimpleNamespace(viewport=vp, world=V(3, 3, 0)))
-    vp.active_tool.on_click(SimpleNamespace(viewport=vp, world=V(6, 3, 0)))
-    assert [g.name for g in _columns(mod, vp)] == ["K1", "K2"]
-
-
-def test_right_click_offers_properties_only_on_a_column(win, monkeypatch):
-    mod, vp = _mod(), win.viewport
-    labels = lambda: [a.text() for m in [QMenu()] for fn in win._ext_context_menus
-                      if not fn(m, list(vp.scene.selection))
-                      for a in m.actions() if a.text()]  # noqa: E731
-    vp.scene.selection.clear()
-    assert labels() == []                            # nada selecionado
-    vp.scene.selection.update(vp.scene.groups)       # figur bawaan, bukan kolom
-    assert labels() == []
-    mod.place_column(vp, V(0, 0, 0), {"params": dict(mod.DEFAULTS)})
-    assert "Properti kolom…" in labels()
-    mod.place_column(vp, V(5, 0, 0), {"params": dict(mod.DEFAULTS)})
-    vp.scene.selection.update(vp.scene.groups)
-    assert "Properti 2 kolom…" in labels()
-
-
 def _panel(win):
-    dock = win.extension_panels()["extension_steel"]
-    return dock, dock.widget().findChild(_mod().ColumnPanel)
+    from_mod = importlib.import_module("ingetrazo_plugin_structure.panel")
+    dock = win.extension_panels()["extension_structure"]
+    return dock, dock.widget().findChild(from_mod.StructurePanel)
+
+
+def _columns(vp):
+    """Jendela baru sudah berisi figur bawaan: hanya hitung kolom."""
+    return [g for g in vp.scene.groups if kb.column_data(g) is not None]
 
 
 def _select(vp, *groups):
@@ -385,106 +353,192 @@ def _select(vp, *groups):
     vp.scene.selection.update(groups)
 
 
-def test_the_steel_tab_has_the_palette_on_top_and_the_properties_at_the_bottom(win):
+def test_the_loader_finds_the_package_and_it_has_a_setup():
+    plugins, errors = extensions.discover_plugins([PKG_DIR])
+    assert not errors
+    assert [p.stem for p in plugins] == ["structure"]
+    assert callable(plugins[0].setup)
+
+
+def test_the_structure_tab_exists_in_the_side_tray(win):
     dock, panel = _panel(win)
-    assert dock.windowTitle() == "Steel"
-    assert dock.objectName() == "extension_steel"
+    assert dock.windowTitle() == "Structure"
+    assert dock.objectName() == "extension_structure"
+    assert panel is not None
+
+
+def test_the_palette_has_the_elements_and_the_connections(win):
+    _, panel = _panel(win)
+    for key in ("column", "beam", "slab", "wall", "footing"):
+        assert key in panel.buttons
+    from importlib import import_module
+    conns = import_module("ingetrazo_plugin_structure.connections")
+    for key, label, _kind in conns.CONNECTIONS:
+        assert panel.buttons[key].text() == label
+    assert len(conns.CONNECTIONS) >= 8
+
+
+def test_only_the_column_works_the_rest_are_empty_buttons(win):
+    _, panel = _panel(win)
+    working = [e.key for e in panel.elements + panel.connections
+               if e.implemented]
+    assert working == ["column"]
+    assert panel.buttons["column"].isCheckable()
+    assert not any(panel.buttons[k].isCheckable()
+                   for k in panel.buttons if k != "column")
+
+
+def test_an_empty_button_only_says_it_is_not_available(win, monkeypatch):
+    vp = win.viewport
+    _, panel = _panel(win)
+    said = []
+    monkeypatch.setattr(type(vp), "flash_status",
+                        lambda self, text, ms=0: said.append(text))
+    tool_before = vp.active_tool
+    n_groups = len(vp.scene.groups)
+    version = vp.scene.version
+    for key in ("beam", "slab", "wall", "footing", "base_plate", "bolted",
+                "welded", "bracing"):
+        panel.buttons[key].click()
+    assert len(said) == 8 and all("belum tersedia" in s for s in said)
+    assert vp.active_tool is tool_before
+    assert len(vp.scene.groups) == n_groups and vp.scene.version == version
+
+
+def test_the_properties_are_at_the_bottom_of_the_tab(win):
+    _, panel = _panel(win)
     lay = panel.layout()
-    widgets = [lay.itemAt(i).widget() for i in range(lay.count())
-               if lay.itemAt(i).widget() is not None]
-    assert widgets.index(panel.btn_column) < widgets.index(panel.title)
-    assert lay.itemAt(lay.count() - 1).layout() is panel._form   # dasar tab
+    form = panel.forms["column"]
+    last_palette = lay.indexOf(panel.note)
+    assert lay.indexOf(form) > last_palette
+    assert lay.indexOf(panel.hint) > last_palette
+    assert lay.indexOf(form) == lay.count() - 1          # dasar tab
+
+
+def test_with_nothing_selected_and_no_tool_only_the_hint_shows(win):
+    vp = win.viewport
+    _, panel = _panel(win)
+    _select(vp)
+    vp.set_active_tool(None)
+    panel.sync(force=True)
+    assert panel.hint.isVisibleTo(panel)
+    assert not panel.forms["column"].isVisibleTo(panel)
+
+
+def test_the_column_button_arms_and_disarms_the_tool(win):
+    vp = win.viewport
+    _, panel = _panel(win)
+    tool = panel.elements[0].tool()
+    panel.buttons["column"].click()
+    assert vp.active_tool is tool
+    assert panel.forms["column"].isVisibleTo(panel)
+    assert panel.forms["column"].title.text() == "Properti kolom baru"
+    panel.buttons["column"].click()
+    assert vp.active_tool is not tool
 
 
 def test_selecting_a_column_fills_the_form_and_editing_is_one_undo_step(win):
-    mod, vp = _mod(), win.viewport
-    mod.place_column(vp, V(2, 3, 0), {"params": dict(mod.DEFAULTS)})
-    g = _columns(mod, vp)[0]
+    vp = win.viewport
+    kb.place_column(vp, V(2, 3, 0), {"params": dict(kb.DEFAULTS)})
+    g = _columns(vp)[0]
     _, panel = _panel(win)
+    form = panel.forms["column"]
     _select(vp, g)
     panel.sync()
-    assert panel.title.text() == "Properti — K1"
-    assert (panel.height.value(), panel.width.value()) == (3000, 300)
-    assert panel.mark.isEnabled() and panel.mark.text() == "K1"
-    panel.height.setValue(4500)                      # pengguna mengetik 4500
-    assert mod.column_data(g)["params"]["height"] == pytest.approx(4.5)
-    assert panel.height.value() == 4500              # form menampilkan yang berlaku
+    assert form.isVisibleTo(panel) and not panel.hint.isVisibleTo(panel)
+    assert form.title.text() == "Properti — K1"
+    assert (form.height.value(), form.width.value()) == (3000, 300)
+    assert form.mark.isEnabled() and form.mark.text() == "K1"
+    form.height.setValue(4500)
+    assert kb.column_data(g)["params"]["height"] == pytest.approx(4.5)
+    assert form.height.value() == 4500
     vp.history.undo()
-    assert mod.column_data(g)["params"]["height"] == pytest.approx(3.0)
+    assert kb.column_data(g)["params"]["height"] == pytest.approx(3.0)
 
 
-def test_changing_the_shape_in_the_panel_rebuilds_and_swaps_the_rows(win):
-    mod, vp = _mod(), win.viewport
-    mod.place_column(vp, V(0, 0, 0), {"params": dict(mod.DEFAULTS)})
-    g = _columns(mod, vp)[0]
+def test_changing_the_shape_rebuilds_and_swaps_the_rows(win):
+    vp = win.viewport
+    kb.place_column(vp, V(0, 0, 0), {"params": dict(kb.DEFAULTS)})
+    g = _columns(vp)[0]
     _, panel = _panel(win)
+    form = panel.forms["column"]
     _select(vp, g)
     panel.sync()
-    assert panel.width.isVisibleTo(panel) and not panel.diameter.isVisibleTo(panel)
-    panel.shape.setCurrentIndex(1)
-    assert mod.column_data(g)["params"]["shape"] == "round"
-    assert panel.diameter.isVisibleTo(panel) and not panel.width.isVisibleTo(panel)
-    assert not panel.rotation.isVisibleTo(panel)
+    assert form.width.isVisibleTo(panel) and not form.diameter.isVisibleTo(panel)
+    form.shape.setCurrentIndex(1)
+    assert kb.column_data(g)["params"]["shape"] == "round"
+    assert form.diameter.isVisibleTo(panel) and not form.width.isVisibleTo(panel)
+    assert not form.rotation.isVisibleTo(panel)
 
 
 def test_with_several_columns_only_the_edited_field_is_applied_to_all(win):
-    mod, vp = _mod(), win.viewport
-    state = {"params": dict(mod.DEFAULTS)}
-    mod.place_column(vp, V(0, 0, 0), state)
-    mod.place_column(vp, V(5, 0, 0), dict(state, params=dict(
-        mod.DEFAULTS, shape="round", diameter=0.5)))
-    a, b = _columns(mod, vp)
+    vp = win.viewport
+    state = {"params": dict(kb.DEFAULTS)}
+    kb.place_column(vp, V(0, 0, 0), state)
+    kb.place_column(vp, V(5, 0, 0), {"params": dict(
+        kb.DEFAULTS, shape="round", diameter=0.5)})
+    a, b = _columns(vp)
     _, panel = _panel(win)
+    form = panel.forms["column"]
     _select(vp, a, b)
     panel.sync()
-    assert panel.title.text() == "Properti — 2 kolom"
-    assert not panel.mark.isEnabled()
-    panel.height.setValue(5000)
-    pa, pb = (mod.column_data(g)["params"] for g in (a, b))
+    assert form.title.text() == "Properti — 2 kolom"
+    assert not form.mark.isEnabled()
+    form.height.setValue(5000)
+    pa, pb = (kb.column_data(g)["params"] for g in (a, b))
     assert pa["height"] == pytest.approx(5.0) == pytest.approx(pb["height"])
-    assert (pa["shape"], pb["shape"]) == ("rect", "round")     # tidak ikut berubah
+    assert (pa["shape"], pb["shape"]) == ("rect", "round")
     assert pb["diameter"] == pytest.approx(0.5)
 
 
-def test_with_nothing_selected_the_panel_sets_the_next_column(win):
-    mod, vp = _mod(), win.viewport
+def test_with_the_tool_armed_and_nothing_selected_the_form_sets_the_next_column(win):
+    vp = win.viewport
     _, panel = _panel(win)
+    form = panel.forms["column"]
     _select(vp)
-    panel.sync(force=True)
-    assert panel.title.text() == "Properti kolom baru"
-    assert not panel.mark.isEnabled()
-    panel.shape.setCurrentIndex(1)
-    panel.diameter.setValue(500)
-    panel.height.setValue(4000)
-    panel._tool.on_click(SimpleNamespace(viewport=vp, world=V(1, 1, 0)))
-    p = mod.column_data(_columns(mod, vp)[-1])["params"]
+    panel.buttons["column"].click()
+    assert form.title.text() == "Properti kolom baru"
+    form.shape.setCurrentIndex(1)
+    form.diameter.setValue(500)
+    form.height.setValue(4000)
+    panel.elements[0].tool().on_click(
+        SimpleNamespace(viewport=vp, world=V(1, 1, 0)))
+    p = kb.column_data(_columns(vp)[-1])["params"]
     assert (p["shape"], p["diameter"], p["height"]) == ("round", 0.5, 4.0)
 
 
 def test_renaming_from_the_panel_updates_the_column_and_its_ifc_name(win):
-    mod, vp = _mod(), win.viewport
-    mod.place_column(vp, V(0, 0, 0), {"params": dict(mod.DEFAULTS)})
-    g = _columns(mod, vp)[0]
+    vp = win.viewport
+    kb.place_column(vp, V(0, 0, 0), {"params": dict(kb.DEFAULTS)})
+    g = _columns(vp)[0]
     _, panel = _panel(win)
+    form = panel.forms["column"]
     _select(vp, g)
     panel.sync()
-    panel.mark.setText("KB-9")
-    panel.mark.editingFinished.emit()
+    form.mark.setText("KB-9")
+    form.mark.editingFinished.emit()
     assert g.name == "KB-9" and g.ifc["name"] == "KB-9"
 
 
-def test_the_palette_button_arms_and_disarms_the_tool(win):
+def test_right_click_offers_properties_only_on_a_column(win):
     vp = win.viewport
-    _, panel = _panel(win)
-    panel.btn_column.click()
-    assert vp.active_tool is panel._tool
-    panel.btn_column.click()
-    assert vp.active_tool is not panel._tool
+    labels = lambda: [a.text() for m in [QMenu()] for fn in win._ext_context_menus  # noqa: E731
+                      if not fn(m, list(vp.scene.selection))
+                      for a in m.actions() if a.text()]
+    _select(vp)
+    assert labels() == []
+    _select(vp, *vp.scene.groups)                    # figur bawaan, bukan kolom
+    assert labels() == []
+    kb.place_column(vp, V(0, 0, 0), {"params": dict(kb.DEFAULTS)})
+    assert "Properti kolom…" in labels()
+    kb.place_column(vp, V(5, 0, 0), {"params": dict(kb.DEFAULTS)})
+    _select(vp, *_columns(vp))
+    assert "Properti 2 kolom…" in labels()
 
 
-def test_right_click_properties_brings_the_steel_tab_to_the_front(win, monkeypatch):
-    mod, vp = _mod(), win.viewport
-    mod.place_column(vp, V(0, 0, 0), {"params": dict(mod.DEFAULTS)})
+def test_right_click_properties_brings_the_structure_tab_to_the_front(win, monkeypatch):
+    vp = win.viewport
+    kb.place_column(vp, V(0, 0, 0), {"params": dict(kb.DEFAULTS)})
     dock, _ = _panel(win)
     shown = []
     monkeypatch.setattr(win, "set_tray_shown",
@@ -492,24 +546,50 @@ def test_right_click_properties_brings_the_steel_tab_to_the_front(win, monkeypat
     menu = QMenu()
     for fn in win._ext_context_menus:
         fn(menu, list(vp.scene.selection))
-    entry = next(a for a in menu.actions() if a.text() == "Properti kolom…")
-    entry.trigger()
+    next(a for a in menu.actions() if a.text() == "Properti kolom…").trigger()
     _app.processEvents()
     assert (dock, True) in shown
 
 
-# ---- modify_columns (tanpa GUI) ---------------------------------------
+def test_a_column_from_the_old_plugin_is_still_read_and_edited(win):
+    """Kunci group.ext tetap «kolom_beton»: dokumen lama terbaca."""
+    from core.group import Group
+    from PySide6.QtGui import QMatrix4x4
+    vp = win.viewport
+    kb.place_column(vp, V(0, 0, 0), {"params": dict(kb.DEFAULTS)})
+    g = _columns(vp)[0]
+    assert list(g.ext) == ["kolom_beton"]
+    assert kb.outliner_kind(g)["type"] == "Kolom"
+    _select(vp, g)
+    _, panel = _panel(win)
+    panel.sync()
+    assert panel.forms["column"].isVisibleTo(panel)
 
-def test_a_change_that_changes_nothing_is_not_an_undo_step(vp):
-    g, _ = _column(vp)
-    assert kb.modify_columns(vp, [g], {"height": 3.0}) is False
-    vp.history.undo()                                 # membatalkan penempatan
-    assert vp.scene.groups == []
+
+def test_the_old_plugin_being_loaded_triggers_a_warning(monkeypatch):
+    monkeypatch.setitem(sys.modules, "ingetrazo_plugin_kolom_beton", object())
+    monkeypatch.setattr(extensions, "plugin_dirs", lambda: [PKG_DIR])
+    import views.viewport as vpmod
+    said = []
+    monkeypatch.setattr(vpmod.Viewport, "flash_status",
+                        lambda self, text, ms=0: said.append(text))
+    from views.main_window import MainWindow
+    w = MainWindow()
+    try:
+        assert any("kolom_beton.py" in s for s in said)
+    finally:
+        w._saved_version = w.viewport.scene.version
+        w.close()
 
 
-def test_an_invalid_value_is_refused_and_the_column_is_untouched(vp, monkeypatch):
-    g, _ = _column(vp)
-    seen = []
-    monkeypatch.setattr(kb, "_warn", lambda _vp, text: seen.append(text))
-    assert kb.modify_columns(vp, [g], {"width": -1}) is False
-    assert seen and kb.column_data(g)["params"]["width"] == 0.30
+# ---- pengemasan ---------------------------------------------------------
+
+def test_the_build_spec_ships_the_package_folder_and_scans_its_imports():
+    spec = (REPO / "sipilbim.spec").read_text(encoding="utf-8")
+    assert "('plugins/structure'" in spec
+    assert "Path('plugins').rglob('*.py')" in spec
+
+
+def test_the_old_column_plugin_is_gone_so_there_is_one_column_tool():
+    assert not (REPO / "plugins" / "kolom_beton.py").exists()
+    assert (REPO / "plugins" / "structure" / "__init__.py").is_file()

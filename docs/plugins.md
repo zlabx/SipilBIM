@@ -322,17 +322,21 @@ Wilson's Windowizer 3 by Bane Andreev, an architect, written with AI help.
   layers / BIM statistics). A read-only, dialog-based plugin.
 - `plugins/python_console.py` — the Python Console. A stateful,
   command-layer-integrated plugin.
-- `plugins/kolom_beton.py` — Kolom beton (SipilBIM): a parametric concrete
-  column (rectangular or round) placed with one click. Its UI is the «Steel»
-  tab in the side tray (`add_panel(..., panel="steel")`, a shared tab other
-  extensions can stack under): a palette on top and, at the bottom, the
-  properties of the selected column(s), applied live as one undo step per
-  change. The worked example of a persistent click tool built in
+- `plugins/structure/` — Structure (SipilBIM): structural elements as an
+  extension written as a PACKAGE (`__init__.py` with `setup(app)`, loaded by
+  path; the build spec copies the folder as data). Its UI is the «Structure»
+  tab in the side tray (`add_panel(..., panel="structure")`): a palette of
+  element and connection buttons on top and, at the bottom, the properties of
+  the selected element, applied live as one undo step per change. Today only
+  the concrete column works (one click to place it; tagged `IfcColumn`, so it
+  feeds the IFC export and the takeoff); beams, slabs, walls, footings and the
+  connections are empty buttons. New elements are a class in `elements.py`,
+  new connections a line in `connections.py`. The worked example of a package
+  extension with several modules, of a persistent click tool built in
   `setup(app)` (its constructor takes an argument, so the loader does not
   list it), of parameters kept in `group.ext` with a rebuild command
-  (`ColumnCommand`), of a panel that follows the selection, and of
-  `add_context_menu`. Tagged `IfcColumn`, so it feeds the IFC export and the
-  takeoff.
+  (`StructureCommand`), of a panel that follows the selection, and of
+  `add_context_menu`.
 - `plugins/solid_inspector.py` — Solid Inspector: per-edge watertightness
   diagnosis with viewport highlighting, step-by-step navigation and a
   one-undo-step repair (`RepairSolidsCommand`, snapshot undo over several

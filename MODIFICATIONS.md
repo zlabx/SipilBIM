@@ -45,8 +45,13 @@ Additional changes applied by the build after those substitutions:
 
 Changes made in this repository after the rebrand:
 
-- added: `plugins/kolom_beton.py` and `tests/test_plugin_kolom_beton.py` (parametric concrete column: «Steel» side-tray tab with
-  the element palette and the selected column's properties, click-to-place tool; tagged `IfcColumn`); `docs/plugins.md` lists it.
+- added: `plugins/structure/` (package extension: «Structure» side-tray tab with the element and connection palette
+  and the selected element's properties; the concrete column works — click-to-place, `IfcColumn` — and beams, slabs,
+  walls, footings and connections are empty buttons) and `tests/test_plugin_structure.py`; `docs/plugins.md` lists it.
+- modified: `sipilbim.spec` — the `plugins/structure` folder is bundled as data and `plugins/` is scanned recursively
+  for imports (the build only knew loose `plugins/*.py`).
+- modified: `main.py` — `--check` also imports package extensions (`plugins/<name>/__init__.py` and every module in
+  them), so the Windows build's bundle check fails if the Structure package cannot load.
 - modified: `core/bim.py` — `collect_objects` now also returns `"faces"` (world space) for tagged groups, so the
   IFC export, the takeoff CSV and the BIM tray measure containers and component instances (their own `group.mesh`
   is empty) instead of skipping them.

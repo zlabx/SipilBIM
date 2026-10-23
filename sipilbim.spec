@@ -58,6 +58,9 @@ datas = [
     ('i18n/*.json',                'i18n'),
     # Bundled plugins (Extensions menu) — discovered by file path at runtime.
     ('plugins/*.py',               'plugins'),
+    # The Structure extension is a PACKAGE (plugins/structure/__init__.py):
+    # loaded by path like the loose ones, so the whole folder travels as data.
+    ('plugins/structure',          'plugins/structure'),
     # Example extensions: shipped but NOT loaded — Extensions ▸ Example
     # extensions copies one into the user's plugins folder on request.
     # Whole folder: an example extension can be a package (CAM, PR #132).
@@ -215,7 +218,7 @@ def _app_imports(paths):
 
 
 hiddenimports += _app_imports(
-    [*Path('plugins').glob('*.py'),
+    [*Path('plugins').rglob('*.py'),
      *Path('examples/extensions').rglob('*.py'),
      Path('scripts/ingetrazo_mcp.py')])
 # The rest of openskp (export/*, _face_groups, instanced_scene, codegen…)
