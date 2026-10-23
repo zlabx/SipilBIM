@@ -45,8 +45,8 @@ Additional changes applied by the build after those substitutions:
 
 Changes made in this repository after the rebrand:
 
-- added: `plugins/kolom_beton.py` and `tests/test_plugin_kolom_beton.py` (parametric concrete column: toolbar
-  button, click-to-place tool, right-click «Properti kolom…» dialog; tagged `IfcColumn`); `docs/plugins.md` lists it.
+- added: `plugins/kolom_beton.py` and `tests/test_plugin_kolom_beton.py` (parametric concrete column: «Steel» side-tray tab with
+  the element palette and the selected column's properties, click-to-place tool; tagged `IfcColumn`); `docs/plugins.md` lists it.
 - modified: `core/bim.py` — `collect_objects` now also returns `"faces"` (world space) for tagged groups, so the
   IFC export, the takeoff CSV and the BIM tray measure containers and component instances (their own `group.mesh`
   is empty) instead of skipping them.

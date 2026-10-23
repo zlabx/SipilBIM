@@ -16,7 +16,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest  # noqa: E402
 from PySide6.QtGui import QVector3D as V  # noqa: E402
-from PySide6.QtWidgets import QApplication, QDialog, QMenu  # noqa: E402
+from PySide6.QtWidgets import QApplication, QMenu  # noqa: E402
 
 import core.extensions as extensions  # noqa: E402
 from core import bim  # noqa: E402
@@ -328,7 +328,7 @@ def win(tmp_path, monkeypatch):
 
 def _mod():
     return next(m for n, m in sys.modules.items()
-                if n.endswith("kolom_beton") and hasattr(m, "ColumnDialog")
+                if n.endswith("kolom_beton") and hasattr(m, "ColumnPanel")
                 and m is not kb)
 
 
@@ -375,34 +375,141 @@ def test_right_click_offers_properties_only_on_a_column(win, monkeypatch):
     assert "Properti 2 kolom…" in labels()
 
 
-def test_the_properties_dialog_rebuilds_the_selected_column(win, monkeypatch):
+def _panel(win):
+    dock = win.extension_panels()["extension_steel"]
+    return dock, dock.widget().findChild(_mod().ColumnPanel)
+
+
+def _select(vp, *groups):
+    vp.scene.selection.clear()
+    vp.scene.selection.update(groups)
+
+
+def test_the_steel_tab_has_the_palette_on_top_and_the_properties_at_the_bottom(win):
+    dock, panel = _panel(win)
+    assert dock.windowTitle() == "Steel"
+    assert dock.objectName() == "extension_steel"
+    lay = panel.layout()
+    widgets = [lay.itemAt(i).widget() for i in range(lay.count())
+               if lay.itemAt(i).widget() is not None]
+    assert widgets.index(panel.btn_column) < widgets.index(panel.title)
+    assert lay.itemAt(lay.count() - 1).layout() is panel._form   # dasar tab
+
+
+def test_selecting_a_column_fills_the_form_and_editing_is_one_undo_step(win):
+    mod, vp = _mod(), win.viewport
+    mod.place_column(vp, V(2, 3, 0), {"params": dict(mod.DEFAULTS)})
+    g = _columns(mod, vp)[0]
+    _, panel = _panel(win)
+    _select(vp, g)
+    panel.sync()
+    assert panel.title.text() == "Properti — K1"
+    assert (panel.height.value(), panel.width.value()) == (3000, 300)
+    assert panel.mark.isEnabled() and panel.mark.text() == "K1"
+    panel.height.setValue(4500)                      # pengguna mengetik 4500
+    assert mod.column_data(g)["params"]["height"] == pytest.approx(4.5)
+    assert panel.height.value() == 4500              # form menampilkan yang berlaku
+    vp.history.undo()
+    assert mod.column_data(g)["params"]["height"] == pytest.approx(3.0)
+
+
+def test_changing_the_shape_in_the_panel_rebuilds_and_swaps_the_rows(win):
     mod, vp = _mod(), win.viewport
     mod.place_column(vp, V(0, 0, 0), {"params": dict(mod.DEFAULTS)})
     g = _columns(mod, vp)[0]
-    vp.scene.selection.clear()
-    vp.scene.selection.add(g)
+    _, panel = _panel(win)
+    _select(vp, g)
+    panel.sync()
+    assert panel.width.isVisibleTo(panel) and not panel.diameter.isVisibleTo(panel)
+    panel.shape.setCurrentIndex(1)
+    assert mod.column_data(g)["params"]["shape"] == "round"
+    assert panel.diameter.isVisibleTo(panel) and not panel.width.isVisibleTo(panel)
+    assert not panel.rotation.isVisibleTo(panel)
 
-    def fake_exec(self):                              # pengguna mengisi form
-        self.shape.setCurrentIndex(1)
-        self.diameter.setValue(600)
-        self.height.setValue(4500)
-        self.mark.setText("KB-1")
-        return QDialog.Accepted
-    monkeypatch.setattr(mod.ColumnDialog, "exec", fake_exec)
+
+def test_with_several_columns_only_the_edited_field_is_applied_to_all(win):
+    mod, vp = _mod(), win.viewport
     state = {"params": dict(mod.DEFAULTS)}
-    mod.edit_columns(vp, state)
-    data = mod.column_data(g)["params"]
-    assert (data["shape"], data["diameter"], data["height"]) == ("round", 0.6, 4.5)
-    assert g.name == "KB-1" and g.ifc["name"] == "KB-1"
-    assert state["params"]["shape"] == "round"      # kolom berikutnya mengikuti
+    mod.place_column(vp, V(0, 0, 0), state)
+    mod.place_column(vp, V(5, 0, 0), dict(state, params=dict(
+        mod.DEFAULTS, shape="round", diameter=0.5)))
+    a, b = _columns(mod, vp)
+    _, panel = _panel(win)
+    _select(vp, a, b)
+    panel.sync()
+    assert panel.title.text() == "Properti — 2 kolom"
+    assert not panel.mark.isEnabled()
+    panel.height.setValue(5000)
+    pa, pb = (mod.column_data(g)["params"] for g in (a, b))
+    assert pa["height"] == pytest.approx(5.0) == pytest.approx(pb["height"])
+    assert (pa["shape"], pb["shape"]) == ("rect", "round")     # tidak ikut berubah
+    assert pb["diameter"] == pytest.approx(0.5)
 
 
-def test_the_dialog_shows_only_the_rows_that_matter_for_the_shape(win):
-    mod = _mod()
-    dlg = mod.ColumnDialog(win, mod.normalize_params(None), "t", mark="K1")
-    dlg.show()
-    assert dlg.width.isVisible() and not dlg.diameter.isVisible()
-    dlg.shape.setCurrentIndex(1)
-    assert dlg.diameter.isVisible() and not dlg.width.isVisible()
-    assert not dlg.rotation.isVisible()
-    dlg.close()
+def test_with_nothing_selected_the_panel_sets_the_next_column(win):
+    mod, vp = _mod(), win.viewport
+    _, panel = _panel(win)
+    _select(vp)
+    panel.sync(force=True)
+    assert panel.title.text() == "Properti kolom baru"
+    assert not panel.mark.isEnabled()
+    panel.shape.setCurrentIndex(1)
+    panel.diameter.setValue(500)
+    panel.height.setValue(4000)
+    panel._tool.on_click(SimpleNamespace(viewport=vp, world=V(1, 1, 0)))
+    p = mod.column_data(_columns(mod, vp)[-1])["params"]
+    assert (p["shape"], p["diameter"], p["height"]) == ("round", 0.5, 4.0)
+
+
+def test_renaming_from_the_panel_updates_the_column_and_its_ifc_name(win):
+    mod, vp = _mod(), win.viewport
+    mod.place_column(vp, V(0, 0, 0), {"params": dict(mod.DEFAULTS)})
+    g = _columns(mod, vp)[0]
+    _, panel = _panel(win)
+    _select(vp, g)
+    panel.sync()
+    panel.mark.setText("KB-9")
+    panel.mark.editingFinished.emit()
+    assert g.name == "KB-9" and g.ifc["name"] == "KB-9"
+
+
+def test_the_palette_button_arms_and_disarms_the_tool(win):
+    vp = win.viewport
+    _, panel = _panel(win)
+    panel.btn_column.click()
+    assert vp.active_tool is panel._tool
+    panel.btn_column.click()
+    assert vp.active_tool is not panel._tool
+
+
+def test_right_click_properties_brings_the_steel_tab_to_the_front(win, monkeypatch):
+    mod, vp = _mod(), win.viewport
+    mod.place_column(vp, V(0, 0, 0), {"params": dict(mod.DEFAULTS)})
+    dock, _ = _panel(win)
+    shown = []
+    monkeypatch.setattr(win, "set_tray_shown",
+                        lambda d, on=True: shown.append((d, on)))
+    menu = QMenu()
+    for fn in win._ext_context_menus:
+        fn(menu, list(vp.scene.selection))
+    entry = next(a for a in menu.actions() if a.text() == "Properti kolom…")
+    entry.trigger()
+    _app.processEvents()
+    assert (dock, True) in shown
+
+
+# ---- modify_columns (tanpa GUI) ---------------------------------------
+
+def test_a_change_that_changes_nothing_is_not_an_undo_step(vp):
+    g, _ = _column(vp)
+    assert kb.modify_columns(vp, [g], {"height": 3.0}) is False
+    vp.history.undo()                                 # membatalkan penempatan
+    assert vp.scene.groups == []
+
+
+def test_an_invalid_value_is_refused_and_the_column_is_untouched(vp, monkeypatch):
+    g, _ = _column(vp)
+    seen = []
+    monkeypatch.setattr(kb, "_warn", lambda _vp, text: seen.append(text))
+    assert kb.modify_columns(vp, [g], {"width": -1}) is False
+    assert seen and kb.column_data(g)["params"]["width"] == 0.30

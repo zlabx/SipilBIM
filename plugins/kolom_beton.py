@@ -4,11 +4,14 @@
 
 Alur kerja (gaya Tekla, versi paling sederhana):
 
-1. Klik tombol **Kolom** (toolbar «Struktur» atau menu Extensions ▸ Kolom beton).
+1. Buka tab **Steel** di sidebar kanan dan klik **Kolom** (atau tombol «Kolom»
+   di toolbar «Struktur», atau menu Extensions ▸ Kolom beton).
 2. Klik lokasi kolom di viewport (snap ke titik/garis bantu seperti biasa).
    Alat tetap aktif, jadi bisa menempatkan banyak kolom berturut-turut.
-3. Klik kanan sebuah kolom ▸ **Properti kolom…** untuk mengubah penampang
-   (persegi atau bulat), dimensi, tinggi, rotasi, dan tanda (K1, K2, …).
+3. Properti ada di bagian paling bawah tab Steel: kolom yang dipilih diubah
+   langsung (penampang persegi/bulat, dimensi, tinggi, rotasi, tanda K1, K2…);
+   tanpa kolom terpilih, isiannya dipakai untuk kolom berikutnya. Klik kanan
+   sebuah kolom ▸ **Properti kolom…** membuka tab Steel.
 
 Desain data — sama dengan pola Windowizer (examples/extensions/windowizer.py):
 
@@ -35,8 +38,8 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import (QColor, QIcon, QMatrix4x4, QPainter, QPen, QPixmap,
                            QVector3D)
 from PySide6.QtWidgets import (
-    QComboBox, QDialog, QDialogButtonBox, QDoubleSpinBox, QFormLayout,
-    QLineEdit, QMessageBox, QVBoxLayout,
+    QComboBox, QDoubleSpinBox, QFormLayout, QLabel, QLineEdit, QMessageBox,
+    QPushButton, QVBoxLayout, QWidget,
 )
 
 from core.history import Command
@@ -359,48 +362,35 @@ def place_column(viewport, point: QVector3D, state: dict) -> bool:
                 f"Kolom {mark} ditempatkan — klik lagi untuk kolom berikutnya.")
 
 
-def edit_columns(viewport, state: dict) -> None:
-    """Properti kolom terpilih (satu atau banyak) lewat dialog."""
-    if not _at_top_level(viewport):
-        return
-    cols = selected_columns(viewport.scene)
+def modify_columns(viewport, cols: list, changes: dict,
+                   mark: str | None = None) -> bool:
+    """Ubah ``changes`` (nama parameter → nilai) pada semua ``cols`` dalam
+    SATU langkah undo. Tanpa perubahan nyata: tidak ada langkah undo."""
     if not cols:
-        _warn(viewport, "Pilih kolom beton dulu (klik kolomnya).")
-        return
-    multi = len(cols) > 1
-    base = normalize_params(column_data(cols[0])["params"])
-    names = ", ".join(g.name for g in cols[:6]) + ("…" if multi and
-                                                    len(cols) > 6 else "")
+        return False
+    if not _at_top_level(viewport):
+        return False
+    try:
+        plan = []
+        for g in cols:
+            now = normalize_params(column_data(g)["params"])
+            new = normalize_params(dict(now, **changes))
+            renamed = mark is not None and mark != g.name
+            if new != now or renamed:
+                plan.append((g, new))
+    except ColumnError as exc:
+        _warn(viewport, str(exc))
+        return False
+    if not plan:
+        return False
 
-    def apply(vals: dict) -> None:
-        vals = dict(vals)
-        mark = None if multi else vals.pop("mark", None)
-        vals.pop("mark", None)
+    def mutate(sc):
+        for g, new in plan:
+            rebuild_column(sc, g, new, mark)
+    names = ", ".join(g.name for g, _ in plan[:4]) + (
+        "…" if len(plan) > 4 else "")
+    return _run(viewport, mutate, f"Kolom diperbarui: {names}.")
 
-        def mutate(sc):
-            for g in cols:
-                rebuild_column(sc, g, vals, mark)
-            state["params"] = normalize_params(vals)
-        _run(viewport, mutate,
-             f"Kolom diperbarui: {names}." if multi
-             else f"Kolom {mark or cols[0].name} diperbarui.")
-
-    dlg = ColumnDialog(viewport.window(), base,
-                       title=f"Properti kolom — {names}",
-                       mark=None if multi else cols[0].name, on_apply=apply)
-    if dlg.exec() == QDialog.Accepted and dlg.values() != dlg.last_applied:
-        apply(dlg.values())
-
-
-def edit_defaults(viewport, state: dict) -> None:
-    """Properti yang dipakai kolom BERIKUTNYA yang ditempatkan."""
-    dlg = ColumnDialog(viewport.window(), normalize_params(state["params"]),
-                       title="Properti kolom baru", mark=None)
-    if dlg.exec() == QDialog.Accepted:
-        vals = dlg.values()
-        vals.pop("mark", None)
-        state["params"] = normalize_params(vals)
-        viewport.flash_status("Properti kolom baru disimpan.", 3000)
 
 
 # ---------------------------------------------------------------------------
@@ -465,76 +455,159 @@ class ColumnPlaceTool(Tool):
 
 
 # ---------------------------------------------------------------------------
-# Dialog Properti
+# Panel «Steel» (tab di sidebar kanan)
 # ---------------------------------------------------------------------------
 
-class ColumnDialog(QDialog):
-    """Jendela «Properti kolom». Dimensi dalam milimeter. **Terapkan** memakai
-    perubahan tanpa menutup jendela (satu langkah undo per penerapan);
-    **OK** menerapkan lalu menutup."""
+class ColumnPanel(QWidget):
+    """Isi tab «Steel».
 
-    def __init__(self, parent, params: dict, title: str,
-                 mark: str | None = None, on_apply=None) -> None:
-        super().__init__(parent)
-        self.setWindowTitle(title)
-        self.setMinimumWidth(340)
-        self._on_apply = on_apply
-        self.last_applied: dict | None = None
+    Atas: palet elemen (sekarang tombol «Kolom»; balok dan sambungan menyusul).
+    Bawah: properti elemen yang sedang dipilih — kolom terpilih diubah
+    langsung (satu langkah undo per perubahan); bila tidak ada kolom yang
+    dipilih, isiannya menjadi properti untuk kolom BERIKUTNYA yang ditempatkan.
+    Dimensi dalam milimeter."""
+
+    POLL_MS = 250
+
+    def __init__(self, app, state: dict, tool) -> None:
+        super().__init__()
+        self._app = app
+        self._state = state
+        self._tool = tool
+        self._cols: list = []
+        self._seen = None
+        self._loading = False
+
+        # ---- Palet ---------------------------------------------------------
+        self.btn_column = QPushButton("  Kolom")
+        self.btn_column.setCheckable(True)
+        self.btn_column.setIcon(_toolbar_icon())
+        self.btn_column.setToolTip(
+            "Kolom beton — klik tombol ini, lalu klik lokasi di viewport")
+        self.btn_column.clicked.connect(self._on_arm)
+
+        # ---- Properti ------------------------------------------------------
+        self.title = QLabel()
+        self.title.setStyleSheet("font-weight: bold;")
+        self.note = QLabel()
+        self.note.setWordWrap(True)
+        self.note.setStyleSheet("color: gray;")
 
         self.shape = QComboBox()
         self.shape.addItem("Persegi / persegi panjang", "rect")
         self.shape.addItem("Bulat", "round")
-        self.shape.setCurrentIndex(0 if params["shape"] == "rect" else 1)
-        self.width = self._mm(params["width"], 10, 5000)
-        self.depth = self._mm(params["depth"], 10, 5000)
-        self.diameter = self._mm(params["diameter"], 10, 5000)
-        self.height = self._mm(params["height"], 100, 100000)
+        self.width = self._mm(10, 5000)
+        self.depth = self._mm(10, 5000)
+        self.diameter = self._mm(10, 5000)
+        self.height = self._mm(100, 100000)
         self.rotation = QDoubleSpinBox()
         self.rotation.setRange(0.0, 359.9)
         self.rotation.setDecimals(1)
         self.rotation.setSuffix(" °")
-        self.rotation.setValue(params["rotation"])
-        self.mark = QLineEdit(mark or "")
-        self.mark.setEnabled(mark is not None)
-        if mark is None:
-            self.mark.setPlaceholderText("(otomatis K1, K2, …)")
+        self.rotation.setKeyboardTracking(False)
+        self.mark = QLineEdit()
 
-        form = QFormLayout()
-        form.addRow("Penampang:", self.shape)
-        form.addRow("Lebar (arah X):", self.width)
-        form.addRow("Dalam (arah Y):", self.depth)
-        form.addRow("Diameter:", self.diameter)
-        form.addRow("Tinggi kolom:", self.height)
-        form.addRow("Rotasi penampang:", self.rotation)
-        form.addRow("Tanda / nama:", self.mark)
-        self._form = form
-        self.shape.currentIndexChanged.connect(self._sync_rows)
+        self._form = QFormLayout()
+        self._form.addRow("Penampang:", self.shape)
+        self._form.addRow("Lebar (arah X):", self.width)
+        self._form.addRow("Dalam (arah Y):", self.depth)
+        self._form.addRow("Diameter:", self.diameter)
+        self._form.addRow("Tinggi kolom:", self.height)
+        self._form.addRow("Rotasi penampang:", self.rotation)
+        self._form.addRow("Tanda / nama:", self.mark)
 
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Apply
-                                   | QDialogButtonBox.Cancel)
-        buttons.button(QDialogButtonBox.Ok).setText("OK")
-        buttons.button(QDialogButtonBox.Apply).setText("Terapkan")
-        buttons.button(QDialogButtonBox.Cancel).setText("Batal")
-        buttons.accepted.connect(self.accept)
-        buttons.rejected.connect(self.reject)
-        buttons.button(QDialogButtonBox.Apply).clicked.connect(self._apply)
-        if on_apply is None:
-            buttons.button(QDialogButtonBox.Apply).hide()
+        self.shape.currentIndexChanged.connect(
+            lambda _i: self._changed("shape"))
+        for key in ("width", "depth", "diameter", "height", "rotation"):
+            getattr(self, key).valueChanged.connect(
+                lambda _v, k=key: self._changed(k))
+        self.mark.editingFinished.connect(self._renamed)
 
+        # ---- Tata letak: palet di atas, properti di dasar tab ---------------
         lay = QVBoxLayout(self)
-        lay.addLayout(form)
-        lay.addWidget(buttons)
-        self._sync_rows()
+        lay.setContentsMargins(8, 6, 8, 8)
+        head = QLabel("Elemen")
+        head.setStyleSheet("font-weight: bold;")
+        lay.addWidget(head)
+        lay.addWidget(self.btn_column)
+        lay.addStretch(1)
+        lay.addWidget(self.title)
+        lay.addWidget(self.note)
+        lay.addLayout(self._form)
+
+        self._timer = QTimer(self)
+        self._timer.setInterval(self.POLL_MS)
+        self._timer.timeout.connect(self.sync)
+        self.sync(force=True)
 
     @staticmethod
-    def _mm(metres: float, lo: float, hi: float) -> QDoubleSpinBox:
+    def _mm(lo: float, hi: float) -> QDoubleSpinBox:
         box = QDoubleSpinBox()
         box.setRange(lo, hi)
         box.setDecimals(0)
         box.setSingleStep(50)
         box.setSuffix(" mm")
-        box.setValue(round(metres * 1000.0))
+        # Ketikan baru berlaku saat Enter/pindah kolom; panah langsung.
+        box.setKeyboardTracking(False)
         return box
+
+    # ---- Mengikuti pilihan di viewport -------------------------------------
+    def showEvent(self, ev) -> None:            # noqa: N802 (Qt)
+        super().showEvent(ev)
+        self._timer.start()
+        self.sync(force=True)
+
+    def hideEvent(self, ev) -> None:            # noqa: N802 (Qt)
+        self._timer.stop()
+        super().hideEvent(ev)
+
+    def sync(self, *_args, force: bool = False) -> None:
+        """Muat ulang form bila pilihan atau dokumen berubah (murah)."""
+        vp = self._app.viewport
+        self.btn_column.setChecked(vp.active_tool is self._tool)
+        cols = selected_columns(vp.scene)
+        key = (tuple(id(g) for g in cols), vp.scene.version)
+        if not force and key == self._seen:
+            return
+        self._seen = key
+        self._cols = cols
+        self._load()
+
+    def _load(self) -> None:
+        self._loading = True
+        try:
+            try:
+                if self._cols:
+                    p = normalize_params(column_data(self._cols[0])["params"])
+                else:
+                    p = normalize_params(self._state["params"])
+            except ColumnError:
+                p = normalize_params(None)
+            if len(self._cols) == 1:
+                self.title.setText(f"Properti — {self._cols[0].name}")
+                self.note.setText("")
+            elif self._cols:
+                self.title.setText(f"Properti — {len(self._cols)} kolom")
+                self.note.setText("Isian yang Anda ubah diterapkan ke semua "
+                                  "kolom terpilih (nilai tampil dari kolom "
+                                  "pertama).")
+            else:
+                self.title.setText("Properti kolom baru")
+                self.note.setText("Tidak ada kolom dipilih: isian ini dipakai "
+                                  "untuk kolom yang ditempatkan berikutnya.")
+            self.shape.setCurrentIndex(0 if p["shape"] == "rect" else 1)
+            self.width.setValue(round(p["width"] * 1000.0))
+            self.depth.setValue(round(p["depth"] * 1000.0))
+            self.diameter.setValue(round(p["diameter"] * 1000.0))
+            self.height.setValue(round(p["height"] * 1000.0))
+            self.rotation.setValue(p["rotation"])
+            single = len(self._cols) == 1
+            self.mark.setEnabled(single)
+            self.mark.setText(self._cols[0].name if single else "")
+            self.mark.setPlaceholderText("" if single else "(otomatis K1, K2, …)")
+        finally:
+            self._loading = False
+        self._sync_rows()
 
     def _sync_rows(self) -> None:
         rect = self.shape.currentData() == "rect"
@@ -545,22 +618,44 @@ class ColumnDialog(QDialog):
             if label is not None:
                 label.setVisible(show)
 
-    def values(self) -> dict:
-        return {
-            "shape": self.shape.currentData(),
-            "width": self.width.value() / 1000.0,
-            "depth": self.depth.value() / 1000.0,
-            "diameter": self.diameter.value() / 1000.0,
-            "height": self.height.value() / 1000.0,
-            "rotation": self.rotation.value(),
-            "mark": self.mark.text().strip(),
-        }
+    # ---- Perubahan dari pengguna --------------------------------------------
+    def _value(self, key: str):
+        if key == "shape":
+            return self.shape.currentData()
+        if key == "rotation":
+            return self.rotation.value()
+        return getattr(self, key).value() / 1000.0
 
-    def _apply(self) -> None:
-        vals = self.values()
-        self.last_applied = dict(vals)
-        if self._on_apply is not None:
-            self._on_apply(vals)
+    def _changed(self, key: str) -> None:
+        if self._loading:
+            return
+        if key == "shape":
+            self._sync_rows()
+        value = self._value(key)
+        if self._cols:
+            modify_columns(self._app.viewport, self._cols, {key: value})
+            self.sync(force=True)       # tampilkan yang sebenarnya berlaku
+        else:
+            self._state["params"] = dict(self._state["params"], **{key: value})
+
+    def _renamed(self) -> None:
+        if self._loading or len(self._cols) != 1:
+            return
+        name = self.mark.text().strip()
+        if name:
+            modify_columns(self._app.viewport, self._cols, {}, mark=name)
+        self.sync(force=True)
+
+    def _on_arm(self, checked: bool) -> None:
+        vp = self._app.viewport
+        if checked:
+            vp.set_active_tool(self._tool)
+            return
+        activate = getattr(vp.window(), "_activate_tool", None)
+        if callable(activate):
+            activate("select")
+        else:
+            vp.set_active_tool(None)
 
 
 # ---------------------------------------------------------------------------
@@ -601,23 +696,28 @@ def _toolbar_icon() -> QIcon:
 
 
 def setup(app) -> None:
-    """Menu Extensions ▸ Kolom beton, tombol «Kolom» di toolbar «Struktur»,
-    dan «Properti kolom…» di menu klik kanan viewport."""
+    """Tab «Steel» di sidebar kanan, menu Extensions ▸ Kolom beton, tombol
+    «Kolom» di toolbar «Struktur», dan «Properti kolom…» di menu klik kanan
+    (membuka tab Steel dengan kolom itu sudah terpilih)."""
     state = {"params": dict(DEFAULTS)}
     tool = ColumnPlaceTool(state)
+    panel = ColumnPanel(app, state, tool)
+    # panel="steel": tab bersama — balok dan sambungan nanti ikut di sini.
+    dock = app.add_panel("Steel", panel, panel="steel")
 
     def start_tool() -> None:
         app.viewport.set_active_tool(tool)
+
+    def show_panel() -> None:
+        app.show_panel(dock)
+        panel.sync(force=True)
 
     start = None
     sub = app.add_menu("Kolom beton")
     if sub is not None:
         start = sub.addAction("Tempatkan kolom", start_tool)
         start.setStatusTip("Klik lokasi di viewport untuk membuat kolom beton.")
-        sub.addAction("Properti kolom baru…",
-                      lambda: edit_defaults(app.viewport, state))
-        sub.addAction("Properti kolom terpilih…",
-                      lambda: edit_columns(app.viewport, state))
+        sub.addAction("Tampilkan panel Steel", show_panel)
 
     # Tombol di toolbar sendiri; gagal membuatnya tidak boleh merusak setup.
     try:
@@ -644,10 +744,10 @@ def setup(app) -> None:
                  else f"Properti {len(cols)} kolom…")
         action = menu.addAction(label)
         action.triggered.connect(
-            lambda _c=False: QTimer.singleShot(
-                0, lambda: edit_columns(app.viewport, state)))
+            lambda _c=False: QTimer.singleShot(0, show_panel))
 
     app.add_context_menu(context)
+    app.on_document_changed(panel.sync)
 
     add_kind = getattr(app, "add_outliner_kind", None)
     if add_kind is not None:
