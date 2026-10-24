@@ -393,6 +393,19 @@ def test_the_sidebar_tab_is_called_sipilbim(win):
     assert dock.widget().findChild(_mods()[0].SipilBimPanel) is not None
 
 
+def test_the_sipilbim_tab_folds_and_unfolds_with_the_sidebar(win):
+    dock = _dock(win)
+    win.show()                                    # Qt reports a tray open once it is up
+    for _ in range(5):
+        _app.processEvents()
+    win._act_sidebar.setChecked(False)                            # Ctrl+F5
+    _app.processEvents()
+    assert dock.isHidden()                                        # folded with the rest
+    win._act_sidebar.setChecked(True)
+    _app.processEvents()
+    assert not dock.isHidden()                                    # the tab came back
+
+
 def test_the_tab_has_a_collapsible_model_and_properties_section(win):
     _p, widgets, _e = _mods()
     panel = _wb(win).panel
@@ -413,25 +426,62 @@ def test_the_palette_is_a_left_toolbar_not_part_of_the_tab(win):
     from PySide6.QtWidgets import QLabel, QToolBar
     wb = _wb(win)
     bar = win.findChild(QToolBar, "sipilbim_elements_bar")
-    assert bar is not None and win.toolBarArea(bar) == Qt.LeftToolBarArea
-    assert wb.palette.parent() is not None and bar.isAncestorOf(wb.palette)
-    titles = [lb.text() for lb in wb.palette.findChildren(QLabel)]
+    assert bar is wb.palette and win.toolBarArea(bar) == Qt.LeftToolBarArea
+    assert bar.isMovable() and not wb.palette.is_horizontal       # a column
+    titles = [lb.text() for lb in wb.palette.findChildren(QLabel, "sipilbim_title")]
     assert titles == ["Building Elements", "Connections"]
-    assert not _dock(win).isAncestorOf(wb.palette)            # nothing left on the right
+    assert not _dock(win).isAncestorOf(wb.palette)                # nothing left on the right
     assert wb.panel.findChildren(type(wb.buttons["column"])) == []
 
 
+def test_the_palette_follows_the_toolbar_when_it_is_dragged_to_the_top(win):
+    from PySide6.QtCore import Qt
+    wb = _wb(win)
+    bar = wb.palette
+    assert wb.buttons["base_plate"].text() == "Base plate"        # a column: full text
+    win.addToolBar(Qt.TopToolBarArea, bar)
+    _app.processEvents()
+    assert win.toolBarArea(bar) == Qt.TopToolBarArea and bar.is_horizontal
+    assert wb.buttons["base_plate"].text() == ""                  # a row: icon only
+    assert wb.buttons["column"].text() == "Column"                # the elements keep it
+    win.addToolBar(Qt.LeftToolBarArea, bar)
+    _app.processEvents()
+    assert not bar.is_horizontal and wb.buttons["base_plate"].text() == "Base plate"
+
+
+def test_the_palette_folds_behind_the_arrow_instead_of_forcing_the_window_size(win):
+    """One tall widget in the toolbar could not fold: the window could not be
+    shorter than the palette, and on a small screen the layout was squeezed
+    (the sidebar lost 84 px of its width — tests/test_sidebar_trays.py). Each
+    button is its own toolbar item, so the toolbar's minimum is a few buttons."""
+    bar = _wb(win).palette
+    assert bar.minimumSizeHint().height() < 300
+    assert bar.minimumSizeHint().width() < 300
+    assert len(bar.actions()) == 18               # 14 buttons, 2 titles, 2 separators
+    assert bar.widgetForAction(bar.actions()[1]) is not None
+
+
 def test_the_palette_has_the_elements_the_connections_and_help(win):
+    from PySide6.QtCore import Qt
     wb = _wb(win)
     for key, text in (("column", "Column"), ("beam", "Beam"), ("slab", "Slab"),
                       ("wall", "Wall"), ("footing", "Footing")):
         assert wb.buttons[key].text() == text
     conns = importlib.import_module("ingetrazo_plugin_sipilbim.connections")
-    for key, label, _kind in conns.CONNECTIONS:
-        assert wb.buttons[key].text() == label
     assert len(conns.CONNECTIONS) >= 8
+    for key, label, _kind in conns.CONNECTIONS:
+        b = wb.buttons[key]
+        assert b.text() == label                          # a column: every label
+        assert b.accessibleName() == label and label in b.toolTip()
+        assert not b.icon().isNull()
     from PySide6.QtWidgets import QPushButton
-    assert "Help" in [b.text() for b in wb.palette.findChildren(QPushButton)]
+    help_btn = wb.palette.help_button
+    assert help_btn in wb.palette.findChildren(QPushButton)
+    assert help_btn.text() == "Help" and not help_btn.icon().isNull()
+    assert help_btn.toolTip()
+    wb.palette.set_orientation(Qt.Horizontal)             # in a row: icon only
+    assert [wb.buttons[k].text() for k, *_ in conns.CONNECTIONS] == [""] * len(conns.CONNECTIONS)
+    assert help_btn.text() == ""
 
 
 def test_help_opens_a_message_box(win, monkeypatch):
@@ -439,7 +489,7 @@ def test_help_opens_a_message_box(win, monkeypatch):
     shown = []
     monkeypatch.setattr(QMessageBox, "exec", lambda self: shown.append(self.text()) or 0)
     next(b for b in _wb(win).palette.findChildren(QPushButton)
-         if b.text() == "Help").click()
+         if b.accessibleName() == "Help").click()
     assert shown and "Building Elements" in shown[0]
 
 
@@ -679,6 +729,21 @@ def test_right_click_properties_brings_the_sipilbim_tab_to_the_front(win, monkey
     next(a for a in menu.actions() if a.text() == "Column properties…").trigger()
     _app.processEvents()
     assert (dock, True) in shown
+
+
+def test_right_click_properties_unfolds_the_sidebar_and_shows_the_tab(win):
+    vp = win.viewport
+    kb.place_column(vp, V(0, 0, 0), {"params": dict(kb.DEFAULTS)})
+    dock = _dock(win)
+    win._act_sidebar.setChecked(False)                            # folded (Ctrl+F5)
+    _app.processEvents()
+    assert dock.isHidden() and not win._act_sidebar.isChecked()
+    menu = QMenu()
+    for fn in win._ext_context_menus:
+        fn(menu, list(vp.scene.selection))
+    next(a for a in menu.actions() if a.text() == "Column properties…").trigger()
+    _app.processEvents()
+    assert win._act_sidebar.isChecked() and not dock.isHidden()
 
 
 def test_the_extensions_menu_has_a_sipilbim_submenu(win):

@@ -81,7 +81,7 @@ class Workbench(QObject):
         self.panel = SipilBimPanel(app)
         self.panel.form.on_edited = lambda: self.sync(force=True)
         self.palette = BuildingElementsBar(
-            self.elements, self.connections, self._on_arm,
+            app.window, self.elements, self.connections, self._on_arm,
             self._on_placeholder, self._on_help)
 
         self._timer = QTimer(self)
@@ -152,17 +152,18 @@ class Workbench(QObject):
 
 
 def _dock_palette(window, palette) -> QToolBar:
-    """Put the palette in a left toolbar of its own, in a new column beside
-    the host's drawing tools."""
-    bar = QToolBar("Building Elements", window)
-    bar.setObjectName("sipilbim_elements_bar")
-    bar.setMovable(False)
-    bar.setFloatable(False)
-    bar.setOrientation(Qt.Vertical)
+    """Put the palette toolbar at the left, in a column of its own beside the
+    host's drawing tools (a toolbar break first). The user may drag it
+    elsewhere; the buttons follow its orientation
+    (``BuildingElementsBar.set_orientation``)."""
     window.addToolBarBreak(Qt.LeftToolBarArea)
-    window.addToolBar(Qt.LeftToolBarArea, bar)
-    bar.addWidget(palette)
-    return bar
+    window.addToolBar(Qt.LeftToolBarArea, palette)
+    try:                                    # the host's look for the «»» arrow
+        from views.icons import style_overflow_button
+        style_overflow_button(palette)
+    except Exception:  # noqa: BLE001 — cosmetic only
+        pass
+    return palette
 
 
 def setup(app) -> None:
