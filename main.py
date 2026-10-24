@@ -282,7 +282,7 @@ def _self_check() -> int:
             spec.loader.exec_module(importlib.util.module_from_spec(spec))
         except Exception as exc:  # noqa: BLE001 - any failure is the report
             broken.append(f"{plugin.stem} ({exc})")
-    # Package extensions (plugins/<name>/__init__.py, e.g. Structure) load by
+    # Package extensions (plugins/<name>/__init__.py, e.g. SipilBIM) load by
     # path too, and import their own modules lazily from setup(): import
     # every module of the package here so a missing one is reported.
     import pkgutil

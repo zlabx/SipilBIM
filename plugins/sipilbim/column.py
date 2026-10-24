@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 SipilStock.
-"""Kolom beton: geometri, data, perintah, dan alat klik-lokasi.
+"""Concrete column: geometry, data, commands and the click-to-place tool.
 
-Satu kolom = satu container group; parameternya di ``group.ext["kolom_beton"]``
-(kunci yang sama dengan plugin Kolom beton lama, jadi kolom dari dokumen lama
-tetap terbaca dan bisa diedit). Mesh dibangun dari parameter di koordinat
-lokal (dasar di z = 0, naik ke +Z); posisi ada di matriks group, jadi
-Move/Rotate tidak perlu membangun ulang apa pun.
+One column = one container group; its parameters live in
+``group.ext["column"]`` (the key is the element's ``key``, so each new element
+type keeps its data under its own name). The mesh is built from the parameters
+in local coordinates (base at z = 0, rising along +Z); the position is the
+group's matrix, so Move/Rotate never rebuild anything.
 """
 from __future__ import annotations
 
@@ -18,31 +18,35 @@ from PySide6.QtGui import QMatrix4x4, QVector3D
 
 from tools.base import Tool
 
-from .common import StructureCommand as ColumnCommand
+from .common import ElementCommand as ColumnCommand
 from .common import at_top_level as _at_top_level
 from .common import run_command as _run
 from .common import warn as _warn
 
-KEY = "kolom_beton"
+KEY = "column"
 IFC_CLASS = "IfcColumn"
-MATERIAL = "Beton"
+MATERIAL = "Concrete"
 CONCRETE_COLOR = (0.74, 0.74, 0.72)
 ROUND_SEGMENTS = 32
 MARK_PREFIX = "K"
 
-#: Satuan di dalam model = meter. Dialog memakai milimeter (kebiasaan sipil).
+#: Model units are metres; the panel shows millimetres (civil practice).
 DEFAULTS = {
     "shape": "rect",        # "rect" | "round"
-    "width": 0.30,          # sisi sepanjang sumbu X lokal (rect)
-    "depth": 0.30,          # sisi sepanjang sumbu Y lokal (rect)
+    "width": 0.30,          # side along the local X axis (rect)
+    "depth": 0.30,          # side along the local Y axis (rect)
     "diameter": 0.40,       # (round)
     "height": 3.00,
-    "rotation": 0.0,        # derajat, putaran penampang terhadap sumbu Z
+    "rotation": 0.0,        # degrees, section turn about the Z axis
 }
+
+#: Allowed ranges in metres (the panel and the validation share them).
+SIZE_RANGE = (0.01, 5.0)        # width, depth, diameter
+HEIGHT_RANGE = (0.1, 100.0)
 
 
 class ColumnError(Exception):
-    """Parameter kolom tidak valid (pesan sudah berupa kalimat untuk pengguna)."""
+    """Invalid column parameter (the message is a sentence for the user)."""
 
 
 # ---------------------------------------------------------------------------
@@ -53,36 +57,36 @@ def _num(p: dict, key: str, lo: float, hi: float, label: str) -> float:
     try:
         v = float(p[key])
     except (KeyError, TypeError, ValueError):
-        raise ColumnError(f"{label}: nilai tidak valid.") from None
+        raise ColumnError(f"{label}: invalid value.") from None
     if not math.isfinite(v) or v < lo or v > hi:
         raise ColumnError(
-            f"{label}: harus antara {lo * 1000:g} dan {hi * 1000:g} mm.")
+            f"{label}: must be between {lo * 1000:g} and {hi * 1000:g} mm.")
     return v
 
 
 def normalize_params(params: dict | None) -> dict:
-    """Parameter lengkap dan tervalidasi (default untuk yang kosong)."""
+    """Complete, validated parameters (defaults fill the missing ones)."""
     p = dict(DEFAULTS)
     if params:
         p.update({k: params[k] for k in DEFAULTS if k in params})
     if p["shape"] not in ("rect", "round"):
-        raise ColumnError("Bentuk penampang harus persegi atau bulat.")
-    p["width"] = _num(p, "width", 0.01, 5.0, "Lebar")
-    p["depth"] = _num(p, "depth", 0.01, 5.0, "Dalam")
-    p["diameter"] = _num(p, "diameter", 0.01, 5.0, "Diameter")
-    p["height"] = _num(p, "height", 0.1, 100.0, "Tinggi kolom")
+        raise ColumnError("Cross-section must be rectangular or circular.")
+    p["width"] = _num(p, "width", *SIZE_RANGE, "Width")
+    p["depth"] = _num(p, "depth", *SIZE_RANGE, "Depth")
+    p["diameter"] = _num(p, "diameter", *SIZE_RANGE, "Diameter")
+    p["height"] = _num(p, "height", *HEIGHT_RANGE, "Height")
     try:
         rot = float(p["rotation"])
     except (TypeError, ValueError):
-        raise ColumnError("Rotasi: nilai tidak valid.") from None
+        raise ColumnError("Rotation: invalid value.") from None
     if not math.isfinite(rot):
-        raise ColumnError("Rotasi: nilai tidak valid.")
+        raise ColumnError("Rotation: invalid value.")
     p["rotation"] = rot % 360.0
     return p
 
 
 def column_data(group):
-    """Data kolom pada ``group.ext`` atau ``None`` bila bukan kolom kita."""
+    """Column data in ``group.ext``, or ``None`` if the group is not ours."""
     ext = getattr(group, "ext", None)
     if not ext:
         return None
@@ -91,7 +95,7 @@ def column_data(group):
 
 
 def next_mark(scene) -> str:
-    """Tanda kolom berikutnya: K{maks+1} dari kolom yang sudah ada."""
+    """Next column mark: K{max+1} over the existing columns."""
     pat = re.compile(rf"^{MARK_PREFIX}(\d+)$")
     top = 0
     for g in scene.groups:
@@ -104,12 +108,12 @@ def next_mark(scene) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Geometri (koordinat lokal: dasar di z = 0, naik ke +Z)
+# Geometry (local coordinates: base at z = 0, rising along +Z)
 # ---------------------------------------------------------------------------
 
 def profile_points(p: dict) -> list:
-    """Penampang sebagai poligon 2D berlawanan jarum jam (meter), sudah
-    diputar sebesar ``rotation``."""
+    """The section as a counter-clockwise 2D polygon (metres), already
+    turned by ``rotation``."""
     if p["shape"] == "round":
         r = p["diameter"] / 2.0
         pts = [(r * math.cos(2.0 * math.pi * i / ROUND_SEGMENTS),
@@ -130,11 +134,11 @@ def _newell_z(loop) -> float:
 
 
 def build_mesh(p: dict, attrs: dict | None = None):
-    """Mesh tertutup (watertight) hasil ekstrusi penampang setinggi
-    ``height``; semua normal menghadap keluar."""
+    """Closed (watertight) mesh: the section extruded ``height`` high, all
+    normals facing outward."""
     from core.mesh import Mesh
     pts = profile_points(p)
-    if _newell_z(pts) < 0:          # jaga urutan CCW
+    if _newell_z(pts) < 0:          # keep CCW order
         pts = list(reversed(pts))
     n, h = len(pts), p["height"]
     mesh = Mesh()
@@ -145,14 +149,14 @@ def build_mesh(p: dict, attrs: dict | None = None):
             face.attrs.update(copy.deepcopy(attrs))
         return face
 
-    add([(x, y, 0.0) for x, y in reversed(pts)])        # dasar, normal -Z
-    add([(x, y, h) for x, y in pts])                    # atas,  normal +Z
+    add([(x, y, 0.0) for x, y in reversed(pts)])        # base, normal -Z
+    add([(x, y, h) for x, y in pts])                    # top,  normal +Z
     for i in range(n):
         (ax, ay), (bx, by) = pts[i], pts[(i + 1) % n]
         add([(ax, ay, 0.0), (bx, by, 0.0), (bx, by, h), (ax, ay, h)])
     if p["shape"] == "round":
-        # Rusuk tegak dilembutkan agar silinder tampak mulus (seperti
-        # silinder hasil push/pull); lingkar atas/bawah tetap terlihat.
+        # Vertical edges are softened so the cylinder looks smooth (like a
+        # push/pull cylinder); the top and bottom rims stay visible.
         for x, y in pts:
             a = mesh.vertex_at(QVector3D(x, y, 0.0))
             b = mesh.vertex_at(QVector3D(x, y, h))
@@ -164,7 +168,8 @@ def build_mesh(p: dict, attrs: dict | None = None):
 
 
 def ensure_material(scene) -> dict:
-    """Material «Beton» di registri dokumen; mengembalikan atribut face."""
+    """The «Concrete» material in the document registry; returns the face
+    attributes."""
     from core.materials import Material
     mat = scene.materials.get(MATERIAL)
     if mat is None:
@@ -175,14 +180,14 @@ def ensure_material(scene) -> dict:
 
 def _make_child(scene, p: dict, pose: QMatrix4x4):
     from core.group import Group
-    child = Group(build_mesh(p, ensure_material(scene)), name="Beton")
+    child = Group(build_mesh(p, ensure_material(scene)), name="Concrete")
     child.xform = QMatrix4x4(pose)
     child.component = False
     return child
 
 
 def _pose_of(group) -> QMatrix4x4:
-    """Letak mesh kolom di dalam container (translasi titik klik)."""
+    """Where the column mesh sits inside the container (the click point)."""
     for k in getattr(group, "children", None) or ():
         if k.xform is not None:
             return QMatrix4x4(k.xform)
@@ -190,7 +195,7 @@ def _pose_of(group) -> QMatrix4x4:
 
 
 def make_column(scene, point: QVector3D, params: dict, mark: str):
-    """Buat kolom dengan dasar di ``point``. Mengembalikan container-nya."""
+    """Create a column with its base at ``point``; returns its container."""
     from core.group import Group
     p = normalize_params(params)
     pose = QMatrix4x4()
@@ -207,10 +212,10 @@ def make_column(scene, point: QVector3D, params: dict, mark: str):
 
 
 def rebuild_column(scene, group, params: dict, mark: str | None = None) -> None:
-    """Parameter baru, tempat sama: mesh dibangun ulang di posisi sekarang
-    (Move/Rotate pada kolom tetap dipertahankan)."""
+    """New parameters, same place: the mesh is rebuilt at the current
+    position (a Move/Rotate on the column is kept)."""
     if column_data(group) is None:
-        raise ColumnError(f"«{group.name}» bukan kolom beton.")
+        raise ColumnError(f"«{group.name}» is not a concrete column.")
     p = normalize_params(params)
     group.children = [_make_child(scene, p, _pose_of(group))]
     ext = dict(group.ext or {})
@@ -218,13 +223,13 @@ def rebuild_column(scene, group, params: dict, mark: str | None = None) -> None:
     group.ext = ext
     if mark:
         group.name = mark
-    ifc = dict(group.ifc or {"class": IFC_CLASS})   # tag dari panel BIM dijaga
+    ifc = dict(group.ifc or {"class": IFC_CLASS})   # keep the BIM-panel tag
     ifc["name"] = group.name
     group.ifc = ifc
 
 
 def column_volume(p: dict) -> float:
-    """Volume beton teoretis (m³) — pembanding untuk takeoff."""
+    """Theoretical concrete volume (m³) — a check for the takeoff."""
     if p["shape"] == "round":
         r = p["diameter"] / 2.0
         n = ROUND_SEGMENTS
@@ -235,7 +240,7 @@ def column_volume(p: dict) -> float:
 
 
 # ---------------------------------------------------------------------------
-# Perintah (dipanggil dari tombol, klik, dan menu klik kanan)
+# Commands (called from the buttons, the click and the right-click menu)
 # ---------------------------------------------------------------------------
 
 def selected_columns(scene) -> list:
@@ -248,20 +253,20 @@ def selected_columns(scene) -> list:
 
 
 def place_column(viewport, point: QVector3D, state: dict) -> bool:
-    """Satu klik = satu kolom dengan properti terakhir yang dipakai."""
+    """One click = one column with the last properties used."""
     if not _at_top_level(viewport):
         return False
     scene = viewport.scene
     params = dict(state["params"])
     mark = next_mark(scene)
     return _run(viewport, lambda sc: make_column(sc, point, params, mark),
-                f"Kolom {mark} ditempatkan — klik lagi untuk kolom berikutnya.")
+                f"Column {mark} placed — click again for the next one.")
 
 
 def modify_columns(viewport, cols: list, changes: dict,
                    mark: str | None = None) -> bool:
-    """Ubah ``changes`` (nama parameter → nilai) pada semua ``cols`` dalam
-    SATU langkah undo. Tanpa perubahan nyata: tidak ada langkah undo."""
+    """Apply ``changes`` (parameter name → value) to every column in
+    ``cols`` as ONE undo step. No real change: no undo step."""
     if not cols:
         return False
     if not _at_top_level(viewport):
@@ -285,22 +290,23 @@ def modify_columns(viewport, cols: list, changes: dict,
             rebuild_column(sc, g, new, mark)
     names = ", ".join(g.name for g, _ in plan[:4]) + (
         "…" if len(plan) > 4 else "")
-    return _run(viewport, mutate, f"Kolom diperbarui: {names}.")
+    return _run(viewport, mutate, f"Column updated: {names}.")
 
 
 
 # ---------------------------------------------------------------------------
-# Alat: klik lokasi
+# Tool: click a location
 # ---------------------------------------------------------------------------
 
 class ColumnPlaceTool(Tool):
-    """Klik lokasi → kolom jadi. Tetap aktif sampai alat lain dipilih.
+    """Click a location → the column is placed. Stays active until another
+    tool is picked.
 
-    Butuh argumen konstruktor, sehingga pemuat plugin tidak membuat entri
-    menu otomatis untuknya; entrinya dibuat di ``setup``."""
+    It needs a constructor argument, so the plugin loader does not add a menu
+    entry for it automatically; the entry is made in ``setup``."""
 
-    name = "Kolom beton"
-    description = "Tempatkan kolom beton dengan satu klik."
+    name = "Column"
+    description = "Place a concrete column with one click."
     uses_snap = True
     wireframe_color = (0.95, 0.45, 0.16, 1.0)
 
@@ -311,8 +317,8 @@ class ColumnPlaceTool(Tool):
     def on_activate(self, viewport) -> None:
         self._hover = None
         viewport.flash_status(
-            "Kolom: klik lokasi kolom (klik kanan kolom ▸ Properti kolom…). "
-            "Pilih alat lain untuk selesai.", 8000)
+            "Column: click to place (right-click a column ▸ Column "
+            "properties…). Pick another tool to finish.", 8000)
 
     def on_deactivate(self, viewport) -> None:
         self._hover = None
@@ -329,7 +335,7 @@ class ColumnPlaceTool(Tool):
         viewport.update()
 
     def rubber_band_lines(self):
-        """Bayangan kolom (rangka kawat) di bawah kursor."""
+        """Ghost of the column (wireframe) under the cursor."""
         if self._hover is None:
             return []
         try:
@@ -363,5 +369,5 @@ def outliner_kind(group):
         section = f"Ø {p['diameter'] * 1000:g} mm"
     else:
         section = f"{p['width'] * 1000:g} × {p['depth'] * 1000:g} mm"
-    return {"type": "Kolom", "props": [("Penampang", section),
-                                       ("Tinggi", fmt_len(p["height"]))]}
+    return {"type": "Column", "props": [("Section", section),
+                                        ("Height", fmt_len(p["height"]))]}

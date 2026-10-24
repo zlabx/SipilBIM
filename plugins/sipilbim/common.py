@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 SipilStock.
-"""Bagian umum paket Structure: satu langkah undo untuk mengubah elemen,
-peringatan, dan pembantu pemilihan. Dipakai kolom sekarang, balok/pelat
-dan lainnya nanti."""
+"""Shared pieces of the SipilBIM plugin: one undo step for editing an element,
+warnings, and selection helpers. Used by the column today and by beams, slabs
+and the other elements later."""
 from __future__ import annotations
 
 import copy
@@ -12,10 +12,12 @@ from PySide6.QtWidgets import QMessageBox
 
 from core.history import Command
 
+TITLE = "SipilBIM"
 
-class StructureCommand(Command):
-    """Satu langkah undo: daftar group, isi/tag/parameter/nama/matriks tiap
-    group, dan registri material."""
+
+class ElementCommand(Command):
+    """One undo step: the list of groups, and the contents, tags, parameters,
+    name and matrix of each group, plus the material registry."""
 
     def __init__(self, mutate) -> None:
         self.mutate = mutate
@@ -63,18 +65,18 @@ class StructureCommand(Command):
 
 
 def warn(viewport, text: str) -> None:
-    """Pesan di status bar dan kotak peringatan."""
+    """Message in the status bar and a warning box."""
     try:
-        viewport.flash_status("Structure: " + text.splitlines()[0], 6000)
+        viewport.flash_status(f"{TITLE}: " + text.splitlines()[0], 6000)
     except Exception:  # noqa: BLE001
         pass
-    QMessageBox.warning(viewport.window(), "Structure", text)
+    QMessageBox.warning(viewport.window(), TITLE, text)
 
 
 def run_command(viewport, mutate, ok_message: str) -> bool:
-    """Jalankan ``mutate(scene)`` sebagai satu langkah undo."""
+    """Run ``mutate(scene)`` as a single undo step."""
     hist = viewport.history
-    hist.execute(StructureCommand(mutate))
+    hist.execute(ElementCommand(mutate))
     if hist.last_error:
         warn(viewport, hist.last_error.split(": ", 1)[-1])
         return False
@@ -87,15 +89,16 @@ def run_command(viewport, mutate, ok_message: str) -> bool:
 
 
 def at_top_level(viewport) -> bool:
-    """Elemen hanya dibuat/diubah di tingkat atas, bukan di dalam group."""
+    """Elements are only created or edited at the top level, not inside a
+    group that is open for editing."""
     if getattr(viewport.scene, "edit_group", None) is not None:
-        warn(viewport, "Tutup group yang sedang diedit, lalu ulangi.")
+        warn(viewport, "Close the group being edited, then try again.")
         return False
     return True
 
 
 def selected_groups(scene) -> list:
-    """Group tingkat atas yang terpilih (tanpa duplikat)."""
+    """Selected top-level groups (no duplicates)."""
     out = []
     for e in scene.selection:
         g = getattr(e, "owner", None) or e

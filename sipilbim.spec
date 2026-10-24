@@ -58,9 +58,9 @@ datas = [
     ('i18n/*.json',                'i18n'),
     # Bundled plugins (Extensions menu) — discovered by file path at runtime.
     ('plugins/*.py',               'plugins'),
-    # The Structure extension is a PACKAGE (plugins/structure/__init__.py):
+    # The SipilBIM extension is a PACKAGE (plugins/sipilbim/__init__.py):
     # loaded by path like the loose ones, so the whole folder travels as data.
-    ('plugins/structure',          'plugins/structure'),
+    ('plugins/sipilbim',           'plugins/sipilbim'),
     # Example extensions: shipped but NOT loaded — Extensions ▸ Example
     # extensions copies one into the user's plugins folder on request.
     # Whole folder: an example extension can be a package (CAM, PR #132).

@@ -322,21 +322,31 @@ Wilson's Windowizer 3 by Bane Andreev, an architect, written with AI help.
   layers / BIM statistics). A read-only, dialog-based plugin.
 - `plugins/python_console.py` — the Python Console. A stateful,
   command-layer-integrated plugin.
-- `plugins/structure/` — Structure (SipilBIM): structural elements as an
-  extension written as a PACKAGE (`__init__.py` with `setup(app)`, loaded by
-  path; the build spec copies the folder as data). Its UI is the «Structure»
-  tab in the side tray (`add_panel(..., panel="structure")`): a palette of
-  element and connection buttons on top and, at the bottom, the properties of
-  the selected element, applied live as one undo step per change. Today only
-  the concrete column works (one click to place it; tagged `IfcColumn`, so it
-  feeds the IFC export and the takeoff); beams, slabs, walls, footings and the
-  connections are empty buttons. New elements are a class in `elements.py`,
-  new connections a line in `connections.py`. The worked example of a package
-  extension with several modules, of a persistent click tool built in
-  `setup(app)` (its constructor takes an argument, so the loader does not
-  list it), of parameters kept in `group.ext` with a rebuild command
-  (`StructureCommand`), of a panel that follows the selection, and of
-  `add_context_menu`.
+- `plugins/sipilbim/` — SipilBIM: building elements as an extension written
+  as a PACKAGE (`__init__.py` with `setup(app)`, loaded by path; the build
+  spec copies the folder as data). Its UI has two parts. On the **left**, the
+  «Building Elements» and «Connections» palette in a toolbar of its own
+  (`window.addToolBar(Qt.LeftToolBarArea, …)`, `palette.py`). On the
+  **right**, the «SipilBIM» tab in the side tray
+  (`add_panel(..., panel="sipilbim")`) with two collapsible sections, *Model*
+  (empty for now) and *Properties*. Properties is ONE generic form
+  (`widgets.PropertiesForm`) that shows the selected element — or, with
+  nothing selected and an element tool armed, the values the next element
+  will be placed with — applied live as one undo step per change. Every
+  element has the General properties **Element** (its type) and **Name** (its
+  mark, e.g. K1); the rest come from the element's own schema
+  (`Element.properties()`, a tuple of `Prop`: length, angle or choice, with an
+  optional `when` rule to show a row conditionally). Today only the concrete
+  column works (one click to place it; tagged `IfcColumn`, so it feeds the IFC
+  export and the takeoff); beams, slabs, walls, footings and the connections
+  are greyed-out buttons. A new element is a class in `elements.py` plus its
+  geometry module — no new form; a new connection is a line in
+  `connections.py`. The worked example of a package extension with several
+  modules, of a persistent click tool built in `setup(app)` (its constructor
+  takes an argument, so the loader does not list it), of parameters kept in
+  `group.ext` with a rebuild command (`ElementCommand`), of a toolbar and a
+  tab that follow the selection, and of `add_context_menu`. (An element keeps
+  its data in `group.ext[<element key>]`, e.g. `group.ext["column"]`.)
 - `plugins/solid_inspector.py` — Solid Inspector: per-edge watertightness
   diagnosis with viewport highlighting, step-by-step navigation and a
   one-undo-step repair (`RepairSolidsCommand`, snapshot undo over several

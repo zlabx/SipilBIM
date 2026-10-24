@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 SipilStock.
-"""Ikon tombol palet, digambar dengan QPainter (tanpa berkas gambar)."""
+"""Palette button icons, drawn with QPainter (no image files)."""
 from __future__ import annotations
 
 from PySide6.QtCore import QPointF, Qt
@@ -109,15 +109,28 @@ def _brace(p) -> None:
     p.drawLine(8, 40, 40, 8)
 
 
+def _help(p) -> None:                       # a circled question mark
+    from PySide6.QtGui import QFont
+    p.setBrush(Qt.NoBrush)
+    p.setPen(QPen(ACCENT, 3))
+    p.drawEllipse(QPointF(24, 24), 18, 18)
+    f = QFont()
+    f.setBold(True)
+    f.setPixelSize(26)
+    p.setFont(f)
+    p.setPen(QPen(INK, 2))
+    p.drawText(6, 6, 36, 36, Qt.AlignCenter, "?")
+
+
 _PAINTERS = {
     "column": _column, "beam": _beam, "slab": _slab, "wall": _wall,
     "footing": _footing, "plate": _plate, "bolt": _bolt, "weld": _weld,
-    "splice": _splice, "moment": _moment, "brace": _brace,
+    "splice": _splice, "moment": _moment, "brace": _brace, "help": _help,
 }
 
 
 def icon(kind: str) -> QIcon:
-    """Ikon 48×48 untuk ``kind`` (``plate`` bila tidak dikenal)."""
+    """A 48×48 icon for ``kind`` (``plate`` when unknown)."""
     pm = QPixmap(48, 48)
     pm.fill(Qt.transparent)
     p = QPainter(pm)

@@ -45,13 +45,15 @@ Additional changes applied by the build after those substitutions:
 
 Changes made in this repository after the rebrand:
 
-- added: `plugins/structure/` (package extension: «Structure» side-tray tab with the element and connection palette
-  and the selected element's properties; the concrete column works — click-to-place, `IfcColumn` — and beams, slabs,
-  walls, footings and connections are empty buttons) and `tests/test_plugin_structure.py`; `docs/plugins.md` lists it.
-- modified: `sipilbim.spec` — the `plugins/structure` folder is bundled as data and `plugins/` is scanned recursively
+- added: `plugins/sipilbim/` (package extension: a «Building Elements» / «Connections» palette in a left toolbar and a
+  «SipilBIM» side-tray tab with collapsible Model and Properties sections; Properties is one schema-driven form with the
+  General properties Element and Name; the concrete column works — click-to-place, `IfcColumn` — and beams, slabs,
+  walls, footings and connections are greyed-out buttons) and `tests/test_plugin_sipilbim.py`; `docs/plugins.md`
+  lists it.
+- modified: `sipilbim.spec` — the `plugins/sipilbim` folder is bundled as data and `plugins/` is scanned recursively
   for imports (the build only knew loose `plugins/*.py`).
 - modified: `main.py` — `--check` also imports package extensions (`plugins/<name>/__init__.py` and every module in
-  them), so the Windows build's bundle check fails if the Structure package cannot load.
+  them), so the Windows build's bundle check fails if the SipilBIM package cannot load.
 - modified: `core/bim.py` — `collect_objects` now also returns `"faces"` (world space) for tagged groups, so the
   IFC export, the takeoff CSV and the BIM tray measure containers and component instances (their own `group.mesh`
   is empty) instead of skipping them.
