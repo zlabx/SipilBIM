@@ -324,12 +324,14 @@ Wilson's Windowizer 3 by Bane Andreev, an architect, written with AI help.
   command-layer-integrated plugin.
 - `plugins/sipilbim/` — SipilBIM: building elements as an extension written
   as a PACKAGE (`__init__.py` with `setup(app)`, loaded by path; the build
-  spec copies the folder as data). Its UI has two parts. On the **left**, the
-  «Building Elements» and «Connections» palette in a toolbar of its own
-  (`window.addToolBar(Qt.LeftToolBarArea, …)`, `palette.py`). On the
-  **right**, the «SipilBIM» tab in the side tray
-  (`add_panel(..., panel="sipilbim")`) with two collapsible sections, *Model*
-  (empty for now) and *Properties*. Properties is ONE generic form
+  spec copies the folder as data). Its UI has two parts. At the **top**, the
+  «Building Elements» and «Connections» palette in a toolbar row of its own
+  (`window.addToolBar(Qt.TopToolBarArea, …)`, `palette.py`); it is movable,
+  and turns into a vertical card when dragged to a side
+  (`QToolBar.orientationChanged`). On the **right**, the «SipilBIM» tab in
+  the side tray (`add_panel(..., panel="sipilbim", start_hidden=True)`, so it
+  is closed until right-click ▸ properties or Window ▸ Panels opens it) with
+  two collapsible sections, *Model* (empty for now) and *Properties*. Properties is ONE generic form
   (`widgets.PropertiesForm`) that shows the selected element — or, with
   nothing selected and an element tool armed, the values the next element
   will be placed with — applied live as one undo step per change. Every

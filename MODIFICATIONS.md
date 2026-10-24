@@ -45,8 +45,8 @@ Additional changes applied by the build after those substitutions:
 
 Changes made in this repository after the rebrand:
 
-- added: `plugins/sipilbim/` (package extension: a «Building Elements» / «Connections» palette in a left toolbar and a
-  «SipilBIM» side-tray tab with collapsible Model and Properties sections; Properties is one schema-driven form with the
+- added: `plugins/sipilbim/` (package extension: a «Building Elements» / «Connections» palette in a movable toolbar row at the top and a
+  «SipilBIM» side-tray tab (closed by default) with collapsible Model and Properties sections; Properties is one schema-driven form with the
   General properties Element and Name; the concrete column works — click-to-place, `IfcColumn` — and beams, slabs,
   walls, footings and connections are greyed-out buttons) and `tests/test_plugin_sipilbim.py`; `docs/plugins.md`
   lists it.

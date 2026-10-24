@@ -2,10 +2,12 @@
 # Copyright (C) 2026 SipilStock.
 """The SipilBIM user interface.
 
-* **Left** — the «Building Elements» / «Connections» palette in a toolbar of
-  its own (``palette.py``).
-* **Right** — the «SipilBIM» tab of the side tray: collapsible *Model* (empty
-  for now) and *Properties* sections. Properties shows the selected element,
+* **Top** — the «Building Elements» / «Connections» palette in a toolbar of
+  its own, in a row under the host's toolbars (``palette.py``). It can be
+  dragged to any side; at a side it becomes a vertical card.
+* **Right** — the «SipilBIM» tab of the side tray, closed until it is needed
+  (right-click an element ▸ properties, or Window ▸ Panels): collapsible
+  *Model* (empty for now) and *Properties* sections. Properties shows the selected element,
   or — with nothing selected and an element tool armed — the values the next
   element will be placed with, in the same form.
 
@@ -16,7 +18,7 @@ from __future__ import annotations
 
 import sys
 
-from PySide6.QtCore import QObject, Qt, QTimer
+from PySide6.QtCore import QObject, QSettings, Qt, QTimer
 from PySide6.QtWidgets import (QLabel, QMessageBox, QToolBar, QVBoxLayout,
                                QWidget)
 
@@ -81,7 +83,7 @@ class Workbench(QObject):
         self.panel = SipilBimPanel(app)
         self.panel.form.on_edited = lambda: self.sync(force=True)
         self.palette = BuildingElementsBar(
-            self.elements, self.connections, self._on_arm,
+            app.window, self.elements, self.connections, self._on_arm,
             self._on_placeholder, self._on_help)
 
         self._timer = QTimer(self)
@@ -152,26 +154,56 @@ class Workbench(QObject):
 
 
 def _dock_palette(window, palette) -> QToolBar:
-    """Put the palette in a left toolbar of its own, in a new column beside
-    the host's drawing tools."""
-    bar = QToolBar("Building Elements", window)
-    bar.setObjectName("sipilbim_elements_bar")
-    bar.setMovable(False)
-    bar.setFloatable(False)
-    bar.setOrientation(Qt.Vertical)
-    window.addToolBarBreak(Qt.LeftToolBarArea)
-    window.addToolBar(Qt.LeftToolBarArea, bar)
-    bar.addWidget(palette)
-    return bar
+    """Put the palette toolbar in a new row at the top, under the host's
+    toolbars. The user may drag it elsewhere; the buttons follow its
+    orientation (``BuildingElementsBar.set_orientation``)."""
+    window.addToolBarBreak(Qt.TopToolBarArea)
+    window.addToolBar(Qt.TopToolBarArea, palette)
+    try:                                    # the host's look for the «»» arrow
+        from views.icons import style_overflow_button
+        style_overflow_button(palette)
+    except Exception:  # noqa: BLE001 — cosmetic only
+        pass
+    return palette
+
+
+#: Remembers that the palette got its row once (the host does the same for
+#: its Walkthrough toolbar: ``ui/placed/walkthrough``).
+PLACED_KEY = "sipilbim/placed/palette_row"
+
+
+def _own_row_once(window, bar) -> None:
+    """First run only: give the palette a row of its own under the host's
+    toolbars. ``restoreState`` lays out the saved window and puts a toolbar it
+    does not know at the end of the last row, where the palette would be
+    squeezed behind the «»» arrow. After this the user's arrangement is
+    kept."""
+    st = QSettings()
+    if st.value(PLACED_KEY) is not None:
+        return
+    st.setValue(PLACED_KEY, 1)
+    if window.toolBarArea(bar) != Qt.TopToolBarArea or window.toolBarBreak(bar):
+        return
+    window.removeToolBar(bar)
+    window.addToolBarBreak(Qt.TopToolBarArea)
+    window.addToolBar(Qt.TopToolBarArea, bar)
+    bar.show()
 
 
 def setup(app) -> None:
-    """Palette on the left, «SipilBIM» tab on the right, Extensions ▸ SipilBIM
-    menu, right-click entries and the Browser's element descriptions."""
+    """Palette in a toolbar at the top, «SipilBIM» tab on the right (closed
+    at first), Extensions ▸ SipilBIM menu, right-click entries and the
+    Browser's element descriptions."""
     wb = Workbench(app)
     # panel="sipilbim": a shared tab, should another extension join it.
-    dock = app.add_panel(TITLE, wb.panel, panel="sipilbim")
+    # start_hidden: the tab is closed the first time; right-click an element ▸
+    # properties, Extensions ▸ SipilBIM or Window ▸ Panels opens it, and the
+    # user's choice is kept from then on.
+    dock = app.add_panel(TITLE, wb.panel, panel="sipilbim", start_hidden=True)
     wb.bar = _dock_palette(app.window, wb.palette)
+    # After the host has restored the saved layout (it does that right after
+    # the extensions' setup), not before.
+    QTimer.singleShot(0, lambda: _own_row_once(app.window, wb.palette))
 
     def show_panel() -> None:
         app.show_panel(dock)
