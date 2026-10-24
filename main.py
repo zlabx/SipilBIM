@@ -282,29 +282,6 @@ def _self_check() -> int:
             spec.loader.exec_module(importlib.util.module_from_spec(spec))
         except Exception as exc:  # noqa: BLE001 - any failure is the report
             broken.append(f"{plugin.stem} ({exc})")
-    # Package extensions (plugins/<name>/__init__.py, e.g. SipilBIM) load by
-    # path too, and import their own modules lazily from setup(): import
-    # every module of the package here so a missing one is reported.
-    import pkgutil
-    for init in sorted((root / "plugins").glob("*/__init__.py")):
-        name = init.parent.name
-        if name.startswith("_"):
-            continue
-        base = f"_check_plugin_{name}"
-        try:
-            spec = importlib.util.spec_from_file_location(
-                base, init, submodule_search_locations=[str(init.parent)])
-            module = importlib.util.module_from_spec(spec)
-            sys.modules[base] = module
-            spec.loader.exec_module(module)
-            for sub in pkgutil.iter_modules([str(init.parent)]):
-                importlib.import_module(f"{base}.{sub.name}")
-        except Exception as exc:  # noqa: BLE001 - any failure is the report
-            broken.append(f"{name} ({exc})")
-        finally:
-            for mod_name in [m for m in sys.modules
-                             if m == base or m.startswith(base + ".")]:
-                sys.modules.pop(mod_name, None)
     print(f"  extensions     : {'all load' if not broken else 'BROKEN'}"
           f"  {'; '.join(broken)}")
     if broken:

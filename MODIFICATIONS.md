@@ -52,8 +52,6 @@ Changes made in this repository after the rebrand:
   lists it.
 - modified: `sipilbim.spec` — the `plugins/sipilbim` folder is bundled as data and `plugins/` is scanned recursively
   for imports (the build only knew loose `plugins/*.py`).
-- modified: `main.py` — `--check` also imports package extensions (`plugins/<name>/__init__.py` and every module in
-  them), so the Windows build's bundle check fails if the SipilBIM package cannot load.
 - modified: `core/bim.py` — `collect_objects` now also returns `"faces"` (world space) for tagged groups, so the
   IFC export, the takeoff CSV and the BIM tray measure containers and component instances (their own `group.mesh`
   is empty) instead of skipping them.
