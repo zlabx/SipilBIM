@@ -45,13 +45,7 @@ Additional changes applied by the build after those substitutions:
 
 Changes made in this repository after the rebrand:
 
-- added: `plugins/sipilbim/` (package extension: a «Building Elements» / «Connections» palette in a left toolbar and a
-  «SipilBIM» side-tray tab with collapsible Model and Properties sections; Properties is one schema-driven form with the
-  General properties Element and Name; the concrete column works — click-to-place, `IfcColumn` — and beams, slabs,
-  walls, footings and connections are greyed-out buttons) and `tests/test_plugin_sipilbim.py`; `docs/plugins.md`
-  lists it.
-- modified: `sipilbim.spec` — the `plugins/sipilbim` folder is bundled as data and `plugins/` is scanned recursively
-  for imports (the build only knew loose `plugins/*.py`).
 - modified: `core/bim.py` — `collect_objects` now also returns `"faces"` (world space) for tagged groups, so the
   IFC export, the takeoff CSV and the BIM tray measure containers and component instances (their own `group.mesh`
-  is empty) instead of skipping them.
+  is empty) instead of skipping them. Needed by the separate SipilBIM plugin (concrete columns), which is not part of
+  this repository.
