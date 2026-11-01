@@ -38,8 +38,12 @@ VersionInfoProductName={#MyAppName}
 
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-PrivilegesRequired=admin
-PrivilegesRequiredOverridesAllowed=dialog
+; Per-user install: no administrator rights and no UAC prompt. {autopf}, {autoprograms}
+; and {autodesktop} then resolve to the current user's folders, and every [Registry] entry
+; uses HKA (HKCU here). SipilStock Launcher passes /CURRENTUSER; an administrator can still
+; run the installer with /ALLUSERS from an elevated prompt for a machine-wide install.
+PrivilegesRequired=lowest
+PrivilegesRequiredOverridesAllowed=commandline
 
 ; Free software: the "license" page shows the GPL-3.0 text.
 LicenseFile=..\LICENSE

@@ -16,6 +16,9 @@ GPL-3.0-or-later. Changes made by the rebrand overlay (GPL-3.0 section 5(a)):
 - Default theme is light; dark and system stay selectable and saved choices are unchanged.
 - Installer: new `AppId` (installs alongside IngeTrazo), publisher `SipilStock`, website, support and
   update URLs point to this repository.
+- Installer: installs per user by default (`PrivilegesRequired=lowest`, no administrator rights or UAC prompt,
+  into `%LOCALAPPDATA%\Programs\SipilBIM`); `/ALLUSERS` from an elevated prompt still installs machine-wide.
+  Installations made with the earlier machine-wide installer are not detected by the per-user one.
 - Workflows: only `build-windows.yml` is kept (removed `ci.yml`, `release-flatpak.yml`, `release-macos.yml`, `release.yml`). It marks the SignPath
   signing steps as inactive, moves `actions/upload-artifact` v4 to v7 and `softprops/action-gh-release`
   v2 to v3 (Node 24), and drops the portable ZIP (installer only).
