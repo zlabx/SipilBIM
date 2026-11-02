@@ -291,3 +291,59 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           files: dist/sipilbim-setup-v*.exe
+
+  # Auto-deploy to R2 (like the web apps in zlabx/Apps): a pushed tag uploads the installer it just built to
+  # the private R2 bucket, where the SipilStock Apps launcher finds it (sipilstock.com/sipilbim/desktop/).
+  # Needs in this repo's Settings -> Secrets and variables -> Actions: secrets R2_ACCOUNT_ID,
+  # R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY and the variable R2_BUCKET. Without them the job is skipped.
+  # scripts/publish-r2.sh is identical to packaging/r2/publish.sh in zlabx/Launcher.
+  publish-r2:
+    needs: build-windows
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      R2_BUCKET: ${{ vars.R2_BUCKET }}
+      PUBLIC_BASE: ${{ vars.PUBLIC_BASE || 'https://sipilstock.com' }}
+      S3_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      # Newer AWS CLI adds checksum headers that R2 can reject.
+      AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+      AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Are the R2 credentials configured?
+        id: r2
+        env:
+          KEY: ${{ secrets.R2_ACCESS_KEY_ID }}
+        run: |
+          if [ -n "$KEY" ] && [ -n "$R2_BUCKET" ]; then echo "on=true" >> "$GITHUB_OUTPUT"
+          else echo "::notice title=R2::Not configured (secrets R2_* and variable R2_BUCKET); skipping the upload."; fi
+
+      - name: Rehearse the publish script (fake aws, no credentials)
+        if: steps.r2.outputs.on == 'true'
+        run: bash scripts/test-publish-r2.sh
+
+      - name: Descargar el instalador compilado
+        if: steps.r2.outputs.on == 'true'
+        uses: actions/download-artifact@v7
+        with:
+          name: sipilbim-windows
+          path: dist
+
+      - name: Publish the installer to R2
+        if: steps.r2.outputs.on == 'true'
+        env:
+          APP: sipilbim
+          PREFIX: sipilbim
+          MAGIC_HEX: 4d5a
+          NOTES_URL: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          ls -la dist
+          bash scripts/publish-r2.sh "dist/sipilbim-setup-v${version}.exe" "$version"

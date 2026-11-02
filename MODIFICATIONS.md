@@ -19,6 +19,7 @@ GPL-3.0-or-later. Changes made by the rebrand overlay (GPL-3.0 section 5(a)):
 - Installer: installs per user by default (`PrivilegesRequired=lowest`, no administrator rights or UAC prompt,
   into `%LOCALAPPDATA%\Programs\SipilBIM`); `/ALLUSERS` from an elevated prompt still installs machine-wide.
   Installations made with the earlier machine-wide installer are not detected by the per-user one.
+- Release automation: a pushed `v*` tag also uploads the installer to the SipilStock R2 bucket (`publish-r2` job in `.github/workflows/build-windows.yml`, `scripts/publish-r2.sh`, `scripts/test-publish-r2.sh`), which the SipilStock Apps launcher reads. No change to the program.
 - Workflows: only `build-windows.yml` is kept (removed `ci.yml`, `release-flatpak.yml`, `release-macos.yml`, `release.yml`). It marks the SignPath
   signing steps as inactive, moves `actions/upload-artifact` v4 to v7 and `softprops/action-gh-release`
   v2 to v3 (Node 24), and drops the portable ZIP (installer only).
