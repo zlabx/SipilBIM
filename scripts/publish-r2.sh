@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Publishes one installer to the PRIVATE R2 bucket, where the sipilstock-apps Worker serves it read-only at
-# <PUBLIC_BASE>/<prefix>/... . The same file is used by zlabx/Launcher (its MSI) and zlabx/SipilBIM (its
-# installer) and must stay identical in both; zlabx/Apps `desktop_publish.py` writes the same manifest.
+# <PUBLIC_BASE>/<prefix>/... . The same file is used by zlabx/Apps (launcher/packaging/r2/publish.sh, its MSI)
+# and zlabx/SipilBIM (scripts/publish-r2.sh, its installer) and must stay identical in both; zlabx/Apps
+# `scripts/desktop_publish.py` writes the same manifest.
 #
 #   usage: publish.sh <installer file> <version>
 #   env:   R2_BUCKET  S3_ENDPOINT  (+ AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY for the aws CLI)

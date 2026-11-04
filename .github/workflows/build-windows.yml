@@ -296,7 +296,7 @@ jobs:
   # the private R2 bucket, where the SipilStock Apps launcher finds it (sipilstock.com/sipilbim/desktop/).
   # Needs in this repo's Settings -> Secrets and variables -> Actions: secrets R2_ACCOUNT_ID,
   # R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY and the variable R2_BUCKET. Without them the job is skipped.
-  # scripts/publish-r2.sh is identical to packaging/r2/publish.sh in zlabx/Launcher.
+  # scripts/publish-r2.sh is identical to launcher/packaging/r2/publish.sh in zlabx/Apps.
   publish-r2:
     needs: build-windows
     if: startsWith(github.ref, 'refs/tags/v')
