@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SipilBIM: Perangkat Lunak BIM untuk Desain Arsitektur dan Struktur</title>
-<meta name="description" content="Rancang model bangunan berbasis BIM untuk desain arsitektur, struktur, dan perhitungan kuantitas. Unduh installer Windows.">
+<meta name="description" content="Rancang model bangunan berbasis BIM untuk desain arsitektur, struktur, dan perhitungan kuantitas. Unduh SipilStock Apps atau installer Windows.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#0a78b5">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -70,6 +70,8 @@ h1{font-size:clamp(2rem,4.6vw,3rem); line-height:1.12; letter-spacing:-.025em; m
 .btn:active{transform:translateY(1px)}
 .btn svg{width:1.25rem; height:1.25rem; flex:none}
 .os{margin:.8rem 0 0; font-size:.875rem; color:var(--muted); text-align:center}
+.how{margin:1rem 0 0; font-size:.9rem; line-height:1.55; color:var(--muted); text-align:center}
+.alt{margin:.6rem 0 0; font-size:.88rem; text-align:center}
 .warn{margin:1.4rem 0 0; font-size:.76rem; line-height:1.55; color:var(--muted); text-align:center}
 
 section{margin-top:3.25rem}
@@ -123,14 +125,22 @@ h2.sec{font-size:1.4rem; letter-spacing:-.01em; margin:0 0 1.1rem}
           <img class="dl-icon" src="icon.svg" alt="" width="68" height="68">
           <div class="dl-title">
             <h2>SipilBIM</h2>
-            <p class="ver">Versi 2027.6</p>
+            <p class="ver" id="ver">Versi 2027.6.2</p>
           </div>
         </div>
-        <a class="btn" href="https://github.com/zlabx/SipilBIM/releases/latest">
+        <a class="btn" href="https://sipilstock.com/launcher/SipilStockApps-x64.msi">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg>
-          Unduh SipilBIM
+          Unduh SipilStock Apps
         </a>
         <p class="os">For Windows 11/10 64-bit</p>
+        <p class="how">
+          SipilStock Apps (sekitar 4 MB) memasang SipilBIM dengan satu klik dan memperbaruinya
+          otomatis. Tanpa hak administrator.
+        </p>
+        <p class="alt">
+          Lebih suka installer saja?
+          <a id="direct" href="https://github.com/zlabx/SipilBIM/releases/latest">Unduh installer SipilBIM</a>
+        </p>
         <p class="warn">
           <strong>Build ini belum ditandatangani.</strong> Windows SmartScreen bisa menampilkan
           peringatan saat pertama kali dijalankan: pilih <em>More info</em>, lalu <em>Run anyway</em>.
@@ -165,5 +175,27 @@ h2.sec{font-size:1.4rem; letter-spacing:-.01em; margin:0 0 1.1rem}
     </section>
   </main>
 </div>
+<script>
+/* Versi dan tautan installer dibaca dari manifest yang sama dengan yang dipakai peluncur.
+   Jika gagal, teks versi dan tautan GitHub di atas tetap dipakai. */
+(function () {
+  if (!window.fetch) return;
+  fetch("/sipilbim/desktop/latest.json", { cache: "no-cache" })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d) return;
+      var v = document.getElementById("ver");
+      if (v && typeof d.version === "string" && /^[0-9][0-9A-Za-z.\-]{0,31}$/.test(d.version)) {
+        v.textContent = "Versi " + d.version;
+      }
+      var a = document.getElementById("direct");
+      var u = d.installer && d.installer.url;
+      if (a && typeof u === "string" && u.indexOf("https://sipilstock.com/sipilbim/desktop/") === 0) {
+        a.href = u;
+      }
+    })
+    .catch(function () {});
+})();
+</script>
 </body>
 </html>
