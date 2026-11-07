@@ -45,6 +45,8 @@ Additional changes applied by the build after those substitutions:
 - modified: `views/about_dialog.py`
 - modified: `views/theme.py`
 - added or replaced: `README.md`
+- added or replaced: `scripts/publish-r2.sh`
+- added or replaced: `scripts/test-publish-r2.sh`
 - added or replaced: `site/favicon.svg`
 - added or replaced: `site/icon.svg`
 - added or replaced: `site/index.html`
